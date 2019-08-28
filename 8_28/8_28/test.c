@@ -2,9 +2,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<assert.h>
+//请你来实现一个 atoi 函数，使其能将字符串转换成整数。
 int myAtoi(char * str){
 	assert(str != NULL);
-	int re = 0;
+	long long int re = 0;
 	while (*str == ' ')
 	{
 		str++;
@@ -23,27 +24,29 @@ int myAtoi(char * str){
 	int i = 0;
 	while (*str >= '0'&&*str <= '9')
 	{
-		i++;
-		if (i > 10 && sign != -1)
-		{
-			return INT_MAX;
-		}
-		if (i > 10 && sign == -1)
-		{
-			return INT_MIN;
-		}
 		re = re * 10 + (*str - '0');
+
+		if (re>INT_MAX)
+		{
+			if (sign != -1)
+				return INT_MAX;
+			else
+				return INT_MIN;
+		}
 		str++;
 	}
-
 	if (sign == -1)
+	{
 		re = re*sign;
-	return re;
+		sign = 1;
+	}
+
+	return (int)re;
 }
 
 int main()
 {
-	char *str = "-91283472332";
+	char *str = "2147483800";
 	printf("%d\n", myAtoi(str));
 	system("pause");
 	return 0;
