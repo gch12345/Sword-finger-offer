@@ -3,9 +3,6 @@
 #include<stdlib.h>
 #include<assert.h>
 
-char * intToRoman(int num){
-
-}
 
 #if 0
 //ÓÉ¶Ì°å¾ö¶¨
