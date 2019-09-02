@@ -2,73 +2,82 @@
 #include<stdio.h>
 #include<assert.h>
 #include<stdlib.h>
+
+//给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。
+//注意：答案中不可以包含重复的三元组。
+
 int cmp(const void *a, const void *b)
 {
 	return (*(const int*)a - *(const int*)b);
 }
 int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes){
-	assert(nums != NULL&&returnSize != NULL);
+	assert(nums != NULL&&returnSize != NULL&&returnColumnSizes != NULL);
 	qsort(nums, numsSize, sizeof(int), cmp);
 	int i = 0;
 	int *Left = NULL;
 	int *Right = NULL;
 	*returnSize = 0;
-	int **res = (int**)malloc(sizeof(int*));
-	(*returnColumnSizes) = (int*)malloc(1*sizeof(int));
+	*returnColumnSizes = (int *)malloc(sizeof(int)* numsSize * numsSize);
+	int **res = (int**)malloc(sizeof(int *)* numsSize * numsSize);
+	(*returnColumnSizes) = (int*)malloc(1 * sizeof(int));
 	for (; i < numsSize - 2; i++)
 	{
-		if (nums[i] >= 0)
+		if (nums[i] > 0)
 			break;
-		if (nums[i] == nums[i + 1])
-			continue;
 		int *p = NULL;
 		Left = nums + 1 + i;
 		Right = nums + numsSize - 1;
+		if (*Right<0)
+			break;
+		if (nums[i] + *Right + *(Right - 1)<0)
+			continue;
 		while (Left<Right)
 		{
+			while (Left < Right&& *Left == *(Left + 1) && 2 * (*Left) != -nums[i])
+				Left++;
+			while (*Right == *(Right - 1) && Left < Right && 2 * (*Right) != -nums[i])
+				Right--;
 			if (nums[i] + *Left + *Right > 0)
 			{
-				while (*Right == *(Right - 1)&&Left < Right)
-					Right--;
 				Right--;
+				if (*Right<0)
+					break;
 			}
 			else if (nums[i] + *Left + *Right < 0)
 			{
-				while (*Left == *(Left + 1) && Left < Right)
-					Left++;
+
 				Left++;
 			}
 			else
 			{
-				res = (int**)realloc(res, ((*returnSize) + 1)*sizeof(int*));
-				res[*returnSize] = (int *)malloc(sizeof(int)*3);
+				res[*returnSize] = (int *)malloc(3 * sizeof(int));
 				res[*returnSize][0] = nums[i];
-				res[*returnSize][1] = nums[*Left];
-				res[*returnSize][2] = nums[*Right];
-				/*p = (int*)malloc(sizeof(int)* 3);
-				p[0] = nums[i];
-				p[1] = nums[*Left];
-				p[2] = nums[*Right];*/
-				(*returnColumnSizes) = (int *)realloc((*returnColumnSizes), ((*returnSize) + 1)*sizeof(int));
+				res[*returnSize][1] = *Left;
+				res[*returnSize][2] = *Right;
 				(*returnColumnSizes)[*returnSize] = 3;
 				(*returnSize)++;
+				if (*Left == *Right)
+					Left = Right;
 				Left++;
 				Right--;
 			}
 		}
+		while (nums[i] == nums[i + 1] && i < numsSize - 2)
+			i++;
 	}
 	return res;
 }
 
+
 int main()
 {
 	int num = 0;
-	int arr[] = { -1, 0, 1, 2, -1, -4 };
+	int arr[] = { 0, 2, 2, 3, 0, 1, 2, 3, -1, -4, 2 };
 	int i = 0;
 	int*p = &i;
 	int **returnSize = &p;
-	int**re=threeSum(arr, 5, &num, returnSize);
-	
+	qsort(arr, sizeof(arr)/sizeof(int), sizeof(int), cmp);
+	int**re = threeSum(arr, sizeof(arr) / sizeof(int), &num, returnSize);
 }
 
 #if 0
