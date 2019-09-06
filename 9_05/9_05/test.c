@@ -4,34 +4,35 @@
 #include<assert.h>
 #include<math.h>
 #include<string.h>
-char *fun(char **re,int n,int left,int right,int *returnSize){
-	if (n == 0){
+void fun(int n, char **re, int left, int right, int *returnSize, char *map){
+	if (left == n && right == n){
+		re[*returnSize] = (char*)calloc(n * 2 + 1, sizeof(char));
+		strcat(re[*returnSize], map);
 		(*returnSize)++;
 		return;
 	}
-	if (left == right){
-		re[*returnSize][left + right] = '(';
-		fun(re, n - 1, left + 1, right, *returnSize);
+	if (left > right){
+		map[left + right] = ')';
+		fun(n, re, left, right + 1, returnSize, map);
 	}
-	else if (left > right){
-		re[*returnSize][left + right] = ')';
-		fun(re, n - 1, left, right + 1, *returnSize);
-		returnSize++;
-		strcpy(re[*returnSize], re[*returnSize] - 1);
-	}
-	else{
-		return;
+	if (left < n){
+		map[left + right] = '(';
+		fun(n, re, left + 1, right, returnSize, map);
 	}
 }
 
 char ** generateParenthesis(int n, int* returnSize){
 	assert(returnSize != NULL);
 	*returnSize = 0;
-	char **re = (char**)malloc(sizeof(char*)*(int)pow(2, 2 * (n - 1)));
-	for (int i = 0; i < (int)pow(2, 2 * (n - 1)); i++){
-		re[i] = (char*)malloc(sizeof(char)*n * 2 + 1);
-		re[i][0] = '(';
-		re[i][n * 2 - 1] = ')';
-		re[i][n * 2] = '\0';
-	}
+	char **re = (char**)malloc(sizeof(char*)*(int)pow(2, 2 * n));
+	char*map = (char*)calloc(n * 2 + 1, sizeof(char));
+	fun(n, re, 0, 0, returnSize, map);
+	return re;
+}
+int main()
+{
+	int returnSize = 0;
+	generateParenthesis(3, &returnSize);
+	system("pause");
+	return 0;
 }
