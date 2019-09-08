@@ -8,13 +8,19 @@ struct ListNode {
 };
 
 struct ListNode* swapPairs(struct ListNode* head){
-	assert(head != NULL);
-	head = head->next;
+	if (head == NULL || head->next == NULL)
+		return head;
 	struct ListNode* new_head = head;
 	struct ListNode* p = head->next;
 	struct ListNode* q = p->next;
-	while (p != NULL){
-		new_head->next = q->next;
+	head = head->next;
+	while (q != NULL){
+		if (q->next == NULL){
+			new_head->next = q;
+		}
+		else{
+			new_head->next = q->next;
+		}
 		p->next = new_head;
 		new_head = q;
 		p = new_head->next;
@@ -24,6 +30,10 @@ struct ListNode* swapPairs(struct ListNode* head){
 		else{
 			q = p->next;
 		}
+	}
+	if (new_head->next != NULL){
+		p->next = new_head;
+		new_head->next = NULL;
 	}
 	return head;
 }
