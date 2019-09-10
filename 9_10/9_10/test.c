@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<assert.h>
 #include<stdlib.h>
+#include<string.h>
 
 //给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
 //不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
@@ -59,35 +60,56 @@ int removeDuplicates(int* nums, int numsSize){
 //不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
 //
 //元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素
-int removeElement(int* nums, int numsSize, int val){
-	assert(nums != NULL);
-	if (numsSize <= 1){
-		return numsSize;
-	}
-	int j = 0;
-	for (int i = 0; i < numsSize; i++){
-		if (nums[i] != val){
-			nums[j++] = nums[i];
+//int removeElement(int* nums, int numsSize, int val){
+//	assert(nums != NULL);
+//	if (numsSize <= 1){
+//		return numsSize;
+//	}
+//	int j = 0;
+//	for (int i = 0; i < numsSize; i++){
+//		if (nums[i] != val){
+//			nums[j++] = nums[i];
+//		}
+//	}
+//	return j;
+//}
+//int main()
+//{
+//	int arr[] = { 1, 2, 3, 4, 4, 2, 2, 3, 2 };
+//	int re = removeElement(arr, sizeof(arr) / sizeof(arr[0]), 2);
+//	for (int i = 0; i < re; i++){
+//		printf("%d ", arr[i]);
+//	}
+//	system("pause");
+//	return 0;
+//}
+//实现 strStr() 函数。
+int strStr(char * haystack, char * needle){
+	if (needle == NULL)
+		return 0; 
+	if (haystack == NULL)
+		return -1;
+	char* start = haystack;
+	while (*haystack != '\0') {
+		char* str1 = needle;
+		char* str0 = haystack;
+		if (*str1 == *str0) {
+			while (*str1 != '\0'&&*str1 == *str0) {
+				str1++;
+				str0++;
+			}
+			if (*str1 == '\0'){
+				return haystack - start;
+			}
 		}
+		haystack++;
 	}
-	return j;
+	return -1;
 }
+
 int main()
 {
-	int arr[] = { 1, 2, 3, 4, 4, 2, 2, 3, 2 };
-	int re = removeElement(arr, sizeof(arr) / sizeof(arr[0]), 2);
-	for (int i = 0; i < re; i++){
-		printf("%d ", arr[i]);
-	}
+	printf("%d\n",strStr("abcde", "cd"));
 	system("pause");
 	return 0;
 }
-//实现 strStr() 函数。
-int strStr(char * haystack, char * needle){
-	if (haystack == NULL)
-		return -1;
-	if (needle == NULL)
-		return 0;
-
-}
-
