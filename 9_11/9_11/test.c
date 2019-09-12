@@ -88,26 +88,35 @@
 //	}
 //	return -1;
 //}
+//实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。
+//如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
+//必须原地修改，只允许使用额外常数空间。
 int cmp(const void *x1,const void* x2)
 {
 	return *(int*)x1 - *(int*)x2;
 }
 void nextPermutation(int* nums, int numsSize){
 	int i = numsSize - 1;
-	int min = nums[i];
-	int j = 0;
+	if (numsSize <= 1)
+		return;
 	while (i > 0 && nums[i] <= nums[i - 1])
 	{
 		i--;
-		j++;
 	}
-	int tmp = nums[i - 1];
-	nums[i - 1] = min;
-	nums[numsSize - 1] = tmp;
-	if (j <= 1)
-		return;
-	qsort(nums + i, numsSize - i , sizeof(int), cmp);	
+	if (i != 0)
+	{
+		int right = numsSize - 1;
+		while (right > i - 1 && nums[i - 1] >= nums[right])
+		{
+			right--;
+		}
+		int tmp = nums[i - 1];
+		nums[i - 1] = nums[right];
+		nums[right] = tmp;
+	}
+	qsort(nums + i, numsSize - i, sizeof(int), cmp);
 }
+
 int main()
 {
 	int arr[] = { 1, 1 };
