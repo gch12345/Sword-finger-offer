@@ -6,7 +6,7 @@ int* searchRange(int* nums, int numsSize, int target, int* returnSize){
 	int right = numsSize - 1;
 	int *re = (int*)malloc(sizeof(int)* 2);
 	*returnSize = 2;
-	if (numsSize <= 1)
+	if (numsSize == 1 && target == nums[0])
 	{
 		re[0] = 0;
 		re[1] = 0;
@@ -18,10 +18,10 @@ int* searchRange(int* nums, int numsSize, int target, int* returnSize){
 		if (nums[mid] == target)
 		{
 			int tmp = mid;
-			while (mid>0&&nums[mid] == nums[mid - 1])
+			while (mid>0 && nums[mid] == nums[mid - 1])
 				mid--;
 			re[0] = mid;
-			while (tmp<numsSize&&nums[tmp] == nums[tmp + 1])
+			while (tmp<numsSize - 1 && nums[tmp] == nums[tmp + 1])
 			{
 				tmp++;
 			}
