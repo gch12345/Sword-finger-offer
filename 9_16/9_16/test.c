@@ -10,9 +10,18 @@ void isFill(int row[9][9], int col[9][9], int box[9][9], char **board, int fillN
 		board0[fillNumb / 9][fillNumb % 9] = board[fillNumb / 9][fillNumb % 9];
 		fillNumb++;
 	}
+
 	if (fillNumb >= 81)
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			for (int j = 0; j < 9; j++)
+			{
+				board[i][j] = board0[i][j];
+			}
+		}
 		return;
-	fun(board, row, col, box);
+	}
 	for (int i = 0; i < 9; i++)
 	{
 		if (row[fillNumb / 9][i] != 1 && col[fillNumb % 9][i] != 1 && box[(fillNumb / 9) / 3 * 3 + (fillNumb % 9) / 3][i] != 1)
@@ -22,14 +31,18 @@ void isFill(int row[9][9], int col[9][9], int box[9][9], char **board, int fillN
 			col[fillNumb % 9][i] = 1;
 			box[(fillNumb / 9) / 3 * 3 + (fillNumb % 9) / 3][i] = 1;
 			isFill(row, col, box, board, fillNumb + 1);
+			//board[fillNumb / 9][fillNumb % 9] = '.';
 			row[fillNumb / 9][i] = 0;
 			col[fillNumb % 9][i] = 0;
 			box[(fillNumb / 9) / 3 * 3 + (fillNumb % 9) / 3][i] = 0;
 		}
 	}
 }
-void fun(char** board, int row[9][9], int col[9][9], int box[9][9])
+void solveSudoku(char** board, int boardSize, int* boardColSize)
 {
+	int row[9][9] = { 0 };
+	int col[9][9] = { 0 };
+	int box[9][9] = { 0 };
 	for (int i = 0; i < 9; i++)
 	{
 		for (int j = 0; j < 9; j++)
@@ -42,22 +55,71 @@ void fun(char** board, int row[9][9], int col[9][9], int box[9][9])
 			}
 		}
 	}
-}
-void solveSudoku(char** board, int boardSize, int* boardColSize)
-{
-	int row[9][9] = { 0 };
-	int col[9][9] = { 0 };
-	int box[9][9] = { 0 };
-	fun(board, row, col, box);
 	isFill(row, col, box, board, 0);
+
+}
+char board0[9][9] = { 0 };
+void isFill(int row[9][9], int col[9][9], int box[9][9], char **board, int fillNumb)
+{
+	while (fillNumb < 81 && board[fillNumb / 9][fillNumb % 9] != '.')
+	{
+		//board0[fillNumb / 9][fillNumb % 9] = board[fillNumb / 9][fillNumb % 9];
+		fillNumb++;
+	}
+
+	if (fillNumb >= 81)
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			for (int j = 0; j < 9; j++)
+			{
+				board0[i][j] = board[i][j];
+			}
+		}
+		return;
+	}
 	for (int i = 0; i < 9; i++)
 	{
-		for (int j = 0; j < 9; j++)
+		if (row[fillNumb / 9][i] != 1 && col[fillNumb % 9][i] != 1 && box[(fillNumb / 9) / 3 * 3 + (fillNumb % 9) / 3][i] != 1)
 		{
-			board[i][j] = board0[i][j];
+			board[fillNumb / 9][fillNumb % 9] = '0' + i + 1;
+			row[fillNumb / 9][i] = 1;
+			col[fillNumb % 9][i] = 1;
+			box[(fillNumb / 9) / 3 * 3 + (fillNumb % 9) / 3][i] = 1;
+			isFill(row, col, box, board, fillNumb + 1);
+			board[fillNumb / 9][fillNumb % 9] = '.';
+			row[fillNumb / 9][i] = 0;
+			col[fillNumb % 9][i] = 0;
+			box[(fillNumb / 9) / 3 * 3 + (fillNumb % 9) / 3][i] = 0;
 		}
 	}
 }
+//void solveSudoku(char** board, int boardSize, int* boardColSize)
+//{
+//	int row[9][9] = { 0 };
+//	int col[9][9] = { 0 };
+//	int box[9][9] = { 0 };
+//	for (int i = 0; i < 9; i++)
+//	{
+//		for (int j = 0; j < 9; j++)
+//		{
+//			if (board[i][j] != '.')
+//			{
+//				row[i][board[i][j] - '0' - 1] = 1;
+//				col[j][board[i][j] - '0' - 1] = 1;
+//				box[(i / 3) * 3 + j / 3][board[i][j] - '0' - 1] = 1;
+//			}
+//		}
+//	}
+//	isFill(row, col, box, board, 0);
+//	for (int i = 0; i < 9; i++)
+//	{
+//		for (int j = 0; j < 9; j++)
+//		{
+//			board[i][j] = board0[i][j];
+//		}
+//	}
+//}
 
 int main()
 {
@@ -82,55 +144,4 @@ int main()
 		[".", "6", ".", ".", ".", ".", "2", "8", "."], 
 		[".", ".", ".", "4", "1", "9", ".", ".", "5"], 
 		[".", ".", ".", ".", "8", ".", ".", "7", "9"]]*/
-}
-char board0[9][9] = { 0 };
-void isFill(int row[9][9], int col[9][9], int box[9][9], char **board, int fillNumb)
-{
-	while (fillNumb < 81 && board[fillNumb / 9][fillNumb % 9] != '.')
-	{
-		board0[fillNumb / 9][fillNumb % 9] = board[fillNumb / 9][fillNumb % 9];
-		fillNumb++;
-	}
-	if (fillNumb >= 81)
-		return;
-	for (int i = 0; i < 9; i++)
-	{
-		if (row[fillNumb / 9][i] != 1 && col[fillNumb % 9][i] != 1 && box[(fillNumb / 9) / 3 * 3 + (fillNumb % 9) / 3][i] != 1)
-		{
-			board0[fillNumb / 9][fillNumb % 9] = '0' + i + 1;
-			row[fillNumb / 9][i] = 1;
-			col[fillNumb % 9][i] = 1;
-			box[(fillNumb / 9) / 3 * 3 + (fillNumb % 9) / 3][i] = 1;
-			isFill(row, col, box, board, fillNumb + 1);
-			row[fillNumb / 9][i] = 0;
-			col[fillNumb % 9][i] = 0;
-			box[(fillNumb / 9) / 3 * 3 + (fillNumb % 9) / 3][i] = 0;
-		}
-	}
-}
-void solveSudoku(char** board, int boardSize, int* boardColSize)
-{
-	int row[9][9] = { 0 };
-	int col[9][9] = { 0 };
-	int box[9][9] = { 0 };
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-			if (board[i][j] != '.')
-			{
-				row[i][board[i][j] - '0' - 1] = 1;
-				col[j][board[i][j] - '0' - 1] = 1;
-				box[(i / 3) * 3 + j / 3][board[i][j] - '0' - 1] = 1;
-			}
-		}
-	}
-	isFill(row, col, box, board, 0);
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-			board[i][j] = board0[i][j];
-		}
-	}
 }
