@@ -1,60 +1,27 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include<stdio.h>
 #include<stdlib.h>
+//给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+//
+//candidates 中的数字可以无限制重复被选取。
+
 int cmp(const void*a, const void*b)
 {
 	return *(int*)a - *(int*)b;
 }
-void fun(int* candidates, int candidatesSize, int target, int* returnSize, int** returnColumnSizes, int sum, int*map, int n)
+//re:返回的数组。 sum:当前数字的和。 map:临时容器。 n:每组数据的大小。 num:去枝叶
+void fun(int* candidates, int candidatesSize, int target, int* returnSize, int** re, int sum, int *map, int n, int**returnColumnSizes, int num)
 {
-	if (sum > target)
+	if (sum > target&&n>0)
 		return;
 	if (sum == target)
 	{
-		returnColumnSizes[*returnSize] = (int*)malloc(sizeof(int)*n);
+		re[*returnSize] = (int*)malloc(sizeof(int)*n);
 		for (int i = 0; i < n; i++)
 		{
-			returnColumnSizes[*returnSize][i] = map[i];
+			re[*returnSize][i] = map[i];
 		}
-		(*returnSize)++;
-		return;
-	}
-	for (int i = 0; i < candidatesSize; i++)
-	{
-		for (int j = i; j < candidatesSize; j++)
-		{
-			sum += candidates[j];
-			map[n] = candidates[j];
-			fun(candidates, candidatesSize, target, returnSize, returnColumnSizes, sum, map, n + 1);
-			sum -= candidates[j];
-		}
-	}
-}
-int** combinationSum(int* candidates, int candidatesSize, int target, int* returnSize, int** returnColumnSizes){
-	int**re = (int**)malloc(sizeof(int*)* 10000);
-	int *map = (int*)malloc(sizeof(int)* 10000);
-	qsort(candidates, candidatesSize, sizeof(int), cmp);
-	*returnSize = 0;
-	fun(candidates, candidatesSize, target, returnSize, re, 0, map, 0);
-	return re;
-}
-int cmp(const void*a, const void*b)
-{
-	return *(int*)a - *(int*)b;
-}
-void fun(int* candidates, int candidatesSize, int target, int* returnSize, int** returnColumnSizes, int sum, int*map, int n, int**re, int num)
-{
-	if (sum > target)
-		return;
-	if (sum == target)
-	{
-		returnColumnSizes[*returnSize] = (int*)malloc(sizeof(int)*n);
-		for (int i = 0; i < n; i++)
-		{
-			returnColumnSizes[*returnSize][i] = map[i];
-		}
-		re[*returnSize] = (int*)malloc(sizeof(int));
-		re[*returnSize][0] = n;
+		(*returnColumnSizes)[*returnSize] = n;
 		(*returnSize)++;
 		return;
 	}
@@ -63,15 +30,15 @@ void fun(int* candidates, int candidatesSize, int target, int* returnSize, int**
 	{
 		sum += candidates[j];
 		map[n] = candidates[j];
-		fun(candidates, candidatesSize, target, returnSize, returnColumnSizes, sum, map, n + 1, re, j);
+		fun(candidates, candidatesSize, target, returnSize, re, sum, map, n + 1, returnColumnSizes, j);
 		sum -= candidates[j];
 	}
 }
 
 int** combinationSum(int* candidates, int candidatesSize, int target, int* returnSize, int** returnColumnSizes){
-	int**re = (int**)malloc(sizeof(int*)* 10000);
-	returnColumnSizes = (int**)malloc(sizeof(int*)* 10000);
-	int *map = (int*)malloc(sizeof(int)* 10000);
+	int**re = (int**)malloc(sizeof(int*)* 500);
+	*returnColumnSizes = (int*)malloc(sizeof(int)* 500);
+	int *map = (int*)malloc(sizeof(int)* 500);
 	qsort(candidates, candidatesSize, sizeof(int), cmp);
 	*returnSize = 0;
 	fun(candidates, candidatesSize, target, returnSize, re, 0, map, 0, returnColumnSizes, 0);
@@ -81,7 +48,16 @@ int** combinationSum(int* candidates, int candidatesSize, int target, int* retur
 int main()
 {
 	int arr[] = { 2, 3, 6, 7 };
-	int x = 0;
-	int *p = &x;
-	combinationSum(arr, 4, 7, p, &p);
+	int *x = (int*)malloc(sizeof(int));
+	int** p = (int**)malloc(sizeof(int*));
+	int** re=combinationSum(arr, 4, 7, x, p);
+	for (int i = 0; i < *x; i++)
+	{
+		for (int j = 0; j < (*p)[i]; j++)
+		{
+			printf("%d ", re[i][j]);
+		}
+	}
+	system("pause");
+	return 0;
 }
