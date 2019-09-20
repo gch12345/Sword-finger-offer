@@ -1,6 +1,38 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include<stdio.h>
 #include<stdlib.h>
+//给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+//
+//candidates 中的每个数字在每个组合中只能使用一次
+//所有数字（包括目标数）都是正整数。
+//解集不能包含重复的组合。
+//re:返回的数组。 sum:当前数字的和。 map:临时容器。 n:每组数据的大小。 num:去枝叶
+void fun0(int* candidates, int candidatesSize, int target, int* returnSize, int** re, int sum, int *map, int n, int**returnColumnSizes, int num)
+{
+	if (sum > target&&n>0)
+		return;
+	if (sum == target)
+	{
+		re[*returnSize] = (int*)malloc(sizeof(int)*n);
+		for (int i = 0; i < n; i++)
+		{
+			re[*returnSize][i] = map[i];
+		}
+		(*returnColumnSizes)[*returnSize] = n;
+		(*returnSize)++;
+		return;
+	}
+
+	for (int j = num; j < candidatesSize; j++)
+	{
+		sum += candidates[j];
+		map[n] = candidates[j];
+		fun(candidates, candidatesSize, target, returnSize, re, sum, map, n + 1, returnColumnSizes, j + 1);
+		sum -= candidates[j];
+		while (j<candidatesSize - 1 && candidates[j] == candidates[j + 1])
+			j++;
+	}
+}
 //给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
 //
 //candidates 中的数字可以无限制重复被选取。
