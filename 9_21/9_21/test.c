@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<assert.h>
+//给定一个未排序的整数数组，找出其中没有出现的最小的正整数。
 int firstMissingPositive(int* nums, int numsSize){
 	for (int i = 0; i < numsSize; i++)
 	{
