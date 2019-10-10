@@ -1,5 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include<stdio.h>
+#include<stdlib.h>
+
 //n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
 void fun(char ***ret, int n, int num, int *returnSize, int **returnColumnSizes, int** board){
 	if (n == 0){
@@ -15,6 +17,15 @@ void fun(char ***ret, int n, int num, int *returnSize, int **returnColumnSizes, 
 				}
 			}
 		}
+		/*if (*returnSize < 5){
+			for (int j = 0; j < 4; j++){
+				for (int k = 0; k < 4; k++){
+					printf("%d,", board[j][k]);
+				}
+				printf("\n");
+			}
+			printf("\n");
+		}*/
 		returnColumnSizes[0][*returnSize] = num;
 		(*returnSize)++;
 		return;
@@ -24,7 +35,7 @@ void fun(char ***ret, int n, int num, int *returnSize, int **returnColumnSizes, 
 			if (board[i][j] == 0){
 				for (int a = 0; a < num; a++){
 					for (int b = 0; b < num; b++){
-						if (a + b == i + j || a - b == i - j && board[a][b] != -1){
+						if ((((a + b) == (i + j)) || ((a - b) == (i - j))) && (board[a][b] != -1)){
 							board[a][b] = 1;
 						}
 					}
@@ -40,7 +51,7 @@ void fun(char ***ret, int n, int num, int *returnSize, int **returnColumnSizes, 
 				board[i][j] = 0;
 				for (int a = 0; a < num; a++){
 					for (int b = 0; b < num; b++){
-						if (a + b == i + j || a - b == i - j && board[a][b] != -1){
+						if ((((a + b) == (i + j)) || ((a - b) == (i - j))) && (board[a][b] != -1)){
 							board[a][b] = 0;
 						}
 					}
@@ -56,7 +67,7 @@ void fun(char ***ret, int n, int num, int *returnSize, int **returnColumnSizes, 
 						if (board[h][g] == -1){
 							for (int a = 0; a < num; a++){
 								for (int b = 0; b < num; b++){
-									if (a + b == h + g || a - b == h - g && board[a][b] != -1){
+									if ((((a + b) == (h + g)) || ((a - b) == (h - g))) && (board[a][b] != -1)){
 										board[a][b] = 1;
 									}
 								}
@@ -76,14 +87,30 @@ void fun(char ***ret, int n, int num, int *returnSize, int **returnColumnSizes, 
 }
 
 char *** solveNQueens(int n, int* returnSize, int** returnColumnSizes){
-	char *** ret = (char***)malloc(sizeof(char**)* 2000);
+	char *** ret = (char***)malloc(sizeof(char**)* 40000);
 	int ** board = (int**)malloc(sizeof(int*)* n);
 	for (int i = 0; i < n; i++){
 		board[i] = (int*)calloc(n, sizeof(int));
 	}
 	*returnSize = 0;
-	*returnColumnSizes = (int*)malloc(2000 * sizeof(int));
+	*returnColumnSizes = (int*)malloc(40000 * sizeof(int));
 	fun(ret, n, n, returnSize, returnColumnSizes, board);
 	return ret;
 }
-
+int main()
+{
+	int returnSize = 0;
+	int* returnColumnSizes = NULL;
+	char *** re = solveNQueens(4, &returnSize, &returnColumnSizes);
+	for (int i = 0; i < returnSize; i++){
+		for (int j = 0; j < 4; j++){
+			for (int k = 0; k < 4; k++){
+				printf("%c,", re[i][j][k]);
+			}
+			printf("\n");
+		}
+		printf("\n");
+	}
+	system("pause");
+	return 0;
+}
