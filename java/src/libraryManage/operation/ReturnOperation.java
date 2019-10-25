@@ -7,23 +7,23 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class DelectOperation implements IOperation{
+public class ReturnOperation implements IOperation{
     @Override
     public void work() throws SQLException {
+        System.out.println("归还书籍");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("输入要归还书的编号");
+        int id = sc.nextInt();
         Connection conn = null;
         PreparedStatement ps = null;
         conn = JdbcUtils.getConnection();
-        System.out.println("删除书籍");
-        Scanner sc = new Scanner(System.in);
-        System.out.println("输入要删除书籍的编号");
-        int id = sc.nextInt();
-        ps = conn.prepareStatement("delete from library where id = ?");
+        ps = conn.prepareStatement("update library set isBorrowed = 0 where id = ?;");
         ps.setInt(1, id);
         int i = ps.executeUpdate();
-        if(i == 1) {
-            System.out.println("删除成功");
+        if (i == 1) {
+            System.out.println("归还成功");
         } else {
-            System.out.println("删除失败");
+            System.out.println("归还失败");
         }
         JdbcUtils.free(conn);
     }

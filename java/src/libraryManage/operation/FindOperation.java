@@ -20,14 +20,14 @@ public class FindOperation implements IOperation{
         ResultSet rs = null;
         conn = JdbcUtils.getConnection();
         int count = 0;
-        conn.prepareStatement("select * from library where name = ?;");
+        ps = conn.prepareStatement("select * from library where name = ?;");
         ps.setString(1, name);
         rs = ps.executeQuery();
         while (rs.next()) {
-            System.out.println(rs.getInt("id") + "\t" +
+            System.out.print(rs.getInt("id") + "\t" +
                                 rs.getString("name") + "\t" +
                                 rs.getFloat("price") + "\t" +
-                                rs.getDate("date") + "\t");
+                                rs.getDate("PublicationDate") + "\t");
             if(rs.getInt("isBorrowed") == 0){
                 System.out.println("未借出");
             } else {

@@ -19,14 +19,17 @@ public class BorrowOperation implements IOperation {
         PreparedStatement ps = null;
         ResultSet rs = null;
         conn = JdbcUtils.getConnection();
-        conn.prepareStatement("select isBorrowed from library where id = ?;");
+        ps = conn.prepareStatement("select isBorrowed from library where id = ?;");
         ps.setInt(1, id);
+        rs = ps.executeQuery();
         if(rs.next())
         {
-            if(rs.getInt("id") == 0)
+            if(rs.getInt("isBorrowed") == 0)
             {
-                conn.prepareStatement("update library set isBorrowed = 1 where id = ?;");
+                ps = conn.prepareStatement("update library set isBorrowed = 1 where id = ?;");
                 ps.setInt(1, id);
+                ps.executeUpdate();
+                System.out.println("借书成功");
             } else {
                 System.out.println("此书已借出");
             }
