@@ -1,6 +1,8 @@
 package myString;
 
 import java.lang.reflect.Field;
+import java.util.Scanner;
+
 //        8. replaceFirst
 //        9. split
 //        10. subString
@@ -113,8 +115,10 @@ public class myString {
         return -1;
     }
 //        7. replaceAll
-//    public String myReplaceAll(String regex, String replacement) throws NoSuchFieldException, IllegalAccessException {
-//        char[] s1 = myToCharArray(str1);
-//        char[]
-//    }
+    public String myReplaceAll(String regex, String replacement) throws NoSuchFieldException, IllegalAccessException {
+        char[] s1 = myToCharArray(str1);
+        char[] Regex = myToCharArray(regex);
+        char[] Replacement = myToCharArray(replacement);
+
+    }
 }
