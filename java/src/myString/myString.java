@@ -1,9 +1,11 @@
 package myString;
 
+import com.sun.deploy.util.ArrayUtil;
+
 import java.lang.reflect.Field;
 import java.util.Scanner;
 
-//        8. replaceFirst
+
 //        9. split
 //        10. subString
 //        11. trim
@@ -119,6 +121,35 @@ public class myString {
         char[] s1 = myToCharArray(str1);
         char[] Regex = myToCharArray(regex);
         char[] Replacement = myToCharArray(replacement);
+        char[] re = s1;
 
+    }
+
+//        8. replaceFirst
+    public String myReplaceFrist(String regex, String replacement) throws NoSuchFieldException, IllegalAccessException {
+        char[] s1 = myToCharArray(str1);
+        char[] Regex = myToCharArray(regex);
+        char[] Replacement = myToCharArray(replacement);
+        char[] re = s1;
+        //"abc".replaceAll()
+        for (int i = 0; i < s1.length - Regex.length + 1; i++) {
+            int count = 0;
+            for (int j = 0; j < Regex.length; j++) {
+                if (s1[i + j] != Regex[j]) {
+                    break;
+                }
+                count++;
+            }
+            if (count == Regex.length) {
+                re = new char[s1.length - (Regex.length - Replacement.length)];
+                System.arraycopy(s1, 0, re, 0, i);
+                System.arraycopy(Replacement, 0, re, i, Replacement.length);
+                System.arraycopy(s1, i + Regex.length, re, i + Replacement.length, s1.length - (i + Regex.length));
+                break;
+            }
+        }
+        String s = new String(re);
+        System.out.println(s);
+        return s;
     }
 }
