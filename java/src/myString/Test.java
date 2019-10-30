@@ -5,10 +5,16 @@ import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
-        myString s1 = new myString("abcbc");
-        String s = s1.myReplaceAll("x", "x");
-        //s = "ac";
-        System.out.println(s);
+        myString s1 = new myString("cabccbc");
+       // String s = s1.myReplaceAll("bc", "x");
+//        //s = "ac";
+//        System.out.println(s);
+//        String str = "hello world    " ;
+        String[] result = s1.mySplit("c") ;
+        System.out.println(result.length);
+        for(String s: result) {
+            System.out.println(s);
+        }
     }
 //    public static void main(String[] args) {
 //        Scanner sc = new Scanner(System.in);
