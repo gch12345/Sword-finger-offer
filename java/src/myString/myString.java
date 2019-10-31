@@ -6,8 +6,8 @@ import java.lang.reflect.Field;
 import java.util.Scanner;
 
 
-//        10. subString
-//        11. trim
+
+
 //        12. isEmpty
 //        13. length
 public class myString {
@@ -191,7 +191,8 @@ public class myString {
         String s = new String(re);
         return s;
     }
-//        9. split
+
+    //        9. split
     public String[] mySplit(String regex) throws NoSuchFieldException, IllegalAccessException {
         char[] s = myToCharArray(str1);
         char[] Regex = myToCharArray(regex);
@@ -205,13 +206,13 @@ public class myString {
                 }
                 count++;
             }
-            if (count == Regex.length && i == s.length - Regex.length) {
-                break;
-            }
+//            if (count == Regex.length && i == s.length - Regex.length + 1) {
+//                break;
+//            }
             if (count == Regex.length && i != start) {
                 if (re == null) {
                     re = new String[1];
-                    re[0] = new String(s, start, i);
+                    re[0] = new String(s, start, i - Regex.length);
                     //re[1] = new String(s, i + Regex.length, s.length - i - Regex.length);
                 } else {
                     String[] cur = re;
@@ -225,15 +226,41 @@ public class myString {
             }
             if (count == Regex.length && i == start) {
                 start = i + Regex.length;
+                i = i + Regex.length - 1;
             }
         }
-        if(re == null) {
+        if (re == null) {
             re = new String[]{str1};
         }
-        String[] cur = re;
-        re = new String[cur.length + 1];
-        System.arraycopy(cur, 0, re, 0, cur.length );
-        re[cur.length] = new String(s, start, s.length - start);
+        if (start != s.length) {
+            String[] cur = re;
+            re = new String[cur.length + 1];
+            System.arraycopy(cur, 0, re, 0, cur.length);
+            re[cur.length] = new String(s, start, s.length - start);
+        }
         return re;
+    }
+//        10. subString
+    public String mySubString(int beginIndex, int endIndex) throws Exception {
+        char[] s = myToCharArray(str1);
+        if (beginIndex > endIndex || beginIndex >s.length || beginIndex < 0) {
+            throw new Exception("访问异常");
+        }
+        String re = new String(s, beginIndex, endIndex - beginIndex + 1);
+        return re;
+    }
+//        11. trim
+    public String myTrim() throws NoSuchFieldException, IllegalAccessException {
+        char[] s= myToCharArray(str1);
+        int left = 0;
+        int right = s.length - 1;
+        while (s[left] == ' ') {
+            left++;
+        }
+        while (s[right] == ' ') {
+            right--;
+        }
+        String re = new String(s, left, right - left + 1);
+        return  re;
     }
 }
