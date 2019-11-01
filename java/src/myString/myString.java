@@ -8,8 +8,7 @@ import java.util.Scanner;
 
 
 
-//        12. isEmpty
-//        13. length
+
 public class myString {
     String str1;
 
@@ -262,5 +261,20 @@ public class myString {
         }
         String re = new String(s, left, right - left + 1);
         return  re;
+    }
+//        12. isEmpty
+    public boolean myIsEmpty() throws Exception {
+        if (str1 == null) {
+            throw new Exception("空指针");
+        }
+        if (str1.length() == 0) {
+            return true;
+        }
+        return false;
+    }
+//        13. length
+    public int myLength() throws NoSuchFieldException, IllegalAccessException {
+        char[] s = myToCharArray(str1);
+        return s.length;
     }
 }

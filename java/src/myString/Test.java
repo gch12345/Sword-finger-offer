@@ -5,8 +5,9 @@ import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) throws Exception {
-        myString s1 = new myString("  a   ");
-        System.out.println(s1.myTrim() + 'a');
+        myString s1 = new myString("a");
+        System.out.println(s1.myIsEmpty());
+        System.out.println(s1.myLength());
         //String re = s1.mySubString(2,3);
         //System.out.println(re);
         //System.out.println("abc".substring(1,5));
