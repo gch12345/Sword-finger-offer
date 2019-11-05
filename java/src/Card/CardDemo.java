@@ -1,19 +1,19 @@
 package Card;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+        import java.util.ArrayList;
+        import java.util.Collections;
+        import java.util.List;
+        import java.util.Random;
 
 public class CardDemo {
     public static final String[] SUIT = {"♥", "♦", "♠", "♣"};
-
+    public static final String[] suit = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
     private static List<Card> CreateCard() {
         List<Card> ret = new ArrayList<Card>();
         for (int i = 0; i < 4; i++) {
             Card card1 = new Card(SUIT[i], "A");
             ret.add(card1);
-            for(int j = 2; j <= 10; j++) {
+            for (int j = 2; j <= 10; j++) {
                 Card card = new Card(SUIT[i], j + "");
                 ret.add(card);
             }
@@ -32,7 +32,7 @@ public class CardDemo {
         Collections.shuffle(deck, rd);
     }
 
-    private static void dealCard(List<Card> deck){
+    private static void dealCard(List<Card> deck) {
         List<List<Card>> player = new ArrayList<>();
         player.add(new ArrayList<Card>());
         player.add(new ArrayList<Card>());
@@ -52,14 +52,14 @@ public class CardDemo {
 
     private static List<Boolean> isUniform(List<List<Card>> player) {
         List<Boolean> is = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < player.size(); i++) {
             int j = 0;
-            for (; j < 4; j++) {
-                if(player.get(i).get(j).suit != player.get(i).get(j + 1).suit) {
+            for (; j < player.get(0).size() - 1; j++) {
+                if (player.get(i).get(j).suit != player.get(i).get(j + 1).suit) {
                     break;
                 }
             }
-            if(j == 4) {
+            if (j == player.get(0).size() - 1) {
                 is.add(true);
             } else {
                 is.add(false);
@@ -67,6 +67,23 @@ public class CardDemo {
         }
         return is;
     }
+
+    private static List<Integer> compare(List<List<Card>> deck) {
+        List<Integer> ret = new ArrayList<>();
+        for (int i = 0; i < deck.size(); i++) {
+            int sum = 0;
+            for (int j = 0; j < deck.get(0).size(); j++) {
+                for (int k = 0; k < suit.length; k++) {
+                    if (deck.get(i).get(j).suit == suit[k]) {
+                        sum = sum + k;
+                    }
+                }
+            }
+            ret.add(sum);
+        }
+        return ret;
+    }
+
 
     public static void main(String[] args) {
         List<Card> deck = CreateCard();
