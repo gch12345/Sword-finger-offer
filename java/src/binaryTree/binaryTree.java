@@ -142,12 +142,21 @@ public class binaryTree {
         if (root == null) {
             return true;
         }
-        if (root.left.val != root.right.val) {
+        return isMirror(root.left, root.right);
+    }
+    public boolean isMirror(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left == null || right == null) {
             return false;
         }
-        boolean left = isSymmetric(root.left);
-        boolean right = isSymmetric(root.right);
-        return left && right;
+        if (left.val != right.val) {
+            return false;
+        }
+        boolean ret1 = isMirror(left.left, right.right);
+        boolean ret2 = isMirror(left.right, right.left);
+        return ret1 && ret2;
     }
 
     public static void main(String[] args) {
