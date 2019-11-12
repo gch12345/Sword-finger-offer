@@ -1,5 +1,8 @@
 package binaryTree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class TreeNode {
     char val;
     TreeNode left;
@@ -57,6 +60,7 @@ public class binaryTree {
         postorder(root.right);
         System.out.println(root.val);
     }
+
 
     //节点个数
     public static int nodeNum (TreeNode root) {
