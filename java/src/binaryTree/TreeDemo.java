@@ -31,6 +31,7 @@ public class TreeDemo {
         help(root.right, level + 1);
     }
 
+    //最近公共祖先
     private TreeNode re = null;
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         find(root, p ,q);
@@ -48,5 +49,63 @@ public class TreeDemo {
             re = root;
         }
         return (left + right + mid) > 0;
+    }
+
+    //二叉搜索树转换成一个排序的双向链表
+    public TreeNode Convert(TreeNode pRootOfTree) {
+        if (pRootOfTree == null) {
+            return null;
+        }
+        if (pRootOfTree.left == null && pRootOfTree.right == null) {
+            return pRootOfTree;
+        }
+        TreeNode left = Convert(pRootOfTree.left);
+        TreeNode leftHead = left;
+        while (leftHead != null && leftHead.right != null) {
+            leftHead = leftHead.right;
+        }
+        if (left != null) {
+            leftHead.right = pRootOfTree;
+            pRootOfTree.left = leftHead;
+        }
+        TreeNode right = Convert(pRootOfTree.right);
+        if (right != null) {
+            pRootOfTree.right = right;
+            right.left = pRootOfTree;
+        }
+        return left == null ? pRootOfTree : left;
+    }
+
+    //根据一棵树的前序遍历与中序遍历构造二叉树。
+    int index = 0;
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        index = 0;
+        if (preorder.length == 0) {
+            return null;
+        }
+        return helper(preorder, inorder, 0, inorder.length);
+    }
+
+    private TreeNode helper(int[] pereorder, int[] inorder, int inorderLeft, int inorderRight) {
+        if (inorderLeft >= inorderRight) {
+            return null;
+        }
+        if (index >= pereorder.length) {
+            return null;
+        }
+        TreeNode root = new TreeNode(pereorder[index]);
+        int pos = find(inorder, inorderLeft, inorderRight, pereorder[index]);
+        index++;
+        root.left = helper(pereorder, inorder, inorderLeft, pos);
+        root.right = helper(pereorder, inorder, pos + 1, inorderRight);
+        return root;
+    }
+    private int find(int[] inorder, int inorderLeft, int inorderRight, int val) {
+        for (int i = inorderLeft; i < inorderRight; i++) {
+            if (inorder[i] == val) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
