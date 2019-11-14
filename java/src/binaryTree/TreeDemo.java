@@ -1,7 +1,9 @@
 package binaryTree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TreeDemo {
     static class TreeNode {
@@ -78,15 +80,15 @@ public class TreeDemo {
 
     //根据一棵树的前序遍历与中序遍历构造二叉树。
     int index = 0;
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
+    public TreeNode buildtree(int[] preorder, int[] inorder) {
         index = 0;
         if (preorder.length == 0) {
             return null;
         }
-        return helper(preorder, inorder, 0, inorder.length);
+        return Helper(preorder, inorder, 0, inorder.length);
     }
 
-    private TreeNode helper(int[] pereorder, int[] inorder, int inorderLeft, int inorderRight) {
+    private TreeNode Helper(int[] pereorder, int[] inorder, int inorderLeft, int inorderRight) {
         if (inorderLeft >= inorderRight) {
             return null;
         }
@@ -96,8 +98,8 @@ public class TreeDemo {
         TreeNode root = new TreeNode(pereorder[index]);
         int pos = find(inorder, inorderLeft, inorderRight, pereorder[index]);
         index++;
-        root.left = helper(pereorder, inorder, inorderLeft, pos);
-        root.right = helper(pereorder, inorder, pos + 1, inorderRight);
+        root.left = Helper(pereorder, inorder, inorderLeft, pos);
+        root.right = Helper(pereorder, inorder, pos + 1, inorderRight);
         return root;
     }
     private int find(int[] inorder, int inorderLeft, int inorderRight, int val) {
@@ -107,5 +109,59 @@ public class TreeDemo {
             }
         }
         return -1;
+    }
+
+    //根据一棵树的中序遍历与后序遍历构造二叉树。
+    Map<Integer, Integer> map = new HashMap<>();
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        index = 0;
+        for (int a: inorder
+             ) {
+            map.put(a, index++);
+        }
+        index--;
+        return helper(inorder, postorder, 0, inorder.length);
+    }
+
+    private TreeNode helper(int[] inorder, int[] postorder, int inorderLeft, int inorderRight) {
+        if (inorderLeft >= inorderRight) {
+            return null;
+        }
+        if (index < 0) {
+            return null;
+        }
+        TreeNode root = new TreeNode(postorder[index]);
+        index--;
+        int pos = map.get(root.val);
+        root.right = helper(inorder, postorder, pos + 1, inorderRight);
+        root.left = helper(inorder, postorder, inorderLeft, pos);
+        return root;
+    }
+
+    //根据二叉树创建字符串
+    StringBuffer str = new StringBuffer();
+    public String tree2str(TreeNode t) {
+        help(t);
+        String re = str.toString();
+        return re;
+    }
+    private void help(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        if (root.left == null && root.right == null) {
+            str.append(root.val);
+            return;
+        }
+        str.append(root.val);
+        str.append("(");
+        help(root.left);
+        str.append(")");
+        if (root.right == null) {
+            return;
+        }
+        str.append("(");
+        help(root.right);
+        str.append(")");
     }
 }
