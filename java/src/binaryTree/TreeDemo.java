@@ -1,9 +1,8 @@
 package binaryTree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import sun.reflect.generics.tree.Tree;
+
+import java.util.*;
 
 public class TreeDemo {
     static class TreeNode {
@@ -163,5 +162,76 @@ public class TreeDemo {
         str.append("(");
         help(root.right);
         str.append(")");
+    }
+
+    //非递归二叉树的前序遍历
+    public List<Integer> preorderTraversal(TreeNode root) {
+        if (root == null) {
+            return  null;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        List<Integer> ret = new ArrayList<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.pop();
+            ret.add(cur.val);
+            if (cur.right != null) {
+                stack.push(cur.right);
+            }
+            if (cur.left != null) {
+                stack.push(cur.left);
+            }
+        }
+        return ret;
+    }
+
+    //非递归二叉树的中序遍历
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        TreeNode cur = root.left;
+        while (!stack.isEmpty() || cur != null) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            TreeNode top = stack.pop();
+            ret.add(top.val);
+            cur = top.right;
+        }
+        return ret;
+    }
+
+    //非递归二叉树的后序遍历
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        stack.push(root);
+        TreeNode cur = root.left;
+        TreeNode prve = null;
+        if (cur == null) {
+            cur = root.right;
+        }
+        while (!stack.isEmpty()) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            TreeNode top = stack.peek();
+            if (top.right == null || prve == top.right) {
+                ret.add(stack.pop().val);
+                prve = top;
+            } else {
+                cur = top.right;
+            }
+        }
+        return ret;
     }
 }
