@@ -2,7 +2,7 @@ package Sort;
 
 import java.util.Arrays;
 
-public class SortDome {
+public class SortDome1 {
     public static void insertSort(int[] array) {
         for (int i = 0; i < array.length; i++) {
             int x = array[i];
