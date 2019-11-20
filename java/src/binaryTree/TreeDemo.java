@@ -215,7 +215,7 @@ public class TreeDemo {
         Stack<TreeNode> stack = new Stack<TreeNode>();
         stack.push(root);
         TreeNode cur = root.left;
-        TreeNode prve = null;
+        TreeNode prev = null;
         if (cur == null) {
             cur = root.right;
         }
@@ -225,9 +225,9 @@ public class TreeDemo {
                 cur = cur.left;
             }
             TreeNode top = stack.peek();
-            if (top.right == null || prve == top.right) {
+            if (top.right == null || prev == top.right) {
                 ret.add(stack.pop().val);
-                prve = top;
+                prev = top;
             } else {
                 cur = top.right;
             }

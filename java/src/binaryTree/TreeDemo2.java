@@ -1,7 +1,6 @@
 package binaryTree;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TreeDemo2 {
     class TreeNode {
@@ -104,5 +103,102 @@ public class TreeDemo2 {
         root.right = Helper(inorder, postorder, pos + 1, inorderRight);
         root.left = Helper(inorder, postorder, inorderLeft, pos - 1);
         return root;
+    }
+
+    StringBuffer string = new StringBuffer();
+    public String tree2str(TreeNode t) {
+        index = 0;
+        help(t);
+        return string.toString();
+    }
+    private void help(TreeNode t) {
+        if (t == null) {
+            return;
+        }
+        if (t.left == null && t.right== null) {
+            string.append(t.val);
+            return;
+        }
+        string.append(t.val);
+        string.append('(');
+        help(t.left);
+        string.append(')');
+        if (t.right == null) {
+            return;
+        }
+        string.append('(');
+        help(t.right);
+        string.append(')');
+    }
+    //非递归前序遍历
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if (root == null) {
+            return list;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.add(root);
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.pop();
+            list.add(cur.val);
+            if (cur.right != null) {
+                stack.add(cur.right);
+            }
+            if (cur.left != null) {
+                stack.add(cur.left);
+            }
+        }
+        return list;
+    }
+    //非递归中序遍历
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if (root == null) {
+            return list;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        //stack.add(root);
+        TreeNode cur = root;
+        while (true) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            if (stack.isEmpty()) {
+                break;
+            }
+            TreeNode top = stack.pop();
+            list.add(top.val);
+            cur = top.right;
+        }
+        return list;
+    }
+    //非递归后序遍历
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if (root == null) {
+            return list;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode cur = root;
+        TreeNode prev = null;
+        while (true) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            if (stack.isEmpty()) {
+                break;
+            }
+            TreeNode top = stack.peek();
+            if (top.right == null || top.right == prev) {
+                stack.pop();
+                list.add(top.val);
+                prev = top;
+            } else {
+                cur = top.right;
+            }
+        }
+        return list;
     }
 }
