@@ -1,9 +1,6 @@
 package MapAndSet;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 class Node {
     public int val;
@@ -17,8 +14,30 @@ class Node {
         next = _next;
         random = _random;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.val == ((Node)obj).val
+                && this.random == ((Node)obj).random;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 37 * result + val;
+        result = 37 * result + (next == null ? 0 :next.hashCode());
+        return result;
+    }
 };
-public class MapAndSet {
+public class MapAndSet{
+    public static void main(String[] args) {
+        Map<Node, Integer> map = new HashMap<>();
+        map.put(new Node(1, null, null), 2);
+        map.put(new Node(1, null, null), 1);
+        for (Node x : map.keySet()) {
+            System.out.println(map.get(x));
+        }
+    }
     public int singleNumber(int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
@@ -63,5 +82,60 @@ public class MapAndSet {
         }
         return result;
     }
-    //
+    //坏键盘打字
+    public static void Main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String expextString = null;
+        String actualString = null;
+        while (sc.hasNext()) {
+            expextString = sc.next().toUpperCase();
+            actualString = sc.next().toUpperCase();
+        }
+        Set<Character> actualSet = new HashSet<>();
+        for (int i = 0; i < actualString.length(); i++) {
+            actualSet.add(actualString.charAt(i));
+        }
+        Set<Character> printfSet = new HashSet<>();
+        for (int i = 0; i < expextString.length(); i++) {
+            char c = expextString.charAt(i);
+            if (!actualSet.contains(c)) {
+                if (!printfSet.contains(c)) {
+                    System.out.print(c);
+                    printfSet.add(c);
+                }
+            }
+        }
+    }
+    //前K个高频单词
+    public List<String> topKFrequent(String[] words, int k) {
+        List<String> list = new ArrayList<>();
+        if (k <= 0) {
+            return list;
+        }
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < words.length; i++) {
+            map.put(words[i], map.getOrDefault(words[i], 0) + 1);
+        }
+        Set<String> set = map.keySet();
+        for (String string : set) {
+            list.add(string);
+        }
+        Collections.sort(list, new myComp(map));
+        return list.subList(0, k);
+    }
+    class myComp implements Comparator<String> {
+        private Map<String, Integer> map;
+        public myComp(Map<String, Integer> map) {
+            this.map = map;
+        }
+        @Override
+        public int compare(String o1, String o2) {
+            int count1 = map.get(o1);
+            int count2 = map.get(o2);
+            if (count1 == count2) {
+                return o1.compareTo(o2);
+            }
+            return count2 - count1;
+        }
+    }
 }
