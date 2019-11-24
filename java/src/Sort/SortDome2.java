@@ -129,12 +129,12 @@ public class SortDome2 {
     }
 
     private static void helperMergeSort(int[] array, int left, int right, int[] helpArray) {
-        if (left <= right) {
+        if (left >= right) {
             return;
         }
-        int mid = (right - left) / 2;
-        helper(array, left, mid);
-        helper(array, mid + 1, right);
+        int mid = (right + left) / 2;
+        helperMergeSort(array, left, mid, helpArray);
+        helperMergeSort(array, mid + 1, right, helpArray);
         merge(array, left, mid, right, helpArray);
     }
     private static void merge(int[] array, int left, int mid, int right, int[] helpArray) {
@@ -180,7 +180,7 @@ public class SortDome2 {
 
     public static void main(String[] args) {
         int[] array = {9, 2, 7, 0, 1, 0, 9, 5, 3};
-        mergeSort0(array);
+        mergeSort(array);
         System.out.println(Arrays.toString(array));
     }
 }
