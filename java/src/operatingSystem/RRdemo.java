@@ -6,11 +6,11 @@ import java.util.Scanner;
 
 public class RRdemo {
     static class process {
-        String name;
-        int rest;
-        int time;
-        int arrive;
-        int exit;
+        String name; // 进程名
+        int rest;   // 剩余服务时间
+        int time;   // 服务时间
+        int arrive; // 到达时间
+        int exit;   // 完成时间
         process next;
 
         public process(String name, int time, int arrive, int rest) {
@@ -21,7 +21,7 @@ public class RRdemo {
         }
     }
     public static process arriveList;
-    public static process readyQueue;
+    public static process readyList;
     public static int RR;
 
     public RRdemo(int RR) {
@@ -53,53 +53,27 @@ public class RRdemo {
         }
     }
     public static Queue<process> queue = new LinkedList<>();
-    public static void ReadyQueue() {
+    public static void ReadyList() {
         for (int time = 0;;) {
-            while (arriveList == null && readyQueue == null) {
+            while (arriveList == null && readyList == null) {
                 return;
             }
-            while (arriveList != null && time >= arriveList.arrive) {
-                process cur = arriveList;
-                arriveList = arriveList.next;
-                cur.next = null;
-                if (readyQueue == null) {
-                    readyQueue = cur;
-                } else {
-                    process readyNode = readyQueue;
-                    while (readyNode.next != null) {
-                        readyNode = readyNode.next;
-                    }
-                    readyNode.next = cur;
-                }
-            }
-            if (readyQueue == null) {
+            load(time);
+            if (readyList == null) {
                 time++;
                 continue;
             }
-            process cur = readyQueue;
+            process cur = readyList;
             if (cur.rest <= RR) {
                 cur.exit = time + cur.rest;
                 queue.add(cur);
                 time = time + cur.rest;
                 cur.rest = 0;
                 cur.exit = time;
-                readyQueue = readyQueue.next;
+                readyList = readyList.next;
             } else {
                 time += RR;
-                while (arriveList != null && time >= arriveList.arrive) {
-                    process Cur = arriveList;
-                    arriveList = arriveList.next;
-                    Cur.next = null;
-                    if (readyQueue == null) {
-                        readyQueue = Cur;
-                    } else {
-                        process readyNode = readyQueue;
-                        while (readyNode.next != null) {
-                            readyNode = readyNode.next;
-                        }
-                        readyNode.next = Cur;
-                    }
-                }
+                load(time);
                 cur.rest = cur.rest - RR;
                 if (cur.next == null){
                     continue;
@@ -108,9 +82,26 @@ public class RRdemo {
                 while (cur.next != null) {
                     cur = cur.next;
                 }
-                readyQueue = readyQueue.next;
+                readyList = readyList.next;
                 node.next = null;
                 cur.next = node;
+            }
+        }
+    }
+
+    private static void load(int time) {
+        while (arriveList != null && time >= arriveList.arrive) {
+            process cur = arriveList;
+            arriveList = arriveList.next;
+            cur.next = null;
+            if (readyList == null) {
+                readyList = cur;
+            } else {
+                process readyNode = readyList;
+                while (readyNode.next != null) {
+                    readyNode = readyNode.next;
+                }
+                readyNode.next = cur;
             }
         }
     }
@@ -125,7 +116,7 @@ public class RRdemo {
     }
 
     public static void main(String[] args) {
-        RRdemo rr = new RRdemo(1);
+        RRdemo rr = new RRdemo(4);
         String name = null;
         Integer time = null;
         Integer arrive = null;
@@ -133,14 +124,14 @@ public class RRdemo {
         Scanner sc = new Scanner(System.in);
         while (!sc.hasNext("#")) {
             name = sc.next();
-            time = sc.nextInt();
             arrive = sc.nextInt();
+            time = sc.nextInt();
             process cur = new process(name, time, arrive, time);
             queue.add(cur);
         }
         sc.close();
         rr.ArriveList(queue);
-        rr.ReadyQueue();
+        rr.ReadyList();
         rr.Printf();
     }
 }
