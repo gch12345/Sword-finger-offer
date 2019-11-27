@@ -1,17 +1,19 @@
 package operatingSystem;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 
-public class SJFdemo {
-    static class process {
+public class SJFdemo{
+    static class process implements Comparable<process> {
         String name;
         int time;
         int arrive;
         int exit;
         process next;
 
+        @Override
+        public int compareTo(process o) {
+            return this.time - o.time;
+        }
         public process(String name, int time, int arrive) {
             this.name = name;
             this.time = time;
@@ -19,7 +21,7 @@ public class SJFdemo {
         }
     }
     public static process arriveList = null;
-    public static process readyList = null;
+    public static List<process> readyList = new ArrayList<>();
     public static void ArriveList(Queue<process> queue) {
         while (!queue.isEmpty()) {
             process cur = queue.poll();
@@ -47,19 +49,19 @@ public class SJFdemo {
     static Queue<process> queue = new LinkedList<>();
     public static void ReadyList() {
         for (int time = 0;;) {
-            if (arriveList == null && readyList == null) {
+            if (arriveList == null && readyList.isEmpty()) {
                 return;
             }
             load(time);
-            if (readyList == null) {
+            if (readyList.isEmpty()) {
                 time++;
                 continue;
             }
-            process cur = readyList;
+            process cur = readyList.get(0);
+            readyList.remove(0);
             time += cur.time;
             cur.exit = time;
             queue.add(cur);
-            readyList = readyList.next;
         }
     }
     private static void load(int time) {
@@ -67,15 +69,8 @@ public class SJFdemo {
             process cur = arriveList;
             arriveList = arriveList.next;
             cur.next = null;
-            if (readyList == null) {
-                readyList = cur;
-            } else {
-                process readyNode = readyList;
-                while (readyNode.next != null) {
-                    readyNode = readyNode.next;
-                }
-                readyNode.next = cur;
-            }
+            readyList.add(cur);
+            Collections.sort(readyList);
         }
     }
     public static void Print() {
