@@ -2,7 +2,7 @@ package operatingSystem;
 
 import java.util.*;
 
-public class SJFdemo{
+public class SJFdemo {
     static class process implements Comparable<process> {
         String name;
         int time;
@@ -20,9 +20,9 @@ public class SJFdemo{
             this.arrive = arrive;
         }
     }
-    public static process arriveList = null;
-    public static List<process> readyList = new ArrayList<>();
-    public static void ArriveList(Queue<process> queue) {
+    public process arriveList = null;
+    public List<process> readyList = new ArrayList<>();
+    public void ArriveList(Queue<process> queue) {
         while (!queue.isEmpty()) {
             process cur = queue.poll();
             if (arriveList == null) {
@@ -46,8 +46,8 @@ public class SJFdemo{
             }
         }
     }
-    static Queue<process> queue = new LinkedList<>();
-    public static void ReadyList() {
+     Queue<process> queue = new LinkedList<>();
+    public void ReadyList() {
         for (int time = 0;;) {
             if (arriveList == null && readyList.isEmpty()) {
                 return;
@@ -64,7 +64,7 @@ public class SJFdemo{
             queue.add(cur);
         }
     }
-    private static void load(int time) {
+    public void load(int time) {
         while (arriveList != null && time >= arriveList.arrive) {
             process cur = arriveList;
             arriveList = arriveList.next;
@@ -73,31 +73,12 @@ public class SJFdemo{
             Collections.sort(readyList);
         }
     }
-    public static void Print() {
+    public void Print() {
         while (!queue.isEmpty()) {
             process cur = queue.poll();
             int num = cur.exit - cur.arrive;
             System.out.println("进程名：" + cur.name + " " + "到达时间：" + cur.arrive + " "
                     + "服务时间：" + cur.time + "完成时间：" + cur.exit + " " + "周转时间：" + num);
         }
-    }
-    public static void main(String[] args) {
-        SJFdemo cur = new SJFdemo();
-        Queue<process> queue = new LinkedList<>();
-        Scanner sc = new Scanner(System.in);
-        String name = null;
-        Integer time = null;
-        Integer arrive = null;
-        while (!sc.hasNext("#")) {
-            name = sc.next();
-            arrive = sc.nextInt();
-            time = sc.nextInt();
-            process pro = new process(name, time, arrive);
-            queue.add(pro);
-        }
-        sc.close();
-        cur.ArriveList(queue);
-        cur.ReadyList();
-        cur.Print();
     }
 }

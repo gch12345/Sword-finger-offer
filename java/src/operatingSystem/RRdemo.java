@@ -5,7 +5,7 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class RRdemo {
-    static class process {
+     static class process {
         String name; // 进程名
         int rest;   // 剩余服务时间
         int time;   // 服务时间
@@ -20,15 +20,15 @@ public class RRdemo {
             this.rest = rest;
         }
     }
-    public static process arriveList;
-    public static process readyList;
-    public static int RR;
+    public  process arriveList;
+    public  process readyList;
+    public  int RR;
 
     public RRdemo(int RR) {
         this.RR = RR;
     }
 
-    public static void ArriveList(Queue<process> queue) {
+    public void ArriveList(Queue<process> queue) {
         while (!queue.isEmpty()) {
             process cur = queue.poll();
             if (arriveList == null) {
@@ -52,8 +52,8 @@ public class RRdemo {
             }
         }
     }
-    public static Queue<process> queue = new LinkedList<>();
-    public static void ReadyList() {
+    public Queue<process> queue = new LinkedList<>();
+    public void ReadyList() {
         for (int time = 0;;) {
             while (arriveList == null && readyList == null) {
                 return;
@@ -89,7 +89,7 @@ public class RRdemo {
         }
     }
 
-    private static void load(int time) {
+    public void load(int time) {
         while (arriveList != null && time >= arriveList.arrive) {
             process cur = arriveList;
             arriveList = arriveList.next;
@@ -106,7 +106,7 @@ public class RRdemo {
         }
     }
 
-    public static void Printf() {
+    public void Printf() {
         while (!queue.isEmpty()) {
             process cur = queue.poll();
             int num = cur.exit - cur.arrive;
@@ -115,7 +115,7 @@ public class RRdemo {
         }
     }
 
-    public static void main(String[] args) {
+    public void main(String[] args) {
         RRdemo rr = new RRdemo(4);
         String name = null;
         Integer time = null;
