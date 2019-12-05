@@ -9,6 +9,7 @@ class TreeNode{
     }
 }
 public class NumTrees {
+    //不同的二叉搜索树
     public int numTrees(int n) {
         int[] array = new int[n + 1];
         array[0] = 1;
@@ -21,36 +22,25 @@ public class NumTrees {
         return array[n];
     }
 
+    //验证二叉搜索树
     public boolean isValidBST(TreeNode root) {
-        return helper(root, root.val);
+        return helper(root, null, null);
     }
-    private boolean helper(TreeNode root, int x) {
+    private boolean helper(TreeNode root, Integer lower, Integer upper) {
         if (root == null) {
             return true;
         }
-        if (root.left == null && root.right == null) {
-            return true;
-        }
-        boolean left = isValidBST(root.left);
-        boolean right = isValidBST(root.right);
-        if (left != true || right != true) {
+        if (lower != null && root.val <= lower) {
             return false;
         }
-        if (root.left == null ) {
-            if (root.right.val > root.val && root.right.val > x)
-                return true;
-            else
-                return false;
+        if (upper != null && root.val >= upper) {
+            return false;
         }
-        if (root.right == null ) {
-            if (root.left.val < root.val && root.left.val < x)
-                return true;
-            else
-                return false;
+        boolean left = helper(root.left, lower, root.val);
+        boolean right = helper(root.right, root.val, upper);
+        if (!left || !right) {
+            return false;
         }
-        if (root.left.val < root.val && root.right.val > root.val && root.left.val < x && root.right.val > x) {
-            return true;
-        }
-        return false;
+        return true;
     }
 }
