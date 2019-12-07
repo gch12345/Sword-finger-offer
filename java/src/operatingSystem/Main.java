@@ -20,7 +20,7 @@ public class Main {
         Integer time = null;
         Integer arrive = null;
         Queue<RRdemo.process> queue = new LinkedList<>();
-        System.out.println("输入进程，以 # 结束");
+        System.out.println("输入进程名   到达时间   服务时间，最后以 # 结束");
         while (!sc.hasNext("#")) {
             name = sc.next();
             arrive = sc.nextInt();
@@ -39,7 +39,7 @@ public class Main {
         String name = null;
         Integer time = null;
         Integer arrive = null;
-        System.out.println("输入进程，以 # 结束");
+        System.out.println("输入进程名   到达时间   服务时间，以 # 结束");
         while (!sc.hasNext("#")) {
             name = sc.next();
             arrive = sc.nextInt();
