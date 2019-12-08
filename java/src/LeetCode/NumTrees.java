@@ -1,4 +1,7 @@
 package LeetCode;
+
+import java.util.Stack;
+
 class TreeNode{
     int val;
     TreeNode left;
@@ -42,5 +45,55 @@ public class NumTrees {
             return false;
         }
         return true;
+    }
+
+    //二叉树展开为链表
+    public void flatten(TreeNode root) {
+        while (root != null) {
+            if (root.left == null) {
+                root = root.right;
+            } else {
+                TreeNode prev = root.left;
+                while(prev.right != null) {
+                    prev = prev.right;
+                }
+                prev.right = root.right;
+                root.right = root.left;
+                root.left = null;
+            }
+        }
+    }
+    public void flatten0(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        TreeNode prve = null;
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.pop();
+            if (prve != null) {
+                prve.right = cur;
+                prve.left = null;
+            }
+            if (cur.right != null) {
+                stack.push(cur.right);
+            }
+            if (cur.left != null) {
+                stack.push(cur.left);
+            }
+            prve = cur;
+        }
+    }
+    private TreeNode prve = null;
+    public void flatten1(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        flatten1(root.right);
+        flatten1(root.left);
+        root.right = prve;
+        root.left = null;
+        prve = root;
     }
 }

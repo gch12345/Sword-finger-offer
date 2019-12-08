@@ -9,6 +9,7 @@ public class MergeKLists {
             this.val = val;
         }
     }
+    //合并 n 个有序链表
     public ListNode mergeKLists(ListNode[] lists){
         if (lists.length == 0) {
             return null;
