@@ -1,25 +1,28 @@
 package dataBase;
 
-import com.mysql.jdbc.UpdatableResultSet;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 public class Query {
     public static void main(String[] args) {
+        mysql();
+    }
+    public static void mysql() {
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             try {
                 connection = DBUtil.getDataSource().getConnection();
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery("select * from exam_result;");
+                statement = connection.prepareStatement("select * from exam_result where name = ?;");
+                statement.setString(1, " ");
+                resultSet = statement.executeQuery();
                 while (resultSet.next()) {
                     System.out.println("id = " + resultSet.getObject("id") + "  " + "name = " + resultSet.getObject("name")
-                                        + "  " + "chinese = " + resultSet.getObject("chinese") + "  " + "math = " + resultSet.getObject("math")
-                                        + "  " + "english = " + resultSet.getObject("english"));
+                            + "  " + "chinese = " + resultSet.getObject("chinese") + "  " + "math = " + resultSet.getObject("math")
+                            + "  " + "english = " + resultSet.getObject("english"));
                 }
             } finally {
                 DBUtil.close(connection, statement, resultSet);
