@@ -12,17 +12,25 @@ public class SortList {
         ListNode ret = head;
         int size = size(head);
         for (int group = 1; group < size; group *= 2) {
-            ListNode prve = null;
-            for (ListNode cur = ret; cur != null; cur = find(cur, group, prve)) {
+            //ListNode prve = null;
+            prve = null;
+            for (ListNode cur = ret; cur != null;) {
                 ListNode l2 = null;
                 l2 = findL2(cur, group);
+                if (l2 == null) {
+                    break;
+                }
+                ListNode oldPrve = prve;
                 ListNode me = merge(cur, l2, group);
-                if (prve != null) {
-                    prve.next = me;
-                    cur = prve.next;
+                if (oldPrve != null) {
+                    oldPrve.next = me;
                 } else {
                     ret = me;
-                    cur = ret;
+                }
+                if (prve == null) {
+                    cur = null;
+                } else {
+                    cur = prve.next;
                 }
             }
         }
@@ -38,17 +46,6 @@ public class SortList {
         }
         return cur;
     }
-    private ListNode find(ListNode head, int group, ListNode prve) {
-        ListNode cur = head;
-        for (int i = 0; i < group * 2; i++) {
-            if (cur == null) {
-                return null;
-            }
-            prve = cur;
-            cur = cur.next;
-        }
-        return cur;
-    }
     private int size(ListNode head) {
         int ret = 0;
         while(head != null) {
@@ -57,6 +54,7 @@ public class SortList {
         }
         return ret;
     }
+    private ListNode prve = null;
     private ListNode merge(ListNode l1, ListNode l2, int len) {
         if (l1 == null || l2 == null || len <= 0) {
             return null;
@@ -79,6 +77,12 @@ public class SortList {
         }
         if (l1 == null || len1 >= len) {
             cur.next = l2;
+            while(len2 < len - 1 && l2 != null) {
+                l2 = l2.next;
+                len2++;
+            }
+            prve = l2;
+            return head.next;
         }
         if (l2 == null || len2 >= len) {
             ListNode next = cur.next;
@@ -87,19 +91,20 @@ public class SortList {
                 l1 = l1.next;
                 len1++;
             }
+            prve = l1;
             l1.next = next;
         }
         return head.next;
     }
 
     public static void main(String[] args) {
-        ListNode a = new ListNode(4);
-        ListNode b = new ListNode(3);
-        ListNode c = new ListNode(2);
-        ListNode d = new ListNode(1);
+        ListNode a = new ListNode(3);
+        ListNode b = new ListNode(2);
+        ListNode c = new ListNode(4);
+        //ListNode d = new ListNode(1);
         a.next = b;
         b.next = c;
-        c.next = d;
+        //c.next = d;
         SortList solve = new SortList();
         solve.sortList(a);
     }
