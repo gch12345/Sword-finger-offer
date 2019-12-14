@@ -20,10 +20,10 @@ public class SortList {
                 if (l2 == null) {
                     break;
                 }
-                ListNode oldPrve = prve;
+                ListNode oldPrev = prve;
                 ListNode me = merge(cur, l2, group);
-                if (oldPrve != null) {
-                    oldPrve.next = me;
+                if (oldPrev != null) {
+                    oldPrev.next = me;
                 } else {
                     ret = me;
                 }
@@ -97,6 +97,35 @@ public class SortList {
         return head.next;
     }
 
+    public ListNode sortList0(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode temp = slow.next;
+        slow.next = null;
+        ListNode left = sortList0(head);
+        ListNode right = sortList0(temp);
+        ListNode ret = new ListNode(-1);
+        ListNode cur = ret;
+        while (left != null && right != null) {
+            if (left.val < right.val) {
+                cur.next = left;
+                left = left.next;
+            } else {
+                cur.next = right;
+                right = right.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = (left == null ? right : left);
+        return ret.next;
+    }
     public static void main(String[] args) {
         ListNode a = new ListNode(3);
         ListNode b = new ListNode(2);
@@ -106,6 +135,6 @@ public class SortList {
         b.next = c;
         //c.next = d;
         SortList solve = new SortList();
-        solve.sortList(a);
+        solve.sortList0(a);
     }
 }
