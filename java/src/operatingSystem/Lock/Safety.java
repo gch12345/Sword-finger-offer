@@ -43,6 +43,10 @@ public class Safety {
                 return;
             }
         }
+        for (int i = 0; i < Work.size(); i++) {
+            Work.set(i, Work.get(i) + p.Allocation.get(i));
+        }
+        p.Finish = true;
         Sequence.add(p.Name);
     }
     private Boolean helper(List<process> p) {

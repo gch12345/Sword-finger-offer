@@ -43,19 +43,19 @@ public class InitProcess {
             Available.add(scanner.nextInt());
             NUM--;
         }
-        System.out.println("按顺序请输入进程名，需要的各类资源数，已分配的各类资源数");
+        System.out.println("按顺序请输入进程名，已分配的各类资源数，需要的各类资源数");
         while (!scanner.hasNext("#")) {
             String name = scanner.next();
             List<Integer> need = new ArrayList<>();
             List<Integer> allocation = new ArrayList<>();
             int Num = num;
             while (Num > 0) {
-                need.add(scanner.nextInt());
+                allocation.add(scanner.nextInt());
                 Num--;
             }
             Num = num;
             while (Num > 0) {
-                allocation.add(scanner.nextInt());
+                need.add(scanner.nextInt());
                 Num--;
             }
             process p = new process(name, need, allocation);
