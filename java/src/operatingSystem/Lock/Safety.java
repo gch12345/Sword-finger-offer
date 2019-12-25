@@ -7,6 +7,10 @@ public class Safety {
     private List<Integer> Work;
     private List<String> Sequence;
 
+    public List<Integer> getWork() {
+        return Work;
+    }
+
     public Safety(List<Integer> work) {
         Sequence = new ArrayList<>();
         Work = new ArrayList<>();

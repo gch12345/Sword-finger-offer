@@ -5,18 +5,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Banker {
-    private List<Integer> Requset;
+    private List<Integer> Request;
     private Integer index;
     public Banker(){
-        Requset = new ArrayList<>();
+        Request = new ArrayList<>();
     }
 
     public Integer getIndex() {
         return index;
     }
 
-    public List<Integer> getRequset() {
-        return Requset;
+    public List<Integer> getRequest() {
+        return Request;
     }
 
     public boolean TrialDistribution(List<process> list, List<Integer> available) {
@@ -39,21 +39,35 @@ public class Banker {
             }
         }
         System.out.println("请输入请求向量");
-        while (!scanner.hasNext("#")) {
-            Requset.add(scanner.nextInt());
+        int Num = available.size();
+        while (Num > 0) {
+            int num = scanner.nextInt();
+            if (num >= 0) {
+                Request.add(num);
+                Num--;
+            } else {
+                System.out.println("输入不合法，请重新输入");
+            }
         }
-//        System.out.println(Requset.isEmpty());
+//        System.out.println(Request.isEmpty());
         process cur = list.get(index);
-        return Premise(cur, available);
+        boolean re = Premise(cur, available);
+        if (re) {
+            for (int i = 0; i < Request.size(); i++) {
+                //System.out.println(available.get(i));
+                available.set(i, available.get(i) - Request.get(i));
+            }
+        }
+        return re;
     }
 
     private boolean Premise(process cur, List<Integer> available) {
         for (int i = 0; i < cur.Need.size(); i++) {
-            if (cur.Need.get(i) < Requset.get(i)) {
+            if (cur.Need.get(i) < Request.get(i)) {
                 System.out.println("进程 " + cur.Name + " 所需要的资源数已超过它所宣布的最大值");
                 return false;
             }
-            if (available.get(i) < Requset.get(i)) {
+            if (available.get(i) < Request.get(i)) {
                 System.out.println("进程 " + cur.Name + " 尚无足够的资源，" + cur.Name + " 须等待");
                 return false;
             }

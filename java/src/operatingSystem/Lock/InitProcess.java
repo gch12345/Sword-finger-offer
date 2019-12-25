@@ -29,6 +29,14 @@ public class InitProcess {
         return Available;
     }
 
+    public void setList(List<process> list) {
+        this.list = list;
+    }
+
+    public void setAvailable(List<Integer> available) {
+        Available = available;
+    }
+
     public List<process> getList() {
         return list;
     }
@@ -43,7 +51,7 @@ public class InitProcess {
             Available.add(scanner.nextInt());
             NUM--;
         }
-        System.out.println("按顺序请输入进程名，已分配的各类资源数，需要的各类资源数");
+        System.out.println("按顺序请输入进程名，已分配的各类资源数，需要的各类资源数，以 # 结束");
         while (!scanner.hasNext("#")) {
             String name = scanner.next();
             List<Integer> need = new ArrayList<>();
@@ -65,15 +73,17 @@ public class InitProcess {
     public void Printf() {
         for (int i = 0; i < list.size(); i++) {
             process cur = list.get(i);
-            System.out.println("进程名  Allocation矩阵   Need矩阵");
-            System.out.print(cur.Name + " ");
+            System.out.print("进程名:" + cur.Name + " ");
+            System.out.print("Allocation矩阵 [");
             for (int j = 0; j < cur.Allocation.size(); j++) {
                 System.out.print(cur.Allocation.get(j) + " ");
             }
+            System.out.print("] ");
+            System.out.print("Need矩阵 [");
             for (int k = 0; k < cur.Need.size(); k++) {
                 System.out.print(cur.Need.get(k) + " ");
             }
-            System.out.println();
+            System.out.println("]");
         }
     }
 }
