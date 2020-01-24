@@ -41,4 +41,44 @@ public class day14 {
         helper(root.right, n + 1);
         helper(root.left, n + 1);
     }
+
+    public boolean isMatch(String s, String p) {
+        int starS = -1;
+        int starP = -1;
+        int i = 0;
+        int j = 0;
+        int k = p.length();
+        while (i < s.length()) {
+            if (j < p.length() && (s.charAt(i) == p.charAt(j) || p.charAt(j) == '?')) {
+                i++;
+                j++;
+                continue;
+            }
+            if (p.length() > j && p.charAt(j) == '*') {
+                starP = j++;
+                starS = i;
+                continue;
+            }
+            if (starP != -1) {
+                i = ++starS;
+                j = starP + 1;
+                continue;
+            }
+            return false;
+        }
+        while (p.length() > j && p.charAt(j) == '*') {
+            ++j;
+        }
+        if (j == p.length() && i == s.length()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        String s = "aaa";
+        String p = "***a";
+        day14 d = new day14();
+        d.isMatch(s, p);
+    }
 }
