@@ -37,7 +37,7 @@ public class compare {
         }
     }
     private void CreateHeap(int[] arr) {
-        for (int i = arr.length - 1; i >= 0; i--){
+        for (int i = (arr.length - 1 - 1) / 2; i >= 0; i--){
             ShiftDown(arr, arr.length, i);
         }
     }
@@ -60,7 +60,7 @@ public class compare {
     }
     public static void main(String[] args) {
         compare c = new compare();
-        int[] arr ={1,1,1};
+        int[] arr ={9,8,7,6,5,3,1,2};
         c.HeapSort(arr);
         System.out.println(Arrays.toString(arr));
     }
