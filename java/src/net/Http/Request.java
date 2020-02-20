@@ -15,6 +15,22 @@ public class Request {
 
     }
 
+    public String getHeader(String key) {
+        return headers.get(key);
+    }
+
+    public String getParameter(String key) {
+        return parameters.get(key);
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
     public static Request buildRequest(InputStream inputStream) throws IOException {
         Request request = new Request();
         try {

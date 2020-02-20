@@ -38,6 +38,29 @@ public class Response {
             printWriter.println(body);
         }
     }
+    public void build200(){
+        status = 200;
+        message = "OK";
+    }
+
+    public void build404() {
+        status = 404;
+        message = "Not Found";
+    }
+
+    public void build307() {
+        status = 307;//301,302,307
+        message = "Send Redirect";
+    }
+    public void build405() {
+        status = 405;
+        message = "Method Not Allowed";
+    }
+    public void build500() {
+        status = 500;
+        message = "Internal Server Error";
+    }
+
     public void setStatus(int status) {
         this.status = status;
     }
