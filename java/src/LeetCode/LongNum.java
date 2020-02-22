@@ -1,15 +1,14 @@
 package LeetCode;
 
+import org.junit.Test;
+import sun.security.krb5.internal.crypto.Des;
+
 import java.util.*;
 
 public class LongNum {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
-        StringBuffer s = new StringBuffer();
-        while (sc.hasNext()) {
-            s.append(sc.next());
-        }
-        String string = s.toString();
+        String string = sc.next();
         int Index = -1;
         int Len = 0;
         for (int i = 0; i< string.length();i++) {
@@ -51,6 +50,9 @@ public class LongNum {
 
     public ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
         ArrayList<Integer> arrayList = new ArrayList<>();
+        if (k > input.length) {
+            return arrayList;
+        }
         PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
         for (int val : input) {
             pq.add(val);

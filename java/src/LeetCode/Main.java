@@ -4,9 +4,14 @@ import org.junit.Test;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class Main {
+// 某餐馆有n张桌子，每张桌子有一个参数：a 可容纳的最大人数；
+// 有m批客人，每批客人有两个参数:b人数，c预计消费金额。
+// 在不允许拼桌的情况下，请实现一个算法选择其中一部分客人，使得总预计消费金额最大
+
     class desk implements Comparable<desk>{
         int max;
         @Override
@@ -40,7 +45,8 @@ public class Main {
         int n = sc.nextInt();
         LinkedList<desk> Desk = new LinkedList<>();
         int m = sc.nextInt();
-        LinkedList<customer> Cus = new LinkedList<>();
+        PriorityQueue<customer> Cus = new PriorityQueue<>();
+//        LinkedList<customer> Cus = new LinkedList<>();
         for (int i = 0; i < n; i++) {
             desk d = new desk();
             d.max = sc.nextInt();
@@ -48,16 +54,20 @@ public class Main {
         }
         Collections.sort(Desk);
         for (int i = 0; i < m; i++) {
+            int num = sc.nextInt();
+            if (num > Desk.get(Desk.size() -1).max) {
+                int x = sc.nextInt();
+                continue;
+            }
             customer c = new customer();
-            c.num = sc.nextInt();
+            c.num = num;
             c.money = sc.nextInt();
-            if (c.num <= Desk.get(Desk.size() -1).max)
-                Cus.add(c);
+            Cus.add(c);
         }
-        Collections.sort(Cus);
+//        Collections.sort(Cus);
         int ret = 0;
         while (!Cus.isEmpty() && !Desk.isEmpty()) {
-            customer c = Cus.get(0);
+            customer c = Cus.poll();
             if (c.num > Desk.get(Desk.size() -1).max) {
                 Cus.remove(0);
                 continue;
@@ -78,7 +88,6 @@ public class Main {
                 ret = ret + c.money;
                 Desk.remove(left);
             }
-            Cus.remove(0);
         }
         return ret;
     }
@@ -88,3 +97,6 @@ public class Main {
         System.out.println(m.Restaurant());
     }
 }
+
+
+
