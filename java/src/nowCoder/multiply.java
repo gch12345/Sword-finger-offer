@@ -1,7 +1,21 @@
 package nowCoder;
 
 public class multiply {
-    public int[] multiply(int[] A) {
+        public int[] multiply1(int[] A) {
+            int[] B = new int[A.length];
+            B[0] = 1;
+            for (int i = 1; i < A.length; i++) {
+                B[i] = B[i - 1] * A[i - 1];
+            }
+            int temp = 1;
+            for (int j = A.length - 1 - 1; j >= 0; j--) {
+                temp = temp * A[j + 1];
+                B[j] = B[j] * temp;
+            }
+            return B;
+        }
+
+        public int[] multiply(int[] A) {
         int[] B = new int[A.length];
         int[] arr0 = new int[A.length];
         int[] arr1 = new int[A.length];
