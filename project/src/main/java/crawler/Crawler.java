@@ -1,9 +1,8 @@
 package crawler;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dao.Project;
 import okhttp3.*;
+import org.jetbrains.annotations.TestOnly;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,6 +14,16 @@ import java.util.List;
 
 public class Crawler {
     private OkHttpClient okHttpClient = new OkHttpClient();
+    public static void main(String[] args) throws IOException {
+        Crawler crawler = new Crawler();
+        String html = crawler.getPage("https://github.com/akullpp/awesome-java/blob/master/README.md");
+        List<Project> projects = crawler.parseProjectList(html);
+        for (int i = 0; i < projects.size(); i++) {
+            Project project = projects.get(i);
+            String jsonSteing = crawler.getRepoInfo(project.getUrl());
+            System.out.println(jsonSteing);
+        }
+    }
 
     public String getPage(String url) throws IOException {
         Request request = new Request.Builder().url(url).build();
@@ -56,7 +65,7 @@ public class Crawler {
         String password = "gch19980506";
 
         String credential = Credentials.basic(username, password);
-        String url = "https://api.github.com/repos/" + Url.substring(18);
+        String url = "https://api.github.com/repos/" + Url.substring(19);
         Request request = new Request.Builder().url(url).header("Authorization", credential).build();
         Call call = okHttpClient.newCall(request);
         Response response = call.execute();
@@ -66,5 +75,5 @@ public class Crawler {
         }
         return response.body().string();
     }
-    
+
 }
