@@ -12,6 +12,22 @@ public class TEST {
 //    public static void main(String[] args) {//2
 //        System.out.println("value="+switchit(4));//3
 //    }//4
+    @Test
+    public void test2() {
+        int num = 10;
+        System.out.println(test(num));
+    }
+    public static int test(int b){
+        try {
+            b += 10;
+            return b;
+        }catch(RuntimeException e){
+        }catch(Exception e2){
+        } finally{
+            b += 10;
+            return b;
+        }
+    }
     public static int switchit(int x) {
         int j=1;
         switch (x) {

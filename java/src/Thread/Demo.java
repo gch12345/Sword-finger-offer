@@ -6,11 +6,11 @@ package Thread;
  */
 public class Demo {
     public static void main(String[] args) {
-        //MyThread thread = new MyThread("MyThread");
-        //thread.start();
-        //thread.run();
-        Thread t = new Thread(new MyRunnable(), "MyRunnable");
-        t.start();
+        MyThread thread = new MyThread("MyThread");
+        thread.start();
+//        thread.run();
+//        Thread t = new Thread(new MyRunnable(), "MyRunnable");
+//        t.start();
         System.out.println(Thread.currentThread().getName());
     }
 }
@@ -19,12 +19,13 @@ public class Demo {
 class MyThread extends Thread{
     public MyThread(String name) {
         super(name);
+        this.setName(name);
     }
 
     @Override
     public void run() {
-        //System.out.println(Thread.currentThread().getName());
-        while (true);
+        System.out.println(Thread.currentThread().getName());
+        ///while (true);
     }
 }
 //实现Runnable接口

@@ -26,7 +26,6 @@ public class meiTuan2 {
                 } else {
                     i++;
                     k++;
-                    Math.
                 }
                 if (i == n) {
                     i = 0;

@@ -1,6 +1,6 @@
 package Practice;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+//import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class MyThread extends Thread{
     public MyThread(String name) {
