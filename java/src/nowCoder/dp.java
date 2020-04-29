@@ -1,5 +1,7 @@
 package nowCoder;
 
+import java.util.List;
+
 public class dp {
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
         if (obstacleGrid == null || obstacleGrid.length == 0) {
@@ -52,5 +54,46 @@ public class dp {
             }
         }
         return dp[row - 1][col - 1];
+    }
+
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s == null || s.length() == 0) {
+            return false;
+        }
+        int len = s.length();
+        boolean[] dp = new boolean[len + 1];
+        dp[0] = true;
+        for (int i = 1; i <= len; i++) {
+            for (int j = 0; j <= i; j++) {
+                if (dp[j] && wordDict.contains(s.substring(j + 1, i + 1))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[len];
+    }
+
+    public int backPackII(int m, int[] A, int[] V) {
+        // write your code here
+        if (m == 0) {
+            return 0;
+        }
+        if (A == null || A.length == 0) {
+            return 0;
+        }
+        if (V == null || V.length == 0) {
+            return 0;
+        }
+        int len = A.length;
+        int[][] dp = new int[len + 1][m + 1];
+        for (int i = 1; i <= len; i++) {
+            for (int j = 1; j <= m; j++) {
+                if (A[i] <= j) {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - A[i - 1] + V[i - 1]]);
+                }
+            }
+        }
+        return dp[len][m];
     }
 }
