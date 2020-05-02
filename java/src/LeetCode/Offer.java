@@ -4,6 +4,7 @@ import sun.reflect.generics.tree.Tree;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class Offer {
     // 数组中重复的数字
@@ -89,5 +90,132 @@ public class Offer {
         root.left = helper(preOrder, inOrder, inLeft, order - 1);
         root.right = helper(preOrder, inOrder, order + 1, inRight);
         return root;
+    }
+
+    private Stack<Integer> appendStack = new Stack<>();
+    private Stack<Integer> deleteStack = new Stack<>();
+    public void appendTail(int value) {
+        appendStack.push(value);
+    }
+
+    public int deleteHead() {
+        if (deleteStack.isEmpty()) {
+            if (appendStack.isEmpty()) {
+                return -1;
+            } else {
+                while (!appendStack.isEmpty()) {
+                    deleteStack.push(appendStack.pop());
+                }
+            }
+        }
+        return deleteStack.pop();
+    }
+
+    public int minArray(int[] numbers) {
+        if (numbers == null || numbers.length == 0) {
+            return Integer.MIN_VALUE;
+        }
+        int left = 0;
+        int right = numbers.length - 1;
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (numbers[right] < numbers[mid]) {
+                left = mid + 1;
+            } else if (numbers[right] == numbers[mid]) {
+                right--;
+            } else {
+                right = mid;
+            }
+        }
+        return numbers[left];
+    }
+
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0 || word  == null) {
+            return false;
+        }
+        boolean[][] star = new boolean[board.length][board[0].length];
+        char[] ch = word.toCharArray();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == ch[0]) {
+                    return helper(board, ch, 0, i, j, star);
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean helper(char[][] board, char[] ch, int index, int row, int col, boolean[][] star) {
+        if (index >= ch.length) {
+            return true;
+        }
+        if (row < 0 || col < 0 || row >= board.length || col >= board[0].length) {
+            return false;
+        }
+        if (star[row][col]) {
+            return false;
+        }
+        if (board[row][col] == ch[index]) {
+            star[row][col] = true;
+            if (helper(board, ch, index + 1, row + 1, col, star)
+                || helper(board, ch, index + 1, row - 1, col, star)
+                || helper(board, ch, index + 1, row, col - 1, star)
+                || helper(board, ch, index + 1, row, col + 1, star)) {
+                return true;
+            }
+            star[row][col] = false;
+        }
+        return false;
+    }
+
+    int ans = 0;
+    boolean[][] star;
+    public int movingCount(int m, int n, int k) {
+        star = new boolean[m][n];
+        BFS(m, n, k, 0, 0);
+        return ans;
+    }
+
+    private void BFS(int m, int n, int k, int row, int col) {
+        if (row >= m || col >= n) {
+            return;
+        }
+        if (star[row][col]) {
+            return;
+        }
+        int rowNum = bitNum(row);
+        int colNum = bitNum(col);
+        if (rowNum + colNum <= k) {
+            star[row][col] = true;
+            ans++;
+        }
+        BFS(m, n, k, row + 1, col);
+        BFS(m, n, k, row, col + 1);
+    }
+    private int bitNum(int num) {
+        int ret = 0;
+        while (num != 0) {
+            ret = ret + num % 10;
+            num = num / 10;
+        }
+        return ret;
+    }
+    private void dp(int m, int n, int k) {
+        int[][] dp = new int[m][n];
+        dp[0][0] = 1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (bitNum(i) + bitNum(j) <= k) {
+                    if (i - 1 >= 0) {
+                        dp[i][j] = dp[i][j] | dp[i - 1][j];
+                    }
+                    if (j - 1 >= 0) {
+                        dp[i][j] = dp[i][j] | dp[i][j - 1];
+                    }
+                }
+                ans += dp[i][j];
+            }
+        }
     }
 }
