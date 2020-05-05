@@ -241,15 +241,26 @@ public class Offer {
         return dp[n];
     }
 
-    public int cuttingRope(int n) {
+    public int cuttingRope0(int n) {
         if (n <= 1) {
             return 0;
         }
         int[] dp = new int[n + 1];
-        dp[2] = 1;
+        dp[0] = 1;
         for (int i = 1; i <= (n + 1) / 2; i++) {
             for (int j = i; j <= n; j++) {
                 dp[j] = Math.max(dp[j], dp[j - i] * i);
+            }
+        }
+        return dp[n];
+    }
+
+    public int cuttingRope1(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = i; j > 0; j--) {
+                dp[i] = Math.max(dp[i], dp[i - j] * j);
             }
         }
         return dp[n];
