@@ -25,7 +25,7 @@ public class Offer {
         return -1;
     }
 
-//    二维数组中的查找
+    //    二维数组中的查找
     public boolean findNumberIn2DArray(int[][] matrix, int target) {
         if (matrix == null || matrix.length == 0) {
             return false;
@@ -68,8 +68,9 @@ public class Offer {
     // 重建树
     Map<Integer, Integer> map = new HashMap<>();
     int index;
+
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if(preorder == null || inorder == null) {
+        if (preorder == null || inorder == null) {
             return null;
         }
         if (preorder.length == 0 || inorder.length == 0) {
@@ -82,7 +83,7 @@ public class Offer {
     }
 
     private TreeNode helper(int[] preOrder, int[] inOrder, int inLeft, int inRight) {
-        if(inLeft > inRight || index >= preOrder.length) {
+        if (inLeft > inRight || index >= preOrder.length) {
             return null;
         }
         TreeNode root = new TreeNode(preOrder[index]);
@@ -94,6 +95,7 @@ public class Offer {
 
     private Stack<Integer> appendStack = new Stack<>();
     private Stack<Integer> deleteStack = new Stack<>();
+
     public void appendTail(int value) {
         appendStack.push(value);
     }
@@ -131,7 +133,7 @@ public class Offer {
     }
 
     public boolean exist(char[][] board, String word) {
-        if (board == null || board.length == 0 || word  == null) {
+        if (board == null || board.length == 0 || word == null) {
             return false;
         }
         boolean[][] star = new boolean[board.length][board[0].length];
@@ -159,9 +161,9 @@ public class Offer {
         if (board[row][col] == ch[index]) {
             star[row][col] = true;
             if (helper(board, ch, index + 1, row + 1, col, star)
-                || helper(board, ch, index + 1, row - 1, col, star)
-                || helper(board, ch, index + 1, row, col - 1, star)
-                || helper(board, ch, index + 1, row, col + 1, star)) {
+                    || helper(board, ch, index + 1, row - 1, col, star)
+                    || helper(board, ch, index + 1, row, col - 1, star)
+                    || helper(board, ch, index + 1, row, col + 1, star)) {
                 return true;
             }
             star[row][col] = false;
@@ -171,6 +173,7 @@ public class Offer {
 
     int ans = 0;
     boolean[][] star;
+
     public int movingCount(int m, int n, int k) {
         star = new boolean[m][n];
         BFS(m, n, k, 0, 0);
@@ -193,6 +196,7 @@ public class Offer {
         BFS(m, n, k, row + 1, col);
         BFS(m, n, k, row, col + 1);
     }
+
     private int bitNum(int num) {
         int ret = 0;
         while (num != 0) {
@@ -201,6 +205,7 @@ public class Offer {
         }
         return ret;
     }
+
     private void dp(int m, int n, int k) {
         int[][] dp = new int[m][n];
         dp[0][0] = 1;
@@ -264,5 +269,65 @@ public class Offer {
             }
         }
         return dp[n];
+    }
+
+    public int cuttingRope2(int n) {
+        if (n <= 3) {
+            return n - 1;
+        }
+        long a = 3;
+        long ret = 1;
+        int p = n % 3;
+        for (int i = n / 3 - 1; i > 0; i /= 2) {
+            if (i % 2 == 1) {
+                ret = (ret * a) % ((int) 1e9 + 7);
+            }
+            a = (a * a) % ((int)1e9 + 7);
+        }
+        if (p == 0) {
+            return (int)((ret * 3) % ((int)1e9 + 7));
+        }
+        if (p == 1) {
+            return (int)((ret * 4) % ((int)1e9 + 7));
+        }
+        return (int)((ret * 6) % ((int)1e9 + 7));
+    }
+
+    public int hammingWeight(int n) {
+        int ret = 0;
+        for (int i = 0; i < 32; i++) {
+            if (n == 0) {
+                break;
+            }
+            if ((n & 1) == 1) {
+                ret++;
+            }
+            n = n >> 1;
+        }
+        return ret;
+    }
+
+    public static double myPow(double x, int n) {
+        double ret = 1;
+        boolean star = false;
+        long b = n;
+        if (n < 0) {
+            b = -b;
+            star = true;
+        }
+        for (long i = b; i > 0; i = i / 2) {
+            if (i % 2 == 1) {
+                ret = ret * x;
+            }
+            x = x * x;
+        }
+        if (star) {
+            ret = 1 / ret;
+        }
+        return ret;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(myPow(2, 10));
     }
 }
