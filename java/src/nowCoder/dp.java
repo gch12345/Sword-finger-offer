@@ -96,4 +96,52 @@ public class dp {
         }
         return dp[len][m];
     }
+
+    // 回文子串分割
+    public int minCut(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int len = s.length();
+        int[] dp = new int[len + 1];
+        boolean[][] Mat = isPar(s);
+        for (int i = 0; i <= len; i++) {
+            dp[i] = i - 1;
+        }
+        for (int i = 1; i <= len; i++) {
+            for (int j = 0; j < i; j++) {
+                if (Mat[j][i - 1])
+                dp[i] = Math.min(dp[i], 1 + dp[j]);
+            }
+        }
+        return dp[len];
+    }
+
+    private boolean[][] isPar(String s) {
+        int len = s.length();
+        boolean[][] ret = new boolean[len][len];
+        for (int i = len - 1; i >= 0; i--) {
+            for (int j = i; j < len; j++) {
+                if (i == j) {
+                    ret[i][j] = true;
+                } else if (j == i + 1) {
+                    ret[i][j] = (s.charAt(i) == s.charAt(j));
+                } else {
+                    ret[i][j] = (s.charAt(i) == s.charAt(j)) && ret[i + 1][j - 1];
+                }
+            }
+        }
+        return ret;
+    }
+
+    private boolean isPar(String s, int j, int i) {
+        while (j < i) {
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+            j++;
+            i--;
+        }
+        return true;
+    }
 }
