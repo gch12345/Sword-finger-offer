@@ -327,7 +327,56 @@ public class Offer {
         return ret;
     }
 
+    public ListNode deleteNode(ListNode head, int val) {
+        if (head == null) {
+            return null;
+        }
+        if (head.val == val) {
+            return head.next;
+        }
+        ListNode cur = head;
+        ListNode prev = null;
+        while (cur != null) {
+            if (cur.val == val) {
+                prev.next = cur.next;
+                break;
+            }
+            prev = cur;
+            cur = cur.next;
+        }
+        return head;
+    }
+
+    public static boolean isMatch(String s, String p) {
+        if (s == null || p == null) {
+            return false;
+        }
+        int len1 = s.length();
+        int len2 = p.length();
+        boolean[][] dp = new boolean[len1 + 1][len2 + 1];
+        dp[0][0] = true;
+        for (int i = 0; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                char ch = p.charAt(j - 1);
+                if (ch == '*') {
+                    if (j >= 2) {
+                        dp[i][j] |= dp[i][j - 2];
+                    }
+                    if (i > 0 &&j >= 2 && (p.charAt(j - 2) == s.charAt(i - 1) || p.charAt(j - 2) == '.') ) {
+                        dp[i][j] |= dp[i - 1][j];
+                    }
+                } else {
+                    if (i > 0 && (ch == s.charAt(i - 1) || ch == '.')) {
+                        dp[i][j] |= dp[i - 1][j - 1];
+                    }
+                }
+            }
+        }
+        return dp[len1][len2];
+    }
+
     public static void main(String[] args) {
+        isMatch("aa", ".*");
         System.out.println(myPow(2, 10));
     }
 }
