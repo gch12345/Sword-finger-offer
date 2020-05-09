@@ -1,7 +1,5 @@
 package LeetCode;
 
-import sun.reflect.generics.tree.Tree;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -375,8 +373,59 @@ public class Offer {
         return dp[len1][len2];
     }
 
+    public static boolean isNumber(String s) {
+        if (s == null) {
+            return false;
+        }
+        int i = 0;
+        s = s.toLowerCase().trim();
+        if (s.equals("-.") || s.equals("+.")) {
+            return false;
+        }
+        if (s.length() == 0) {
+            return false;
+        }
+        int len = s.length();
+        boolean place = false;
+        int star = -2;
+        char c = s.charAt(0);
+        if (c == '-' || c == '+' || c == '.' || c == 'e') {
+            if (len == 1 || c == 'e') {
+                return false;
+            }
+            if (c != '.') {
+                i++;
+            }
+        }
+        c = s.charAt(len - 1);
+        if (c == 'e' || s.charAt(i) == 'e') {
+            return false;
+        }
+        boolean starE = false;
+        for (; i < len; i++) {
+            char ch = s.charAt(i);
+            if (ch >= '0' && ch <= '9') {
+                continue;
+            }
+            if (!place && ch == '.') {
+                if (star == i - 1) {
+                    return false;
+                }
+                star = i;
+                place = true;
+                continue;
+            }
+            if (!starE && ch == 'e') {
+                star = i;
+                starE = true;
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
-        isMatch("aa", ".*");
-        System.out.println(myPow(2, 10));
+        isNumber("2e0");
     }
 }
