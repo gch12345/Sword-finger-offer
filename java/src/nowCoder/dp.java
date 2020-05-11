@@ -163,9 +163,9 @@ public class dp {
             for (int j = 1; j <= len2; j++) {
                 // 替换
                 if (word1.charAt(i - 1) != word2.charAt(j - 1)) {
-                    // 插入
-                    dp[i][j] = 1 + dp[i - 1][j];
                     // 删除
+                    dp[i][j] = 1 + dp[i - 1][j];
+                    // 插入
                     dp[i][j] = Math.min(dp[i][j], 1 + dp[i][j - 1]);
                     dp[i][j] = Math.min(dp[i][j], 1 + dp[i -1][j - 1]);
                 } else {
@@ -174,5 +174,27 @@ public class dp {
             }
         }
         return dp[len1][len2];
+    }
+
+    public int numDistinct(String S, String T) {
+        if (S == null || T == null) {
+            return 0;
+        }
+        int row = S.length();
+        int col = T.length();
+        int[][] dp = new int[row + 1][col + 1];
+        for (int i = 0; i <= row; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 1; i <= row; i++) {
+            for (int j = 1; j <= i; j++) {
+                if (S.charAt(i - 1) == T.charAt(i - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+                } else  {
+                    dp[i][j] = dp[i -1][j];
+                }
+            }
+        }
+        return dp[row][col];
     }
 }
