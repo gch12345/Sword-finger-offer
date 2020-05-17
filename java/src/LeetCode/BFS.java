@@ -1,9 +1,8 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import operatingSystem.MemoryAllocation.BF;
+
+import java.util.*;
 
 class Node {
     public int val;
@@ -100,5 +99,100 @@ public class BFS {
             return ret;
         }
         return ret - 1;
+    }
+
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (beginWord.equals(endWord)) {
+            return 0;
+        }
+        Set<String> set = new HashSet<>(wordList);
+        if (!set.contains(endWord)) {
+            return 0;
+        }
+        Queue<String> queue = new LinkedList<>();
+        queue.add(beginWord);
+        int size = beginWord.toCharArray().length;
+        int ret = 0;
+        while (!queue.isEmpty()) {
+            int queueSize = queue.size();
+            for (int k = 0; k < queueSize; k++) {
+                String str = queue.poll();
+                char[] cur = str.toCharArray();
+                for (int i = 0; i < size; i++) {
+                    char ch = cur[i];
+                    for (int j = 0; j < 26; j++) {
+                        cur[i] = (char) ('a' + j);
+                        String curStr = new String(cur);
+                        if (curStr.equals(endWord)) {
+                            return ++ret;
+                        }
+                        if (set.contains(curStr)) {
+                            set.remove(curStr);
+                            queue.add(curStr);
+                        }
+                    }
+                    cur[i] = ch;
+                }
+            }
+            ret++;
+        }
+        return 0;
+    }
+
+    public int openLock(Set<String> set, String target) {
+        //Set<String> set = new HashSet<>();
+        //Collections.addAll(set, deadends);
+        if (set.contains(target)) {
+            return -1;
+        }
+        Queue<String> queue = new LinkedList<>();
+        queue.add("0000");
+        int ret = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String str = queue.poll();
+                char[] chars = str.toCharArray();
+                for (int j = 0; j < 4; j++) {
+                    char ch = chars[j];
+                    chars[j] = (char)((ch - '0' + 1) % 10 + '0');
+                    String cur = new String(chars);
+                    if (cur.equals(target)) {
+                        return ++ret;
+                    }
+                    if (!set.contains(cur)) {
+                        queue.add(cur);
+                        set.add(cur);
+                    }
+                    chars[j] = (char)((ch - '0' - 1 + 10) % 10 + '0');
+                    cur = new String(chars);
+                    if (cur.equals(target)) {
+                        return ++ret;
+                    }
+                    if (!set.contains(cur)) {
+                        queue.add(cur);
+                        set.add(cur);
+                    }
+                    chars[j] = ch;
+                }
+            }
+            ret++;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        BFS bfs = new BFS();
+        Set<String> set = new HashSet<>();
+        //["8887","8889","8878","8898","8788","8988","7888","9888"]
+        set.add("8887");
+        set.add("8878");
+        set.add("8898");
+        set.add("8788");
+        set.add("8889");
+        set.add("8988");
+        set.add("7888");
+        set.add("9888");
+        System.out.println(bfs.openLock(set, "8888"));
     }
 }
