@@ -181,6 +181,52 @@ public class BFS {
         return -1;
     }
 
+    public int minMutation(String start, String end, String[] bank) {
+        if (start == null || end == null || bank == null) {
+            return -1;
+        }
+        if (start.equals(end)) {
+            return 0;
+        }
+        Set<String> set = new HashSet<>();
+        Collections.addAll(set, bank);
+        if (!set.contains(end)) {
+            return -1;
+        }
+        int size = start.length();
+        Queue<String> queue = new LinkedList<>();
+        queue.add(start);
+        char[] next = {'A', 'T', 'C', 'G'};
+        int ret = 0;
+        while (!queue.isEmpty()) {
+            int curLen = queue.size();
+            for (int i = 0; i < curLen; i++) {
+                String cur = queue.poll();
+                char[] chars = cur.toCharArray();
+                for (int j = 0; j < size; j++) {
+                    char ch = chars[j];
+                    for (int k = 0; k < 4; k++) {
+                        if (ch == next[k]) {
+                            continue;
+                        }
+                        chars[j] = next[k];
+                        String curStr = new String(chars);
+                        if (curStr.equals(end)) {
+                            return ++ret;
+                        }
+                        if (set.contains(curStr)) {
+                            queue.add(curStr);
+                            set.remove(curStr);
+                        }
+                    }
+                    chars[j] = ch;
+                }
+            }
+            ret++;
+        }
+        return -1;
+    }
+
     public static void main(String[] args) {
         BFS bfs = new BFS();
         Set<String> set = new HashSet<>();
