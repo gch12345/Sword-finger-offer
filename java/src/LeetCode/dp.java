@@ -298,7 +298,7 @@ public class dp {
         }
         return false;
     }
-    public boolean checkSubarraySum(int[] nums, int k) {
+    public boolean checkSubarraySum0(int[] nums, int k) {
         int sum = 0;
         HashMap < Integer, Integer > map = new HashMap< >();
         map.put(0, -1);
@@ -315,8 +315,121 @@ public class dp {
         return false;
     }
 
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        HashMap<Character, Integer> map = new HashMap<>();
+        int ret = 0;
+        int start = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (map.containsKey(ch) && map.get(ch) >= start) {
+                int curLen = i - start;
+                if (curLen > ret) {
+                    ret = curLen;
+                }
+                start = map.get(ch) + 1;
+            }
+            map.put(ch, i);
+        }
+        int tailLen = s.length() - start;
+        if (ret < tailLen) {
+            ret = tailLen;
+        }
+        return ret;
+    }
+
+    public static double findMedianSortedArrays0(int[] nums1, int[] nums2) {
+        double ret = 0;
+        if (nums1 == null) {
+            if (nums2.length % 2 == 0)
+                return (nums2[nums2.length / 2] + nums2[nums2.length / 2 - 1]) / 2.0;
+            return nums2[nums2.length / 2];
+        }
+        if (nums2 == null) {
+            if (nums1.length % 2 == 0)
+                return (nums1[nums1.length / 2] + nums1[nums1.length / 2 - 1]) / 2.0;
+            return nums1[nums1.length / 2];
+        }
+        int i = 0;
+        int j = 0;
+        int[] merge = new int[nums1.length + nums2.length];
+        int Index = 0;
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] < nums2[j]) {
+                merge[Index++] = nums1[i++];
+            } else {
+                merge[Index++] = nums2[j++];
+            }
+        }
+        if (i == nums1.length) {
+            for (; j < nums2.length; j++,Index++) {
+                merge[Index] = nums2[j];
+            }
+        } else {
+            for (; i < nums1.length; i++,Index++) {
+                merge[Index] = nums1[i];
+            }
+        }
+        if (merge.length % 2 == 0)
+            return (merge[merge.length / 2] + merge[merge.length / 2 - 1]) / 2.0;
+        return merge[merge.length / 2];
+    }
+
+    public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        if (nums1.length == nums2.length && nums1.length == 1) {
+            return Math.min(nums1[0], nums2[0]);
+        }
+        int len = nums1.length + nums2.length;
+        return (help(nums1, nums2, (len + 1) / 2) + help(nums1, nums2, (len + 2) / 2)) / 2.0;
+    }
+
+    private static int help(int[] nums1, int[] nums2, int k) {
+        int len = nums1.length + nums2.length;
+        int start1 = 0;
+        int end1 = 0;
+        int start2 = 0;
+        int end2 = 0;
+        int count = k;
+        while (count >= 2 && start1 < nums1.length && start2 < nums2.length) {
+            if (k >= 2) {
+                end1 = start1 + k / 2 - 1;
+                end2 = start2 + k / 2 - 1;
+            } else {
+                end1 = start1;
+                end2 = start2;
+            }
+            if (end1 >= nums1.length) {
+                end1 = nums1.length - 1;
+            }
+            if (end2 >= nums2.length) {
+                end2 = nums2.length - 1;
+            }
+            if (nums1[end1] > nums2[end2]) {
+                k -= end2 - start2 + 1;
+                count -= end2 - start2 + 1;
+                start2 = end2 + 1;
+            } else {
+                k -= end1 - start1 + 1;
+                count -= end1 - start1 + 1;
+                start1 = end1 + 1;
+            }
+            k = k / 2;
+        }
+        if (nums1.length <= start1) {
+            return nums2[start2 + count - 1];
+        }
+        if (nums2.length <= start2) {
+            return nums1[start1 + count - 1];
+        }
+        return Math.min(nums1[start1], nums2[start2]);
+    }
+
     public static void main(String[] args) {
-        int[] arr = {0, 1, 0};
-        checkSubarraySum(arr, 0);
+        int[] arr = {1, 3};
+        int[] arr0 = {2};
+        System.out.println(findMedianSortedArrays(arr, arr0));
+
     }
 }
