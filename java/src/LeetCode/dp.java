@@ -426,10 +426,36 @@ public class dp {
         return Math.min(nums1[start1], nums2[start2]);
     }
 
-    public static void main(String[] args) {
-        int[] arr = {1, 3};
-        int[] arr0 = {2};
-        System.out.println(findMedianSortedArrays(arr, arr0));
+    public static String longestPalindrome(String s) {
+        if (s == null || s.length() <= 0) {
+            return s;
+        }
+        int len = s.length();
+        int[][] dp = new int[len][len];
+        int max = -1;
+        int maxIndexX = -1;
+        int maxIndexY = -1;
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < len; i++) {
+            for (int j = i; j >= 0; j--) {
+                if (i == j) {
+                    dp[i][j] = 1;
+                } else if (j == i - 1 && chars[i] == chars[j]) {
+                    dp[i][j] = 2;
+                } else if (chars[i] == chars[j]){
+                    dp[i][j] = dp[i - 1][j + 1] + 2;
+                }
+                if (max < dp[i][j] && dp[i][j] == i - j + 1) {
+                    max = dp[i][j];
+                    maxIndexX = i;
+                    maxIndexY = j;
+                }
+            }
+        }
+        return s.substring(maxIndexY, maxIndexX + 1);
+    }
 
+    public static void main(String[] args) {
+        System.out.println(longestPalindrome("aacdefcaa"));
     }
 }
