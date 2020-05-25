@@ -455,7 +455,113 @@ public class dp {
         return s.substring(maxIndexY, maxIndexX + 1);
     }
 
+    public static boolean isMatch0(String s, String p) {
+        if (s == null) {
+            return true;
+        }
+        if (p == null) {
+            return false;
+        }
+        if (p.equals(".*")) {
+            return true;
+        }
+        int sLen = s.length();
+        int pLen = p.length();
+        boolean[][] dp = new boolean[sLen + 1][pLen + 1];
+        for (int i = 0; i <= sLen; i++) {
+            dp[i][0] = true;
+        }
+        for (int i = 0; i <= pLen; i++) {
+            dp[0][i] = true;
+        }
+        for (int i = 1; i <= sLen; i++) {
+            int j = 1;
+            boolean star = false;
+            while (j <= pLen && i > 1) {
+                if (dp[i - 1][j]) {
+                    star = true;
+                    j++;
+                    break;
+                }
+                j++;
+            }
+            if (!star) {
+                j = 1;
+            }
+            for (; j <= pLen; j++) {
+                char chS = s.charAt(i - 1);
+                char chP = p.charAt(j - 1);
+                if (chP == '.' && dp[i - 1][j - 1]) {
+                    dp[i][j] = true;
+                }
+                if (chP == chS && dp[i - 1][j - 1]) {
+                    dp[i][j] = true;
+                }
+                if (chP == '*' && (dp[i][j - 1] || dp[i - 1][j - 1]));
+//                if (chP == '*' && (dp[i - 1][j] || dp[i - 1][j - 1])  && (chS == p.charAt(j - 2)
+//                        || (p.charAt(j - 2) == '.' && i > 1 && chS == s.charAt(i - 2)))) {
+//                    dp[i][j] = true;
+//                }
+            }
+        }
+        for (int i = 1; i <= pLen; i++) {
+            if (dp[sLen][i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isMatch(String s, String p) {
+        if (s == null) {
+            return true;
+        }
+        if (p == null) {
+            return false;
+        }
+        if (p.equals(".*")) {
+            return true;
+        }
+        s = " " + s;
+        p = " " + p;
+        int sLen = s.length();
+        int pLen = p.length();
+        boolean[][] dp = new boolean[sLen + 1][pLen + 1];
+        dp[0][0] = true;
+        for (int i = 1; i <= sLen; i++) {
+            char chS = s.charAt(i - 1);
+            for (int j = 1; j <= pLen; j++) {
+                char chP = p.charAt(j - 1);
+                if ((chP == chS || chP == '.') && dp[i - 1][j - 1]) {
+                    dp[i][j] = true;
+                }
+                if (chP == '*') {
+                    //aa
+                    //a*
+                    //dp[2][2] = dp[2 - 1][2] &&
+                    if (dp[i][j - 2] || dp[i][j - 1] || (dp[i - 1][j]
+                            && (chS == p.charAt(j - 2) || p.charAt(j - 2) == '.'))) {
+                        dp[i][j] = true;
+                    }
+//                    if (p.charAt(j - 2) != chS && p.charAt(j - 2) != '.') {
+//                        dp[i][j] = dp[i][j - 2];
+//                    } else if (dp[i][j - 2] || dp[i][j - 1] || dp[i - 1][j]) {
+//                        dp[i][j] = true;
+//                    }
+                }
+            }
+        }
+        return dp[sLen][pLen];
+    }
+
     public static void main(String[] args) {
-        System.out.println(longestPalindrome("aacdefcaa"));
+//        "aab"
+//        "c*a*b"
+//        "mississippi"
+////        "mis*is*ip*."
+//        "ab"
+//        ".*c"
+        System.out.println(isMatch("aab",
+                "c*a*b"));
     }
 }
