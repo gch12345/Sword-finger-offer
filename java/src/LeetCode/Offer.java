@@ -1,5 +1,7 @@
 package LeetCode;
 
+import sun.reflect.generics.tree.Tree;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -423,6 +425,190 @@ public class Offer {
             return false;
         }
         return true;
+    }
+
+    // 调整数组顺序使奇数位于偶数前面
+    public int[] exchange(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return nums;
+        }
+        int fast = 0;
+        int slow = 0;
+        for (; fast < nums.length; fast++) {
+            if (nums[fast] % 2 == 1) {
+                int temp = nums[fast];
+                nums[fast] = nums[slow];
+                nums[slow] = temp;
+                slow++;
+            }
+        }
+        return nums;
+    }
+
+    // 链表中倒数第k个节点
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        if (head == null) {
+            return head;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && k > 0) {
+            fast = fast.next;
+            k--;
+        }
+        while (fast != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return slow;
+    }
+
+    // 反转链表
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode newHead = null;
+        ListNode next = null;
+        while (head != null) {
+            next = head.next;
+            head.next = newHead;
+            newHead = head;
+            head = next;
+        }
+        return newHead;
+    }
+
+    // 合并两个排序的链表
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        ListNode head = new ListNode(-1);
+        ListNode tail = head;
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+                tail.next = l1;
+                l1 = l1.next;
+            } else {
+                tail.next = l2;
+                l2 = l2.next;
+            }
+            tail = tail.next;
+        }
+        if (l1 == null) {
+            tail.next = l2;
+        } else {
+            tail.next = l1;
+        }
+        return head.next;
+    }
+
+    // 树的子结构
+    // 遍历+判断
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        if (A == null || B == null) {
+            return false;
+        }
+        return helper(A, B) || isSubStructure(A.left, B) || isSubStructure(A.right, B);
+    }
+
+    private boolean helper(TreeNode A, TreeNode B) {
+        if (B == null) {
+            return true;
+        }
+        if (A == null) {
+            return false;
+        }
+        if (A.val == B.val) {
+            boolean left = helper(A.left, B.left);
+            boolean right = helper(A.right, B.right);
+            return left && right;
+        }
+        return false;
+    }
+
+    // 二叉树的镜像
+    public TreeNode mirrorTree(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+        TreeNode node = root.left;
+        root.left = root.right;
+        root.right = node;
+        mirrorTree(root.left);
+        mirrorTree(root.right);
+        return root;
+    }
+
+    // 对称的二叉树
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return help(root.left, root.right);
+    }
+
+    private boolean help(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left == null || right == null) {
+            return false;
+        }
+        if (left.val == right.val) {
+            return help(left.left, right.right) && help(left.right, right.left);
+        }
+        return false;
+    }
+
+    // 顺时针打印矩阵
+    public int[] spiralOrder(int[][] matrix) {
+        if (matrix == null) {
+            return null;
+        }
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int r = 0;
+        int c = 0;
+        int[] ret = new int[row * col];
+        int index = 0;
+        row--;
+        col--;
+        while (true) {
+            for (int i = c; i <= col; i++) {
+                ret[index++] = matrix[r][i];
+            }
+            r++;
+            if (index >= ret.length) {
+                break;
+            }
+            for (int i = r; i <= row; i++) {
+                ret[index++] = matrix[i][col];
+            }
+            col--;
+            if (index >= ret.length) {
+                break;
+            }
+            for (int i = col; i >= c; i--) {
+                ret[index++] = matrix[row][i];
+            }
+            row--;
+            if (index >= ret.length) {
+                break;
+            }
+            for (int i = row; i >= r; i--) {
+                ret[index++] = matrix[i][c];
+            }
+            c++;
+            if (index >= ret.length) {
+                break;
+            }
+        }
+        return ret;
     }
 
     public static void main(String[] args) {
