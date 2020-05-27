@@ -2,9 +2,8 @@ package LeetCode;
 
 import sun.reflect.generics.tree.Tree;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Offer {
     // 数组中重复的数字
@@ -607,6 +606,108 @@ public class Offer {
             if (index >= ret.length) {
                 break;
             }
+        }
+        return ret;
+    }
+
+    // 栈的压入、弹出序列
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        if (pushed == null || popped == null) {
+            return false;
+        }
+        int lenPush = pushed.length;
+        int lenPop = popped.length;
+        if (lenPop != lenPush) {
+            return false;
+        }
+        Stack<Integer> stack = new Stack<>();
+        int index = 0;
+        for (int value : pushed) {
+            stack.push(value);
+            while (!stack.isEmpty() && stack.peek() == popped[index]) {
+                stack.pop();
+                index++;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+//    从上到下打印二叉树 I
+    public int[] levelOrder0(TreeNode root) {
+        if (root == null) {
+            return new int[0];
+        }
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode treeNode = queue.poll();
+            if (treeNode != null) {
+                arrayList.add(treeNode.val);
+                queue.add(treeNode.left);
+                queue.add(treeNode.right);
+            }
+        }
+        int[] ret = new int[arrayList.size()];
+        for (int i = 0; i < arrayList.size(); i++) {
+            ret[i] = arrayList.get(i);
+        }
+        return ret;
+    }
+//    从上到下打印二叉树 II
+    public List<List<Integer>> levelOrder1(TreeNode root) {
+        List<List<Integer>> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode treeNode = queue.poll();
+                list.add(treeNode.val);
+                if (treeNode.left != null) {
+                    queue.add(treeNode.left);
+                }
+                if (treeNode.right != null) {
+                    queue.add(treeNode.right);
+                }
+            }
+            ret.add(list);
+        }
+        return ret;
+    }
+
+    //    从上到下打印二叉树 III
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int star = -1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode treeNode = queue.poll();
+                if (star == - 1) {
+                    list.add(treeNode.val);
+                } else {
+                    list.add(treeNode.val, 0);
+                }
+                if (treeNode.left != null) {
+                    queue.add(treeNode.left);
+                }
+                if (treeNode.right != null) {
+                    queue.add(treeNode.right);
+                }
+            }
+            star = star * -1;
+            ret.add(list);
         }
         return ret;
     }
