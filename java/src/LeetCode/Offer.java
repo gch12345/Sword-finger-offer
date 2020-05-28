@@ -712,7 +712,55 @@ public class Offer {
         return ret;
     }
 
-    public static void main(String[] args) {
+//    二叉搜索树的后序遍历序列
+    public boolean verifyPostorder0(int[] postorder) {
+        if (postorder == null || postorder.length == 0) {
+            return false;
+        }
+        return isTrue(postorder, 0, postorder.length - 1);
+    }
+
+    private boolean isTrue(int[] postorder, int start, int end) {
+        if (start >= end) {
+            return true;
+        }
+        int num = postorder[end];
+        int i = start;
+        for (; i < end; i++) {
+            if (postorder[i] > num) {
+                break;
+            }
+        }
+        for (int j = i; j < end; j++) {
+            if (postorder[j] < num) {
+                return false;
+            }
+        }
+        return isTrue(postorder, start, i - 1) && isTrue(postorder, i, end - 1);
+    }
+
+    public boolean verifyPostorder(int[] postorder) {
+        if (postorder == null) {
+            return false;
+        }
+        Stack<Integer> stack = new Stack<>();
+        int root = Integer.MAX_VALUE;
+        // 根->右子树->左子树
+        for (int i = postorder.length - 1; i >= 0; i--) {
+            if (postorder[i] > root) {
+                return false;
+            }
+            while (!stack.isEmpty() && stack.peek() > postorder[i]) {
+                root = stack.pop();
+            }
+            stack.push(postorder[i]);
+        }
+        return true;
+    }
+
+
+
+        public static void main(String[] args) {
         isNumber("2e0");
     }
 }
