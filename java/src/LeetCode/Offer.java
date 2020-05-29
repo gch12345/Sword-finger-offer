@@ -1,8 +1,5 @@
 package LeetCode;
 
-import sun.reflect.generics.tree.Tree;
-
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Offer {
@@ -758,9 +755,84 @@ public class Offer {
         return true;
     }
 
+    // 二叉树中和为某一值的路径。
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> lists = new LinkedList<>();
+        if (root == null) {
+            return lists;
+        }
+        helper(root, new LinkedList<Integer>(), lists, sum, 0);
+        return lists;
+    }
 
+    private void helper(TreeNode root, LinkedList<Integer> list, List<List<Integer>> lists, int sum, int curSum) {
+        if (root == null) {
+            return;
+        }
+        list.add(root.val);
+        if (curSum + root.val == sum && root.left == null && root.right == null) {
+            lists.add(new LinkedList<>(list));
+        }
+        helper(root.left, list, lists, sum, curSum + root.val);
+        helper(root.right, list, lists, sum, curSum + root.val);
+        list.removeLast();
+    }
 
-        public static void main(String[] args) {
+    // 复杂链表的复制
+    class Node {
+        int val;
+        Node next;
+        Node random;
+
+        public Node(int val) {
+            this.val = val;
+            this.next = null;
+            this.random = null;
+        }
+    }
+
+    public Node copyRandomList0(Node head) {
+        Map<Node, Node> map = new HashMap<>();
+        for (Node cur = head; cur != null; cur = cur.next) {
+            map.put(cur, new Node(cur.val));
+        }
+        for (Node cur = head; cur != null; cur = cur.next) {
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+        }
+        return map.get(head);
+    }
+
+    public Node copyRandomList(Node head) {
+        if (head == null) {
+            return head;
+        }
+        // 复制next指针
+        for (Node cur = head; cur != null; cur = cur.next) {
+            Node node = new Node(cur.val);
+            Node next = cur.next;
+            cur.next = node;
+            node.next = next;
+            cur = cur.next;
+        }
+        // 复制随机指针
+        for (Node cur = head; cur != null; cur = cur.next.next) {
+            if (cur.random != null)
+                cur.next.random = cur.random.next;
+        }
+        // 一分为二
+        Node ret = head.next;
+        Node node = ret;
+        head.next = head.next.next;
+        for (Node cur = ret.next; cur != null; cur = cur.next) {
+            node.next = cur.next;
+            cur.next = cur.next.next;
+            node = node.next;
+        }
+        return ret;
+    }
+
+    public static void main(String[] args) {
         isNumber("2e0");
     }
 }
