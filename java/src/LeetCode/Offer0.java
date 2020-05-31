@@ -1,5 +1,9 @@
 package LeetCode;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Offer0 {
 
     class Node {
@@ -65,5 +69,79 @@ public class Offer0 {
         root.left = prev;
         prev = root;
         dfs(root.right);
+    }
+
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return new String();
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        StringBuilder stringBuilder = new StringBuilder();
+        String string = null;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            int nullSize = 0;
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.peek();
+                if (node != null) {
+                    queue.add(node.left);
+                    queue.add(node.right);
+                } else {
+                    nullSize++;
+                }
+                stringBuilder.append(queue.poll());
+                stringBuilder.append(",");
+            }
+            if (nullSize == size) {
+                string = stringBuilder.substring(0, stringBuilder.length() - 5 * size);
+                break;
+            }
+        }
+        return string;
+    }
+
+    public TreeNode deserialize(String data) {
+        if (data == null) {
+            return null;
+        }
+        String[] strings = data.split(",");
+        Queue<String> queue = new LinkedList<>();
+        Collections.addAll(queue, strings);
+        TreeNode root = null;
+        Queue<TreeNode> curQueue = new LinkedList<>();
+        int size = 0;
+        while (!queue.isEmpty()) {
+            if (size == 0) {
+                String string = queue.poll();
+                root = new TreeNode(Integer.parseInt(string));
+                curQueue.add(root);
+                size = 1;
+            } else {
+                for (int i = 0; i < size; i++) {
+                    TreeNode cur = curQueue.poll();
+                    String string = queue.poll();
+                    if (cur != null) {
+                        if ("null".equals(string)) {
+                            cur.left = null;
+                        } else {
+                            cur.left = new TreeNode(Integer.parseInt(string));
+                        }
+                        string = queue.poll();
+                        if ("null".equals(string)) {
+                            cur.right = null;
+                        } else {
+                            cur.right = new TreeNode(Integer.parseInt(string));
+                        }
+                        curQueue.add(cur.left);
+                        curQueue.add(cur.right);
+                    } else {
+                        curQueue.add(null);
+                    }
+                }
+            }
+            size *= 2;
+        }
+        return root;
     }
 }
