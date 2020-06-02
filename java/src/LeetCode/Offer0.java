@@ -266,6 +266,79 @@ public class Offer0 {
         chars[b] = ch;
     }
 
+    //数组中出现次数超过一半的数字
+    public int majorityElement(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return Integer.MIN_VALUE;
+        }
+        int count = 1;
+        int num = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (count == 0) {
+                count = 1;
+                num = nums[i];
+                continue;
+            }
+            if (num == nums[i]) {
+                count++;
+            } else {
+                count--;
+            }
+        }
+        return num;
+    }
+
+    //最小的k个数
+    public int[] getLeastNumbers0(int[] arr, int k) {
+        if (k < 0 || arr == null || arr.length == 0 || arr.length < k) {
+            return new int[0];
+        }
+        int[] ret = new int[k];
+        PriorityQueue<Integer> queue = new PriorityQueue<>(Comparator.naturalOrder());
+        for (int i = 0; i < arr.length; i++) {
+            queue.add(arr[i]);
+        }
+        for (int i = 0; i < k; i++) {
+            ret[i] = queue.poll();
+        }
+        return ret;
+    }
+
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if (k < 0 || arr == null || arr.length == 0 || arr.length < k) {
+            return new int[0];
+        }
+        qSort(arr, 0, arr.length - 1, k);
+        return Arrays.copyOf(arr, k);
+    }
+    private void qSort(int[] arr, int left, int right, int k) {
+        if (left <= right) {
+            return;
+        }
+        int L = left;
+        int R = right;
+        int num = arr[left];
+        while (L < R) {
+            while (L < R && arr[R] >= num) {
+                R--;
+            }
+            while (L < R && arr[L] <= num) {
+                L++;
+            }
+            int temp = arr[R];
+            arr[R] = arr[L];
+            arr[L] = temp;
+        }
+        int temp = arr[L];
+        arr[L] = arr[left];
+        arr[left] = temp;
+        if (k < L + 1) {
+            qSort(arr, left, L - 1, k);
+        } else if (k > L + 1) {
+            qSort(arr, L + 1, right, k);
+        }
+    }
+
     public static void main(String[] args) {
         Offer0 o = new Offer0();
 //        TreeNode root = new TreeNode(0);
