@@ -339,6 +339,80 @@ public class Offer0 {
         }
     }
 
+    // 数据流中的中位数
+    Queue<Integer> A = new PriorityQueue<>(Comparator.naturalOrder());
+    Queue<Integer> B = new PriorityQueue<>(Comparator.reverseOrder());
+    public void addNum(int num) {
+        if (A.size() == B.size()) {
+            A.add(num);
+            B.add(A.poll());
+        } else {
+            B.add(num);
+            A.add(B.poll());
+        }
+    }
+
+    public double findMedian() {
+        if (A.size() == B.size()) {
+            return (A.peek() + B.peek()) / 2.0;
+        } else {
+            return B.peek();
+        }
+    }
+
+    // 42. 连续子数组的最大和
+    public int maxSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return Integer.MIN_VALUE;
+        }
+        int[] dp = new int[nums.length + 1];
+        int max = Integer.MIN_VALUE;
+        for (int i = 1; i < dp.length; i++) {
+            if (dp[i - 1] <= 0) {
+                dp[i] = nums[i - 1];
+            } else {
+                dp[i] = dp[i - 1] + nums[i - 1];
+            }
+            if (dp[i] > max) {
+                max = dp[i];
+            }
+        }
+        return max;
+    }
+
+    // 43. 1～n整数中1出现的次数
+    public int countDigitOne(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        if (n < 10) {
+            return 1;
+        }
+        String s = String.valueOf(n);
+        int num =  n - ((s.charAt(0) - '0') * (int)Math.pow(10, s.length() - 1));
+        return countDigitOne(num) + help(num + 1, n);
+    }
+
+    private int help(int start, int end) {
+        if (end == 0) {
+            return 0;
+        }
+        if (end < 10) {
+            return 1;
+        }
+        int ret = 0;
+        String s = String.valueOf(end);
+        if (s.charAt(0) == '1') {
+            ret = end - start + 1;
+        } else {
+            ret = (int)Math.pow(10, s.length() - 1);
+        }
+        if (s.length() > 2) {
+            ret = ret + (s.charAt(0) - '0') * (int) Math.pow(10, s.length() - 2);
+        }
+        return ret;
+    }
+
     public static void main(String[] args) {
         Offer0 o = new Offer0();
 //        TreeNode root = new TreeNode(0);
@@ -346,8 +420,12 @@ public class Offer0 {
 //        root.right = new TreeNode(2);
 //        root.left.right = new TreeNode(3);
 //        System.out.println(o.serialize(root));
-        String s = "5,2,3,null,null,2,4,3,1";
-        TreeNode root = o.deserialize(s);
-        System.out.println(o.serialize(root));
+//        String s = "5,2,3,null,null,2,4,3,1";
+//        TreeNode root = o.deserialize(s);
+//        System.out.println(o.serialize(root));
+        o.B.add(1);
+        o.B.add(2);
+        System.out.println(o.B.poll());
+        System.out.println(o.B.poll());
     }
 }
