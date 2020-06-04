@@ -403,18 +403,68 @@ public class Offer0 {
         int ret = 0;
         String s = String.valueOf(end);
         if (s.charAt(0) == '1') {
-            ret = end - start + 1;
+            ret = end - (int)Math.pow(10, s.length() - 1) + 1;
         } else {
             ret = (int)Math.pow(10, s.length() - 1);
         }
-        if (s.length() > 2) {
-            ret = ret + (s.charAt(0) - '0') * (int) Math.pow(10, s.length() - 2);
+        ret = ret + (s.charAt(0) - '0') * (int) Math.pow(10, s.length() - 2) * (s.length() - 1);
+        return ret;
+    }
+
+    // 45. 把数组排成最小的数
+
+    /**
+     * 字符串 x + y > y + x 则 y 应在 x 之前
+     *        x + y < y + x 则 x 应在 y 之前
+     * 比如 "3" + "30" > "30" + "3" 输出应为 "303"
+     *
+     * 利用快排快速分割排序。
+     * @param nums
+     * @return
+     */
+    public String minNumber(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        String[] strings = new String[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            strings[i] = String.valueOf(nums[i]);
+        }
+        qSort(strings, 0, strings.length - 1);
+        String ret = "";
+        for (int i = 0; i < strings.length; i++) {
+            ret = ret + strings[i];
         }
         return ret;
     }
 
+    private void qSort(String[] strings, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int L = left;
+        int R = right;
+        while (L < R) {
+            while (L < R && (strings[R] + strings[left]).compareTo(strings[left] + strings[R]) >= 0) {
+                R--;
+            }
+            while (L < R && (strings[L] + strings[left]).compareTo(strings[left] + strings[L]) <= 0) {
+                L++;
+            }
+            String temp = strings[R];
+            strings[R] = strings[L];
+            strings[L] = temp;
+        }
+        String temp = strings[L];
+        strings[L] = strings[left];
+        strings[left] = temp;
+        qSort(strings, left, L - 1);
+        qSort(strings, L + 1, right);
+    }
+
     public static void main(String[] args) {
         Offer0 o = new Offer0();
+        System.out.println(o.countDigitOne(12));
 //        TreeNode root = new TreeNode(0);
 //        root.left = new TreeNode(1);
 //        root.right = new TreeNode(2);
