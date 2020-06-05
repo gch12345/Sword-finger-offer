@@ -462,9 +462,59 @@ public class Offer0 {
         qSort(strings, L + 1, right);
     }
 
+    // 46. 把数字翻译成字符串
+    int count = 0;
+    public int translateNum(int num) {
+        if (num < 0) {
+            return -1;
+        }
+        char[] chars = String.valueOf(num).toCharArray();
+        helper(chars, 0);
+        return count;
+    }
+
+    private void helper(char[] chars, int index) {
+        if (index == chars.length) {
+            count++;
+            return;
+        }
+        int minNum = chars[index] - '0';
+        int maxNum = Integer.MAX_VALUE;
+        if (index < chars.length - 1) {
+            maxNum = (chars[index] - '0') * 10 + chars[index + 1] - '0';
+        }
+        helper(chars, index + 1);
+        if (maxNum <= 35) {
+            helper(chars, index + 2);
+        }
+    }
+
+    // 47. 礼物的最大价值
+    public int maxValue(int[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return -1;
+        }
+        int row = grid.length;
+        int col = grid[0].length;
+        int[][] dp = new int[row][col];
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < col; i++) {
+            dp[0][i] = grid[0][i] + dp[0][i - 1];
+        }
+        for (int i = 1; i < row; i++) {
+            dp[i][0] = grid[i][0] + dp[i - 1][0];
+        }
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+            }
+        }
+        return dp[row - 1][col - 1];
+    }
+
     public static void main(String[] args) {
         Offer0 o = new Offer0();
-        System.out.println(o.countDigitOne(12));
+//        System.out.println(o.countDigitOne(12));
 //        TreeNode root = new TreeNode(0);
 //        root.left = new TreeNode(1);
 //        root.right = new TreeNode(2);
@@ -473,9 +523,15 @@ public class Offer0 {
 //        String s = "5,2,3,null,null,2,4,3,1";
 //        TreeNode root = o.deserialize(s);
 //        System.out.println(o.serialize(root));
-        o.B.add(1);
-        o.B.add(2);
-        System.out.println(o.B.poll());
-        System.out.println(o.B.poll());
+//        o.B.add(1);
+//        o.B.add(2);
+//        System.out.println(o.B.poll());
+//        System.out.println(o.B.poll());
+//  [1,3,1],
+//  [1,5,1],
+//  [4,2,1]
+        // 1→3→5→2→1
+        int[][] arr = {{1,3,1},{1,5,1},{4,2,1}};
+        System.out.println(o.maxValue(arr));
     }
 }
