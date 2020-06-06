@@ -512,6 +512,32 @@ public class Offer0 {
         return dp[row - 1][col - 1];
     }
 
+//    48. 最长不含重复字符的子字符串
+    public int lengthOfLongestSubstring(String s) {
+        if (s ==  null || s.length() == 0) {
+            return 0;
+        }
+        int[] dp = new int[s.length()];
+        Map<Character, Integer> map = new HashMap<>();
+        dp[0] = 1;
+        map.put(s.charAt(0), 0);
+        int max = dp[0];
+        for (int i = 1; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            int index = map.getOrDefault(ch, -1);
+            if (i - index > dp[i - 1]) {
+                dp[i] = dp[i - 1] + 1;
+            } else {
+                dp[i] = i - index;
+            }
+            map.put(ch, i);
+            if (max < dp[i]) {
+                max = dp[i];
+            }
+        }
+        return max;
+    }
+
     public static void main(String[] args) {
         Offer0 o = new Offer0();
 //        System.out.println(o.countDigitOne(12));
