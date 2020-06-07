@@ -538,6 +538,49 @@ public class Offer0 {
         return max;
     }
 
+    // 49. 丑数
+    public int nthUglyNumber(int n) {
+        if (n <= 0) {
+            return -1;
+        }
+        int tow = 0;
+        int three = 0;
+        int five = 0;
+        int[] dp = new int[n];
+        dp[0] = 1;
+        for (int i = 1; i < n; i++) {
+            dp[i] = Math.min(Math.min(dp[tow] * 2, dp[three] * 3), dp[five] * 5);
+            if (dp[i] == dp[tow] * 2) {
+                tow++;
+            }
+            if (dp[i] == dp[three] * 3) {
+                three++;
+            }
+            if (dp[i] == dp[five] * 5) {
+                five++;
+            }
+        }
+        return dp[n - 1];
+    }
+
+    // 50. 第一个只出现一次的字符
+    public char firstUniqChar(String s) {
+        if (s == null || s.length() == 0) {
+            return ' ';
+        }
+        Map<Character, Boolean> map = new LinkedHashMap<>();
+        char[] chars = s.toCharArray();
+        for (char ch : chars) {
+            map.put(ch, !map.containsKey(ch));
+        }
+        for (Map.Entry<Character, Boolean> node : map.entrySet()) {
+            if (node.getValue()) {
+                return node.getKey();
+            }
+        }
+        return ' ';
+    }
+
     public static void main(String[] args) {
         Offer0 o = new Offer0();
 //        System.out.println(o.countDigitOne(12));
