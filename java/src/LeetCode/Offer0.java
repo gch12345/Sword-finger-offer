@@ -581,6 +581,55 @@ public class Offer0 {
         return ' ';
     }
 
+    // 51. 数组中的逆序对
+    // 归并
+    public int reversePairs(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        return merge(nums, 0, nums.length - 1);
+    }
+
+    private int merge (int[] nums, int left, int right) {
+        if (left == right) {
+            return 0;
+        }
+        int mid = (right + left) / 2;
+        int leftCount = merge(nums, left, mid);
+        int rightCount = merge(nums, mid + 1, right);
+        if (nums[mid] <= nums[mid + 1]) {
+            return leftCount + rightCount;
+        }
+        return leftCount + rightCount + helpMerge(nums, left, mid, right);
+    }
+
+    private int helpMerge(int[] nums, int left, int mid, int right) {
+        int[] arr = new int[right - left + 1];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = nums[left + i];
+        }
+        int count = 0;
+        int i = 0;
+        int j = mid - left + 1;
+        for (int k = left; k <= right; k++) {
+            if (i == mid + 1 - left) {
+                nums[k] = arr[j];
+                j++;
+            } else if (j == right + 1 - left) {
+                nums[k] = arr[i];
+                i++;
+            } else if (arr[i] <= arr[j]) {
+                nums[k] = arr[i];
+                i++;
+            } else {
+                nums[k] = arr[j];
+                count = count + mid - i + 1;
+                j++;
+            }
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
         Offer0 o = new Offer0();
 //        System.out.println(o.countDigitOne(12));
