@@ -630,6 +630,55 @@ public class Offer0 {
         return count;
     }
 
+    // 52. 两个链表的第一个公共节点
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        ListNode l1 = headA;
+        ListNode l2 = headB;
+        while (l1 != l2) {
+            l1 = l1.next == null ? headB : l1.next;
+            l2 = l2.next == null ? headA : l2.next;
+        }
+        return l1;
+    }
+
+    // 53 - I. 在排序数组中查找数字 I
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int left = 0;
+        int right = nums.length - 1;
+        int mid = (right - left) / 2 + left;
+        while (left <= right) {
+            if (target == nums[mid]) {
+                break;
+            } else if (target < nums[mid]) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+            mid = (right - left) / 2 + left;
+        }
+        if (left > right) {
+            return 0;
+        }
+        int count = 1;
+        int index = mid - 1;
+        while (target == nums[index]) {
+            count++;
+            index--;
+        }
+        index = mid + 1;
+        while (target == nums[index]) {
+            count++;
+            index++;
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
         Offer0 o = new Offer0();
 //        System.out.println(o.countDigitOne(12));
