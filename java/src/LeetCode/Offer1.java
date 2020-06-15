@@ -1,5 +1,6 @@
 package LeetCode;
 
+import java.util.HashMap;
 import java.util.Stack;
 
 public class Offer1 {
@@ -68,5 +69,40 @@ public class Offer1 {
         ret = root.val;
         k--;
         dfs(root.left);
+    }
+
+    class Node{
+        int val;
+        Node left;
+        Node right;
+    }
+
+//    36. 二叉搜索树与双向链表
+    public Node treeToDoublyList(Node root) {
+        if (root == null) {
+            return root;
+        }
+        Stack<Node> stack = new Stack<>();
+        Node head = null;
+        Node prev = null;
+        Node cur = root;
+        while (!stack.isEmpty() || cur != null) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            if (prev == null) {
+                head = cur;
+            } else {
+                prev.right = cur;
+            }
+            cur.left = prev;
+            prev = cur;
+            cur = cur.right;
+        }
+        head.left = prev;
+        prev.right = head;
+        return head;
     }
 }
