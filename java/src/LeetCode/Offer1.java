@@ -1,6 +1,8 @@
 package LeetCode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 public class Offer1 {
@@ -104,5 +106,79 @@ public class Offer1 {
         head.left = prev;
         prev.right = head;
         return head;
+    }
+
+    //55 - I. 二叉树的深度
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(maxDepth(root.left) + 1, maxDepth(root.right) + 1);
+    }
+
+//    55 - II. 平衡二叉树
+    public boolean isBalanced0(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        boolean left = isBalanced0(root.left);
+        boolean right = isBalanced0(root.right);
+        if (left && right && Math.abs(maxDepth(root.left) - maxDepth(root.right)) == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isBalanced(TreeNode root) {
+         int ret = help(root);
+         if (ret == -1) {
+             return false;
+         }
+        return true;
+    }
+
+    private int help(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = help(root.left);
+        if (left == -1) {
+            return -1;
+        }
+        int right = help(root.right);
+        if (right == -1) {
+            return -1;
+        }
+        return Math.abs(left - right) <= 1 ? Math.max(left, right) + 1 : -1;
+    }
+
+    //I. 数组中数字出现的次数
+    public int[] singleNumbers(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return new int[0];
+        }
+        int sum = nums[0];
+        int len = nums.length;
+        for (int i = 1; i < len; i++) {
+            sum = sum ^ nums[i];
+        }
+        int count = 0;
+        while ((sum & 1) != 1) {
+            sum = sum >> 1;
+            count++;
+        }
+        int num1 = 0;
+        int num2 = 0;
+        for (int i = 0; i < len; i++) {
+            if ((nums[i] >> count & 1) == 1) {
+                num1 = num1 ^ nums[i];
+            } else {
+                num2 = num2 ^ nums[i];
+            }
+        }
+        int[] ret = new int[2];
+        ret[0] = num1;
+        ret[1] = num2;
+        return ret;
     }
 }
