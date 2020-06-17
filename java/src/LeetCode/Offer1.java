@@ -181,4 +181,41 @@ public class Offer1 {
         ret[1] = num2;
         return ret;
     }
+
+    // 后序遍历
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if (root == null) {
+            return list;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode cur = root;
+        TreeNode prev = null;
+        while (cur != null || !stack.isEmpty()) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            TreeNode top = stack.peek();
+            if (top.right == null || top.right == prev) {
+                list.add(top.val);
+                stack.pop();
+                prev = top;
+            } else {
+                cur = top.right;
+            }
+        }
+        return list;
+    }
+
+    private class fun {
+
+    }
+    public static void main(String[] args) {
+        Class<?> c  = Offer1.class;
+        Class<?>[] classes = c.getDeclaredClasses();
+        for (Class<?> C : classes) {
+            System.out.println(C.getName());
+        }
+    }
 }
