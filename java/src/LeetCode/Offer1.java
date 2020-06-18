@@ -1,9 +1,6 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Offer1 {
     // 53 - II. 0～n-1中缺失的数字
@@ -211,11 +208,74 @@ public class Offer1 {
     private class fun {
 
     }
-    public static void main(String[] args) {
-        Class<?> c  = Offer1.class;
-        Class<?>[] classes = c.getDeclaredClasses();
-        for (Class<?> C : classes) {
-            System.out.println(C.getName());
+
+    // 堆排序
+    public static void heapSort(int[] arr) {
+        if (arr == null || arr.length <= 1) {
+            return;
         }
+        help(arr);
+        for (int i = 1; i < arr.length; i++) {
+            int temp = arr[0];
+            arr[0] = arr[arr.length - i];
+            arr[arr.length - i] = temp;
+            shiftDown(arr, 0, arr.length - i);
+        }
+    }
+    // 建堆
+    private static void help(int[] arr) {
+        int index = (arr.length - 1 -1) / 2;
+        for (; index >= 0; index--) {
+            shiftDown(arr, index, arr.length);
+        }
+    }
+
+    private static void shiftDown(int[] arr, int index, int length) {
+        int parent = index;
+        int child = parent * 2 + 1;
+        while (child < length) {
+            if (child + 1 < length && arr[child] < arr[child + 1]) {
+                child = child + 1;
+            }
+            if (arr[child] <= arr[parent]) {
+                return;
+            }
+            int temp = arr[child];
+            arr[child] = arr[parent];
+            arr[parent] = temp;
+            parent = child;
+            child = parent * 2 + 1;
+        }
+    }
+
+    // 插入排序
+    public static void insert(int[] arr) {
+        if (arr == null || arr.length <= 1) {
+            return;
+        }
+        for (int i = 1; i < arr.length; i++) {
+            int num = arr[i];
+            int j = i - 1;
+            for (; j >= 0; j--) {
+                if (num < arr[j]) {
+                    arr[j + 1] = arr[j];
+                } else {
+                    break;
+                }
+            }
+            arr[j + 1] = num;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {3,1,6,3,7,1,7,2,0};
+//        heapSort(arr);
+        insert(arr);
+        System.out.println(Arrays.toString(arr));
+//        Class<?> c  = Offer1.class;
+//        Class<?>[] classes = c.getDeclaredClasses();
+//        for (Class<?> C : classes) {
+//            System.out.println(C.getName());
+//        }
     }
 }
