@@ -180,7 +180,7 @@ public class Offer1 {
     }
 
     // 后序遍历
-    public List<Integer> postorderTraversal(TreeNode root) {
+    public List<Integer> postorderTraversal0(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         if (root == null) {
             return list;
@@ -267,10 +267,64 @@ public class Offer1 {
         }
     }
 
+    // 希尔排序
+    public static void shall(int[] arr) {
+        if (arr == null || arr.length <= 1) {
+            return;
+        }
+        int gap = arr.length;
+        while (gap >= 1) {
+            shallHelp(arr, gap);
+            gap /= 2;
+        }
+    }
+
+    private static void shallHelp(int[] arr, int gap) {
+        for (int i = 0; i < arr.length; i++) {
+            int j = i - gap;
+            int num = arr[i];
+            for (; j >= 0; j -= gap) {
+                if (num < arr[j]) {
+                    arr[gap + j] = arr[j];
+                } else {
+                    break;
+                }
+            }
+            arr[gap + j] = num;
+        }
+    }
+
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if (root == null) {
+            return list;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode cur = root;
+        TreeNode prev = null;
+        while (!stack.isEmpty() || cur != null) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.peek();
+            if (cur.right == prev || cur.right == null) {
+                stack.pop();
+                list.add(cur.val);
+                prev = cur;
+                cur = null;
+            } else {
+                cur = cur.right;
+            }
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         int[] arr = {3,1,6,3,7,1,7,2,0};
 //        heapSort(arr);
-        insert(arr);
+//        insert(arr);
+        shall(arr);
         System.out.println(Arrays.toString(arr));
 //        Class<?> c  = Offer1.class;
 //        Class<?>[] classes = c.getDeclaredClasses();
