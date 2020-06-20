@@ -320,11 +320,70 @@ public class Offer1 {
         return list;
     }
 
+    public static void merge(int[] arr) {
+        if (arr == null || arr.length <= 1) {
+            return;
+        }
+        mergeHelp(arr, 0, arr.length - 1);
+    }
+
+    private static void mergeHelp(int[] arr, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int mid = left + (right - left) / 2;
+        mergeHelp(arr, left, mid);
+        mergeHelp(arr, mid + 1, right);
+        int[] temp = new int[right - left + 1];
+        int left1 = left;
+        int left2 = mid + 1;
+        int i = 0;
+        while (left1 <= mid && left2 <= right) {
+            if (arr[left1] < arr[left2]) {
+                temp[i++] = arr[left1++];
+            } else {
+                temp[i++] = arr[left2++];
+            }
+        }
+        if (left1 > mid) {
+            while (left2 <= right) {
+                temp[i++] = arr[left2++];
+            }
+        } else {
+            while (left1 <= mid) {
+                temp[i++] = arr[left1++];
+            }
+        }
+        for (i = 0; i < temp.length; i++) {
+            arr[left + i] = temp[i];
+        }
+    }
+
+    //  56 - II. 数组中数字出现的次数 II
+    public int singleNumber(int[] nums) {
+        int[] bitNum = new int[32];
+        for (int num : nums) {
+            for (int j = 0; j < 32; j++) {
+                if ((num & 1) == 1) {
+                    bitNum[j]++;
+                }
+                num >>= 1;
+            }
+        }
+        int ret = 0;
+        for (int i = 31; i >= 0; i--) {
+            ret <<= 1;
+            ret |= bitNum[i] % 3;
+        }
+        return ret;
+    }
+
     public static void main(String[] args) {
         int[] arr = {3,1,6,3,7,1,7,2,0};
 //        heapSort(arr);
 //        insert(arr);
-        shall(arr);
+//        shall(arr);
+        merge(arr);
         System.out.println(Arrays.toString(arr));
 //        Class<?> c  = Offer1.class;
 //        Class<?>[] classes = c.getDeclaredClasses();
