@@ -1,5 +1,7 @@
 package LeetCode;
 
+import org.openjdk.jol.info.ClassLayout;
+
 import java.util.*;
 
 public class Offer1 {
@@ -378,17 +380,93 @@ public class Offer1 {
         return ret;
     }
 
-    public static void main(String[] args) {
-        int[] arr = {3,1,6,3,7,1,7,2,0};
-//        heapSort(arr);
-//        insert(arr);
-//        shall(arr);
-        merge(arr);
-        System.out.println(Arrays.toString(arr));
-//        Class<?> c  = Offer1.class;
-//        Class<?>[] classes = c.getDeclaredClasses();
-//        for (Class<?> C : classes) {
-//            System.out.println(C.getName());
-//        }
+//    public static void main(String[] args) {
+//        int[] arr = {3,1,6,3,7,1,7,2,0};
+////        heapSort(arr);
+////        insert(arr);
+////        shall(arr);
+//        merge(arr);
+//        System.out.println(Arrays.toString(arr));
+////        Class<?> c  = Offer1.class;
+////        Class<?>[] classes = c.getDeclaredClasses();
+////        for (Class<?> C : classes) {
+////            System.out.println(C.getName());
+////        }
+//    }
+    static class A{
+
     }
+    public static void main(String[] args) throws Exception {
+        List<A> list=new ArrayList<>();
+        //生成40个A的实例
+        for (int i = 0; i < 100; i++) {
+            list.add(new A());
+        }
+        System.out.println( "-------" + ClassLayout.parseInstance(new A()).toPrintable());
+
+        Thread t1= new Thread(){
+            public void run() {
+                for (int i = 0; i < 100; i++) {
+                    A a=list.get(i);
+                    synchronized (a) {
+                        if(i==1 || i==99) {
+                            System.out.println("t1 lock " + i );
+                            //打印对象头
+                            System.out.println(ClassLayout.parseInstance(a).toPrintable());//偏向锁
+                        }
+                    }
+                }
+//                synchronized (Offer.class) {
+//                    System.out.println(".....");
+//                    System.out.println(ClassLayout.parseInstance(Offer.class).toPrintable());//偏向锁
+//                }
+            }
+        };
+        t1.start();
+        t1.join();//通过join是t1结束后再启动t2,避免竞争
+        System.out.println( "-------" + ClassLayout.parseInstance(new A()).toPrintable());
+
+        Thread t2= new Thread(){
+            public void run() {
+                for (int i = 0; i < 100; i++) {
+                    A a=list.get(i);
+                    synchronized (a) {
+                        if(i==1 || i==99 || i == 26) {//i<19的时候轻量锁， i>=19的时候是偏向锁
+                            System.out.println("t2 lock " + i );
+                            System.out.println(ClassLayout.parseInstance(a).toPrintable());
+                        }
+                    }
+                }
+            }
+        };
+        t2.start();
+        t2.join();
+//        for (int i = 0; i < 21; i++) {
+//            A x = new A();
+//            synchronized (x) {
+//                if (i == 20) {
+//                    System.out.println(ClassLayout.parseInstance(x).toPrintable());
+//                }
+//            }
+//        }
+        System.out.println( "-------" + ClassLayout.parseInstance(new A()).toPrintable());
+
+        Thread t3 = new Thread() {
+            public void run() {
+                for (int i = 0; i < 100; i++) {
+                    A a=list.get(i);
+                    synchronized (a) {
+                        if(i==1 || i==99) {//i<19的时候轻量锁， i>=19的时候是偏向锁
+                            System.out.println("t3 lock " + i );
+                            System.out.println(ClassLayout.parseInstance(a).toPrintable());
+                        }
+                    }
+                }
+            }
+        };
+        t3.start();
+        t3.join();
+        System.out.println( "-------" + ClassLayout.parseInstance(new A()).toPrintable());
+    }
+
 }
