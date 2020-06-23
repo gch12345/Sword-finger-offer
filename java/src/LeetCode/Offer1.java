@@ -1,5 +1,6 @@
 package LeetCode;
 
+import org.junit.Test;
 import org.openjdk.jol.info.ClassLayout;
 
 import java.util.*;
@@ -397,6 +398,59 @@ public class Offer1 {
             }
         }
         return ret;
+    }
+
+    //和为s的正数子序列
+    public static int[][] findContinuousSequence0(int target) {
+        List<List<Integer>> lists = new ArrayList<>();
+        helper(target, 1, 0, lists, new ArrayList<>());
+        return lists.toArray(new int[lists.size()][]);
+    }
+
+    private static void helper(int target, int index, int curSum, List<List<Integer>> lists, List<Integer> list) {
+        if (target < curSum) {
+            return;
+        }
+        if (target == curSum) {
+            lists.add(new ArrayList<>(list));
+            return;
+        }
+        for (int i = index; i < target; i++) {
+            list.add(i);
+            helper(target, i + 1, curSum + i, lists, list);
+            list.remove(list.size() - 1);
+        }
+    }
+
+    @Test
+    public void test() {
+        findContinuousSequence(15);
+    }
+
+    //57 - II. 和为s的连续正数序列
+    public static int[][] findContinuousSequence(int target) {
+        int left = 1;
+        int right = 1;
+        int sum = 1;
+        List<int[]> list = new ArrayList<>();
+        while (left < target) {
+            if (sum < target) {
+                right++;
+                sum += right;
+            } else if (sum > target) {
+                sum -= left;
+                left++;
+            } else {
+                int[] solution = new int[right - left + 1];
+                for (int j = left; j <= right; j++) {
+                    solution[j - left] = j;
+                }
+                list.add(solution);
+                sum -= left;
+                left++;
+            }
+        }
+        return list.toArray(new int[list.size()][]);
     }
 
 //    public static void main(String[] args) {
