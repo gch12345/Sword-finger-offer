@@ -499,9 +499,10 @@ public class Offer1 {
         t1.join();//通过join是t1结束后再启动t2,避免竞争
 //        System.out.println( "-------" + ClassLayout.parseInstance(new A()).toPrintable());
         new Thread().start();
+
         Thread t2= new Thread(){
             public void run() {
-                for (int i = 0; i < 30; i++) {
+                for (int i = 0; i < 100; i++) {
                     A a=list.get(i);
                     synchronized (a) {
                         if(i==1 || i==41 || i == 26) {//i<19的时候轻量锁， i>=19的时候是偏向锁
@@ -514,8 +515,6 @@ public class Offer1 {
         };
         t2.start();
         t2.join();
-        System.out.println("23" + ClassLayout.parseInstance(list.get(23)).toPrintable());
-        System.out.println("99" + ClassLayout.parseInstance(list.get(99)).toPrintable());
 
 //        for (int i = 0; i < 21; i++) {
 //            A x = new A();
@@ -533,17 +532,18 @@ public class Offer1 {
                 for (int i = 0; i < 100; i++) {
                     A a=list.get(i);
                     synchronized (a) {
-                        if(i==1 || i==19) {//i<19的时候轻量锁， i>=19的时候是偏向锁
+                        //if(i==1 || i==19 || i==29 || i == 99) {//i<19的时候轻量锁， i>=19的时候是偏向锁
                             System.out.println("t3 lock " + i );
                             System.out.println(ClassLayout.parseInstance(a).toPrintable());
-                        }
+                        //}
                     }
                 }
             }
         };
         t3.start();
         t3.join();
-        //System.out.println( "-------" + ClassLayout.parseInstance(new A()).toPrintable());
+        System.out.println("99" + ClassLayout.parseInstance(list.get(99)).toPrintable());
+        System.out.println( "-------" + ClassLayout.parseInstance(new A()).toPrintable());
     }
 
 }
