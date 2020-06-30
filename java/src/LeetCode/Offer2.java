@@ -106,6 +106,60 @@ public class Offer2 {
         return ret;
     }
 
+    //  59 - II. 队列的最大值
+    private Queue<Integer> queue = new LinkedList<>();
+    private Deque<Integer> deque = new LinkedList<>();
+    public int max_value() {
+        if (deque.isEmpty()) {
+            return -1;
+        }
+        return deque.peekFirst();
+    }
+
+    public void push_back(int value) {
+        queue.add(value);
+        while (!deque.isEmpty() && deque.peekLast() < value) {
+            deque.removeLast();
+        }
+        deque.addLast(value);
+    }
+
+    public int pop_front() {
+        if (queue.isEmpty()) {
+            return -1;
+        }
+        if (queue.peek().equals(deque.peekFirst())) {
+            deque.removeFirst();
+        }
+        return queue.poll();
+    }
+
+    // 60. n个骰子的点数
+    public double[] twoSum(int n) {
+        if (n <= 0) {
+            return new double[0];
+        }
+        double[][] dp = new double[n + 1][6 * n + 1];
+        for (int i = 0; i < 7; i++) {
+            dp[1][i] = 1 / 6.0;
+        }
+        for (int i = 2; i <= n; i++) {
+            for (int j = i; j <= i * 6; j++) {
+                for (int k = 1; k <= 6; k++) {
+                    if (j - k <= 0) {
+                        break;
+                    }
+                    dp[i][j] += dp[i - 1][j - k] / 6.0;
+                }
+            }
+        }
+        double[] ret = new double[n * 6 - n + 1];
+        for (int i = 0; i < ret.length; i++) {
+            ret[i] = dp[n][i + n];
+        }
+        return ret;
+    }
+
     public static void main(String[] args) {
         Offer2 offer2 = new Offer2();
         offer2.reverseWords(" ");
