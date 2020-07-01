@@ -160,6 +160,62 @@ public class Offer2 {
         return ret;
     }
 
+    // 61. 扑克牌中的顺子
+    public boolean isStraight0(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return true;
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < min && nums[i] != 0) {
+                min = nums[i];
+            }
+        }
+        int count = 0;
+        int[] map = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] - min >= map.length) {
+                return false;
+            }
+            if (nums[i] == 0) {
+                count++;
+                continue;
+            }
+            map[nums[i] - min] = 1;
+        }
+        for (int i = 0; i < map.length; i++) {
+            if (map[i] == 0) {
+                count--;
+            }
+        }
+        if (count < 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isStraight(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return true;
+        }
+        int len = nums.length;
+        int[] map = new int[13];
+        int min = 14;
+        int max = 0;
+        for (int i = 0; i < len; i++) {
+            if (nums[i] == 0) {
+                continue;
+            }
+            min = Math.min(min, nums[i]);
+            max = Math.max(max, nums[i]);
+            if (map[nums[i] - 1] == 1) {
+                return false;
+            }
+            map[nums[i] - 1] = 1;
+        }
+        return max - min < nums.length;
+    }
+
     public static void main(String[] args) {
         Offer2 offer2 = new Offer2();
         offer2.reverseWords(" ");
