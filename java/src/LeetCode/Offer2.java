@@ -1,5 +1,6 @@
 package LeetCode;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -47,7 +48,7 @@ public class Offer2 {
     // 58 - II. 左旋转字符串
     public String reverseLeftWords(String s, int n) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = n; i < s.length() + n; i++ ) {
+        for (int i = n; i < s.length() + n; i++) {
             stringBuilder.append(s.charAt(i % s.length()));
         }
         return stringBuilder.toString();
@@ -109,6 +110,7 @@ public class Offer2 {
     //  59 - II. 队列的最大值
     private Queue<Integer> queue = new LinkedList<>();
     private Deque<Integer> deque = new LinkedList<>();
+
     public int max_value() {
         if (deque.isEmpty()) {
             return -1;
@@ -214,6 +216,69 @@ public class Offer2 {
             map[nums[i] - 1] = 1;
         }
         return max - min < nums.length;
+    }
+
+    //  62. 圆圈中最后剩下的数字
+    //0 1 2 3 4
+    //0 1 3 4  : 2
+    //1 3 4  : 0
+    //1 3 ：4
+    //3 ：1
+    public int lastRemaining0(int n, int m) {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            arrayList.add(i);
+        }
+        int index = 0;
+        while (n > 1) {
+            index = (index + m - 1) % n;
+            arrayList.remove(index);
+            n--;
+        }
+        return arrayList.get(0);
+    }
+
+    // 逆推
+    public int lastRemaining(int n, int m) {
+        int ans = 0;
+        for (int i = 2; i < n; i++) {
+            ans = (ans + m) % i;
+        }
+        return ans;
+    }
+
+    //  63. 股票的最大利润
+    // dp[天数][手中是否有股票]
+    public int maxProfit0(int[] prices) {
+        int[][] dp = new int[prices.length + 1][2];
+        dp[0][0] = 0;
+        dp[0][1] = Integer.MIN_VALUE;
+        for (int i = 1; i <= prices.length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i - 1]);
+            dp[i][1] = Math.max(dp[i - 1][1], -prices[i - 1]);
+        }
+        return dp[prices.length][0];
+    }
+
+    //dp[i] = max(dp[i - 1], prices[i] - min(prices[i], 前几天价格最低的))
+    public int maxProfit1(int[] prices) {
+        int min = Integer.MAX_VALUE;
+        int[] dp = new int[prices.length + 1];
+        for (int i = 1; i < dp.length; i++) {
+            min = Math.min(prices[i - 1], min);
+            dp[i] = Math.max(dp[i - 1], prices[i - 1] - min);
+        }
+        return dp[prices.length];
+    }
+
+    public int maxProfit(int[] prices) {
+        int cost = Integer.MIN_VALUE;
+        int profit = 0;
+        for (int i = 0; i < prices.length; i++) {
+            profit = Math.max(profit, cost + prices[i]);
+            cost = Math.max(cost, -prices[i]);
+        }
+        return profit;
     }
 
     public static void main(String[] args) {
