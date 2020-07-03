@@ -281,6 +281,96 @@ public class Offer2 {
         return profit;
     }
 
+    // 64. 求1+2+…+n
+    int sum = 0;
+    public int sumNums(int n) {
+        boolean bool = n > 1 && sumNums(n - 1) > 0;
+        sum += n;
+        return sum;
+    }
+
+    // 65. 不用加减乘除做加法
+    public int add(int a, int b) {
+        while (b != 0) {
+            int temp = (a & b) << 1;
+            a = a ^ b; // 非进位和
+            b = temp; // 进位
+        }
+        return a;
+    }
+
+    // 66. 构建乘积数组
+    public int[] constructArr(int[] a) {
+        if (a == null || a.length == 0) {
+            return new int[0];
+        }
+        int[] b1 = new int[a.length];
+        int[] b2 = new int[a.length];
+        b1[0] = 1;
+        b2[a.length - 1] = 1;
+        // 下三角
+        for (int i = 1; i < a.length; i++) {
+            b1[i] = b1[i - 1] * a[i];
+        }
+        // 上三角
+        for (int i = a.length - 1; i >= 0; i--) {
+            b2[i] = b2[i + 1] * a[i];
+        }
+        // 合并
+        for (int i = 0; i < a.length; i++) {
+            b1[i] *= b2[i];
+        }
+        return b1;
+    }
+
+    // 68 - II. 二叉树的最近公共祖先
+    TreeNode ret = null;
+    public TreeNode lowestCommonAncestor0(TreeNode root, TreeNode p, TreeNode q) {
+        help(root, p, q);
+        return ret;
+    }
+    private boolean help(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return false;
+        }
+        int left = help(root.left, p, q) ? 1 : 0;
+        int right = help(root.right, p, q) ? 1 : 0;
+        int mid = (root == p || root == q) ? 1 :0;
+        if (mid + left + right >= 2) {
+            ret = root;
+        }
+        return (mid + left + right) > 0;
+    }
+
+    // 68 - I. 二叉搜索树的最近公共祖先
+    public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
+        while (root != null) {
+            if (root.val < p.val && root.val < q.val) {
+                root = root.right;
+            } else if (root.val > p.val && root.val > q.val) {
+                root = root.left;
+            } else {
+                break;
+            }
+        }
+        return root;
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q) {
+            return root;
+        }
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if (left == null) {
+            return right;
+        }
+        if (right == null) {
+            return left;
+        }
+        return root;
+    }
+
     public static void main(String[] args) {
         Offer2 offer2 = new Offer2();
         offer2.reverseWords(" ");
