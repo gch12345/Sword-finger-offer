@@ -1,6 +1,8 @@
 package LeetCode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class program0 {
@@ -74,10 +76,72 @@ public class program0 {
         return Strings;
     }
 
-    public static void main(String[] args) {
-        String[] strings = grayCode(3);
-        for (String s : strings) {
-            System.out.println(s);
+    public static void heapSort(int[] arr) {
+        creatHeap(arr);
+        for (int i = 0; i < arr.length; i++) {
+            int temp = arr[0];
+            arr[0] = arr[arr.length - 1 - i];
+            arr[arr.length - 1 - i] = temp;
+            shiftDown(arr, 0, arr.length - 1 - 1 - i);
         }
+    }
+
+    private static void creatHeap(int[] arr) {
+        int index = (arr.length - 1 - 1) / 2;
+        for (int i = index; i >= 0; i--) {
+            shiftDown(arr, i, arr.length - 1);
+        }
+    }
+
+    private static void shiftDown(int[] arr, int index, int len) {
+        int parent = index;
+        int child = index * 2 + 1;
+        while (child <= len) {
+            if (child + 1 <= len && arr[child] < arr[child + 1]) {
+                child = child + 1;
+            }
+            if (arr[child] > arr[parent]) {
+                int temp = arr[parent];
+                arr[parent] = arr[child];
+                arr[child] = temp;
+            }
+            parent = child;
+            child = parent * 2 + 1;
+        }
+    }
+
+    public static void shellSort(int[] arr) {
+        int gap = arr.length;
+        while (gap > 1) {
+            shellHelp(arr, gap);
+            gap /= 2;
+        }
+        shellHelp(arr, 1);
+    }
+
+    private static void shellHelp(int[] arr, int gap) {
+        for (int i = 0; i < arr.length; i++) {
+            int j = i;
+            int num = arr[i];
+            for (; j - gap >= 0 && arr[j - gap] > num; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = num;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {2,1,4,6,2,6,8,0,6,2,6,1};
+//        heapSort(arr);
+        shellSort(arr);
+        System.out.println(Arrays.toString(arr));
+//        String[] strings = grayCode(3);
+//        for (String s : strings) {
+//            System.out.println(s);
+//        }
+//        HashMap<TreeNode, Integer> hashMap = new HashMap<>();
+//        TreeNode treeNode= new TreeNode(1);
+//        hashMap.put(treeNode, 0);
+//        System.out.println(hashMap.get(treeNode));
     }
 }
