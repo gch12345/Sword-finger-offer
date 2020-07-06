@@ -135,6 +135,15 @@ public class program0 {
 //        heapSort(arr);
         shellSort(arr);
         System.out.println(Arrays.toString(arr));
+        HashMap<Integer, Character> hashMap = new HashMap<>();
+        Integer a = 10;
+        Integer b = new Integer(10);
+        hashMap.put(a, 'a');
+        hashMap.put(b, 'b');
+        System.out.println(a.hashCode());
+        System.out.println(b.hashCode());
+        System.out.println(hashMap.get(a));
+        System.out.println(hashMap.get(b));
 //        String[] strings = grayCode(3);
 //        for (String s : strings) {
 //            System.out.println(s);
