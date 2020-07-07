@@ -1,9 +1,13 @@
 package LeetCode;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class DailyQuestion {
     // 63. 不同路径 II
     int count = 0;
     int[][] point = {{0, 1}, {1, 0}};
+
     public int uniquePathsWithObstacles0(int[][] obstacleGrid) {
         if (obstacleGrid == null || obstacleGrid.length == 0) {
             return 0;
@@ -49,5 +53,54 @@ public class DailyQuestion {
             }
         }
         return dp[row][col];
+    }
+
+    // 112. 路径总和
+    public boolean hasPathSum0(TreeNode root, int sum) {
+        return helper(root, sum, 0);
+    }
+
+    private boolean helper(TreeNode root, int sum, int curSum) {
+        if (root == null) {
+            return false;
+        }
+        if (root.left == null && root.right == null) {
+            return curSum + root.val == sum;
+        }
+        if (curSum + root.val > sum) {
+            return false;
+        }
+        return helper(root.left, sum, curSum + root.val) || helper(root.right, sum, curSum + root.val);
+    }
+
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root == null) {
+            return false;
+        }
+        Queue<TreeNode> treeQueue = new LinkedList<>();
+        Queue<Integer> treeSum = new LinkedList<>();
+        treeQueue.add(root);
+        treeSum.add(root.val);
+        while (!treeQueue.isEmpty()) {
+            for (int i = 0; i < treeQueue.size(); i++) {
+                TreeNode curNode = treeQueue.poll();
+                int curSum = treeSum.poll();
+                if (curNode.left == null && curNode.right == null) {
+                    if (curSum == sum) {
+                        return true;
+                    }
+                    continue;
+                }
+                if (curNode.left != null) {
+                    treeQueue.add(curNode.left);
+                    treeSum.add(curSum + curNode.left.val);
+                }
+                if (curNode.right != null) {
+                    treeQueue.add(curNode.right);
+                    treeSum.add(curSum + curNode.right.val);
+                }
+            }
+        }
+        return false;
     }
 }
