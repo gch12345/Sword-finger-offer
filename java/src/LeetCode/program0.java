@@ -39,7 +39,7 @@ public class program0 {
             map[s1.charAt(i)]++;
             map[s2.charAt(i)]--;
         }
-        for (int i = 0; i < 128 ;i++) {
+        for (int i = 0; i < 128; i++) {
             if (map[i] != 0) {
                 return false;
             }
@@ -62,7 +62,7 @@ public class program0 {
     }
 
     public static String[] grayCode(int n) {
-        String[] Strings = new String[(int)Math.pow(2, n)];
+        String[] Strings = new String[(int) Math.pow(2, n)];
         if (n == 1) {
             Strings[0] = "0";
             Strings[1] = "1";
@@ -128,6 +128,47 @@ public class program0 {
             }
             arr[j] = num;
         }
+    }
+
+    // 03. URL化
+    public String replaceSpaces0(String S, int length) {
+        if (S == null || S.length() == 0) {
+            return S;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        char[] chars = S.toCharArray();
+        for (int i = 0; i < length; i++) {
+            if (chars[i] == ' ') {
+                stringBuilder.append("%20");
+            } else {
+                stringBuilder.append(chars[i]);
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    public String replaceSpaces(String S, int length) {
+        if (S == null || S.length() == 0) {
+            return S;
+        }
+        char[] chars = S.toCharArray();
+        int count = 0;
+        for (int i = 0; i < length; i++) {
+            if (chars[i] == ' ') {
+                count++;
+            }
+        }
+        int lastLength = length + 2 * count;
+        for (int i = length - 1; i >= 0; i--) {
+            if (chars[i] == ' ') {
+                chars[lastLength--] = '0';
+                chars[lastLength--] = '2';
+                chars[lastLength--] = '%';
+            } else {
+                chars[lastLength--] = chars[i];
+            }
+        }
+        return String.valueOf(chars, 0,length + 2 * count);
     }
 
     public static void main(String[] args) {
