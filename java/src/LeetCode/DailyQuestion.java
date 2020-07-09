@@ -1,7 +1,6 @@
 package LeetCode;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class DailyQuestion {
     // 63. 不同路径 II
@@ -102,5 +101,42 @@ public class DailyQuestion {
             }
         }
         return false;
+    }
+
+    // 面试题 17.13. 恢复空格
+    public int respace0(String[] dictionary, String sentence) {
+        Set<String> set = new HashSet<>();
+        set.addAll(Arrays.asList(dictionary));
+        int[] dp = new int[sentence.length() + 1];
+        dp[0] = 0;
+        for (int i = 1; i <= sentence.length(); i++) {
+            dp[i] = dp[i - 1] + 1;
+            for (int j = 1; j <= i; j++) {
+                if (set.contains(sentence.substring(j - 1, i))) {
+                    dp[i] = Math.min(dp[i], dp[j - 1]);
+                }
+            }
+        }
+        return dp[sentence.length()];
+    }
+
+    public int respace(String[] dictionary, String sentence) {
+        int[] dp = new int[sentence.length() + 1];
+        dp[0] = 0;
+        for (int i = 1; i <= sentence.length(); i++) {
+            dp[i] = dp[i - 1] + 1;
+            for (int j = 0; j < dictionary.length; j++) {
+                if (sentence.substring(0, i).endsWith(dictionary[j])) {
+                    dp[i] = Math.min(dp[i], dp[i - dictionary[j].length()]);
+                }
+            }
+        }
+        return dp[sentence.length()];
+    }
+
+    public static void main(String[] args) {
+        String[] strings = {"looked","just","like","her","brother"};
+        DailyQuestion dailyQuestion = new DailyQuestion();
+        dailyQuestion.respace(strings, "jesslookedjustliketimherbrother");
     }
 }
