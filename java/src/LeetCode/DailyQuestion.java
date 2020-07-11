@@ -176,9 +176,58 @@ public class DailyQuestion {
         return dp[prices.length][0];
     }
 
+    // 315. 计算右侧小于当前元素的个数
+    public List<Integer> countSmaller(int[] nums) {
+        List<Integer> list = new ArrayList<>();
+        if (nums == null || nums.length <= 0) {
+            return list;
+        }
+        int len = nums.length;
+        int[] count = new int[len];
+        int[] index = new int[len];
+        for (int i = 0; i < len; i++) {
+            index[i] = i;
+        }
+        merge(nums, 0, len - 1, count, index);
+        for (int i = 0; i < len; i++) {
+            list.add(count[i]);
+        }
+        return list;
+    }
+
+    private void merge(int[] nums, int left, int right, int[] count, int[] index) {
+        if (left >= right) {
+            return;
+        }
+        int[] temp = new int[right - left + 1];
+        int mid = (right -left) / 2 + left;
+        merge(nums, left, mid, count, index);
+        merge(nums, mid + 1, right, count, index);
+        int i = left;
+        int j = mid + 1;
+        for (int k = left; k <= right; k++) {
+            if (i > mid) {
+                temp[k - left] = index[j++];
+            } else if (j > right) {
+                temp[k - left] = index[i++];
+            } else if (nums[index[i]] <= nums[index[j]]) {
+                temp[k - left] = index[j++];
+            } else {
+                temp[k - left] = index[i];
+                count[index[i]] += right - j + 1;
+                i++;
+            }
+        }
+        for (i = left; i <= right; i++) {
+            index[i] = temp[i - left];
+        }
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
-        dailyQuestion.respace(strings, "jesslookedjustliketimherbrother");
+        int[] nums = {4,2,6,1};
+        dailyQuestion.countSmaller(nums);
+//        dailyQuestion.respace(strings, "jesslookedjustliketimherbrother");
     }
 }
