@@ -274,12 +274,100 @@ public class DailyQuestion {
         return ret;
     }
 
+
+    //143. 重排链表(折叠链表)
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null) {
+            return;
+        }
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode cur = null;
+        ListNode node = slow.next;
+        while (node != null) {
+            ListNode list = node.next;
+            node.next = cur;
+            cur = node;
+            node = list;
+        }
+        slow.next = null;
+        ListNode newHead = new ListNode(-1);
+        ListNode newTail = newHead;
+        while (cur != null && head != null) {
+            newTail.next = head;
+            newTail = newTail.next;
+            head = head.next;
+            newTail.next = cur;
+            newTail = newTail.next;
+            cur = cur.next;
+        }
+        if (cur == null) {
+            newTail.next = head;
+        } else {
+            newTail.next = cur;
+        }
+        head = newHead.next;
+    }
+
+    // 120. 三角形最小路径和
+    public int minimumTotal(List<List<Integer>> triangle) {
+        if (triangle == null || triangle.size() == 0) {
+            return -1;
+        }
+        int[] cur = new int[triangle.size()];
+        for (int i = 0; i < triangle.size(); i++) {
+            List<Integer> list = triangle.get(i);
+            int temp = cur[0];
+            cur[0] = cur[0] + list.get(0);
+            for (int j = 1; j < list.size(); j++) {
+                int num = cur[j];
+                if (j == list.size() - 1) {
+                    cur[j] = temp + list.get(j);
+                    break;
+                }
+                cur[j] = Math.min(temp, cur[j]) + list.get(j);
+                temp = num;
+            }
+        }
+        int ret = Integer.MAX_VALUE;
+        for (int i = 0; i < cur.length; i++) {
+            if (cur[i] < ret) {
+                ret = cur[i];
+            }
+        }
+        return ret;
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
-        int[] nums = {1,2,2,1};
-        int[] nums1 = {2,2};
-        dailyQuestion.intersect(nums1, nums);
+        List<List<Integer>> lists = new ArrayList<>();
+        List<Integer> list0 = new ArrayList<>();
+        list0.add(2);
+        List<Integer> list1 = new ArrayList<>();
+        list1.add(3);
+        list1.add(4);
+        List<Integer> list2 = new ArrayList<>();
+        list2.add(6);
+        list2.add(5);
+        list2.add(7);
+        List<Integer> list3 = new ArrayList<>();
+        list3.add(4);
+        list3.add(1);
+        list3.add(8);
+        list3.add(3);
+        lists.add(list0);
+        lists.add(list1);
+        lists.add(list2);
+        lists.add(list3);
+        dailyQuestion.minimumTotal(lists);
+//        int[] nums = {1,2,2,1};
+//        int[] nums1 = {2,2};
+//        dailyQuestion.intersect(nums1, nums);
 //        dailyQuestion.countSmaller(nums);
 //        dailyQuestion.respace(strings, "jesslookedjustliketimherbrother");
     }
