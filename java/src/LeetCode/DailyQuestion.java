@@ -200,7 +200,7 @@ public class DailyQuestion {
             return;
         }
         int[] temp = new int[right - left + 1];
-        int mid = (right -left) / 2 + left;
+        int mid = (right - left) / 2 + left;
         merge(nums, left, mid, count, index);
         merge(nums, mid + 1, right, count, index);
         int i = left;
@@ -340,6 +340,124 @@ public class DailyQuestion {
             }
         }
         return ret;
+    }
+
+    // 96. 不同的二叉搜索树
+    public int numTrees(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                dp[i] += dp[i - j - 1] * dp[j];
+            }
+        }
+        return dp[n];
+    }
+
+    // 100. 相同的树
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        }
+        if (p == null || q == null) {
+            return false;
+        }
+        if (p.val != q.val) {
+            return false;
+        }
+        boolean left = isSameTree(p.left, q.left);
+        boolean right = isSameTree(p.right, q.right);
+        return left && right;
+    }
+
+    // 572. 另一个树的子树
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if (s == null || t == null) {
+            return false;
+        }
+        return isSameTree(s, t) || isSubtree(s.left, t) || isSubtree(s.right, t);
+    }
+
+    // 104. 二叉树的最大深度
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+        return Math.max(left, right) + 1;
+    }
+
+    // 110. 平衡二叉树
+    public boolean isBalanced(TreeNode root) {
+        return helper(root) != -1;
+    }
+    private int helper(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = helper(root.left);
+        if (left == -1) {
+            return -1;
+        }
+        int right = helper(root.right);
+        if (right == -1) {
+            return -1;
+        }
+        if (Math.abs(left - right) < 2) {
+            return 1 + Math.max(left, right);
+        }
+        return -1;
+    }
+
+    // 101. 对称二叉树
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return helper(root.left, root.right);
+    }
+
+    private boolean helper(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left == null || right == null) {
+            return false;
+        }
+        if (left.val == right.val) {
+            return helper(left.left, right.right) &&
+            helper(left.right, right.left);
+        }
+        return false;
+    }
+
+    // 236. 二叉树的最近公共祖先
+    TreeNode node = null;
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || p == null || q == null) {
+            return null;
+        }
+        helper(root, p, q);
+        return node;
+    }
+
+    private boolean helper(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return false;
+        }
+        int left = helper(root.left, p, q) ? 1 : 0;
+        int right = helper(root.right, p, q) ? 1 : 0;
+        int mid = (root == p || root == q) ? 1 :0;
+        if (left + right + mid >= 2) {
+            node = root;
+            return true;
+        }
+        return (left + right + mid) >= 1;
     }
 
     public static void main(String[] args) {
