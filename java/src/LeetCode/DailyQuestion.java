@@ -1,5 +1,7 @@
 package LeetCode;
 
+import org.junit.Test;
+
 import java.util.*;
 
 public class DailyQuestion {
@@ -458,6 +460,72 @@ public class DailyQuestion {
             return true;
         }
         return (left + right + mid) >= 1;
+    }
+
+    // 114. 二叉树展开为链表
+    TreeNode next;
+    public void flatten(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        flatten(root.right);
+        flatten(root.left);
+        root.right = next;
+        root.left = null;
+        next = root;
+    }
+
+    @Test
+    public void test() {
+        DailyQuestion dailyQuestion = new DailyQuestion();
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        dailyQuestion.flatten(root);
+    }
+
+    class Node {
+        public int val;
+        public Node left;
+        public Node right;
+
+        public Node() {}
+
+        public Node(int _val) {
+            val = _val;
+        }
+
+        public Node(int _val,Node _left,Node _right) {
+            val = _val;
+            left = _left;
+            right = _right;
+        }
+    };
+
+    // 剑指 Offer 36. 二叉搜索树与双向链表
+    Node head = null;
+    Node prev = null;
+    public Node treeToDoublyList(Node root) {
+        if (root == null) {
+            return null;
+        }
+        helper(root);
+        head.left = prev;
+        prev.right = head;
+        return head;
+    }
+    private void helper(Node root) {
+        if (root == null) {
+            return;
+        }
+        helper(root.left);
+        if (head == null) {
+            head = root;
+        } else {
+            prev.right = root;
+            root.left = prev;
+        }
+        prev = root;
+        helper(root.right);
     }
 
     public static void main(String[] args) {
