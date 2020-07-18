@@ -587,6 +587,78 @@ public class DailyQuestion {
         return Math.abs(left - right) <= 1 ? 1 + Math.max(left, right) : -1;
     }
 
+    // 97. 交错字符串
+    class point {
+        int x;
+        int y;
+        public point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    public boolean isInterleave0(String s1, String s2, String s3) {
+        if (s1 == null || s2 == null || s3 == null) {
+            return false;
+        }
+        char[] S1 = s1.toCharArray();
+        char[] S2 = s2.toCharArray();
+        char[] S3 = s3.toCharArray();
+        List<List<point>> lists = new ArrayList<>();
+        List<point> list = new ArrayList<>();
+        if (S1[0] == S3[0]) {
+            list.add(new point(0, -1));
+        }
+        if (S2[0] == S3[0]) {
+            list.add(new point(-1, 0));
+        }
+        lists.add(list);
+        if (lists.isEmpty()) {
+            return false;
+        }
+        for (int i = 1; i < s3.length(); i++) {
+            list = lists.get(i - 1);
+            List<point> list1 = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                point point = list.get(j);
+                if (point.x + 1 < S1.length && S3[i] == S1[point.x + 1]) {
+                    list1.add(new point(point.x + 1, point.y));
+                }
+                if (point.y + 1 < S2.length && S3[i] == S2[point.y + 1]) {
+                    list1.add(new point(point.x, point.y + 1));
+                }
+            }
+            lists.add(list1);
+        }
+        if (lists.get(lists.size() - 1).isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isInterleave(String s1, String s2, String s3) {
+        if (s1 == null || s2 == null || s3 == null) {
+            return false;
+        }
+        if (s1.length() + s2.length() != s3.length()) {
+            return false;
+        }
+        int len1 = s1.length();
+        int len2 = s2.length();
+        boolean dp[][] = new boolean[len1 + 1][len2 + 1];
+        dp[0][0] = true;
+        for (int i = 0; i <= len1; i++) {
+            for (int j = 0; j <= len2; j++){
+                if (i > 0) {
+                    dp[i][j] = dp[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1);
+                }
+                if (j > 0) {
+                    dp[i][j] = dp[i][j]  || (dp[i][j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1));
+                }
+            }
+        }
+        return dp[len1][len2];
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
