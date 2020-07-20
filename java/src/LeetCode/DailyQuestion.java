@@ -659,6 +659,51 @@ public class DailyQuestion {
         return dp[len1][len2];
     }
 
+    // 167. 两数之和 II - 输入有序数组
+    public int[] twoSum(int[] numbers, int target) {
+        if (numbers == null || numbers.length == 0) {
+            return new int[0];
+        }
+        int i = 0;
+        int j = numbers.length - 1;
+        while (i < j) {
+            if (numbers[i] + numbers[j] == target) {
+                break;
+            } else if (numbers[i] + numbers[j] < target) {
+                i++;
+            } else {
+                j--;
+            }
+        }
+        int[] ret = new int[2];
+        ret[0] = i + 1;
+        ret[1] = j + 1;
+        return ret;
+    }
+
+    // 奇偶分离，并保证奇偶各自的相对位置不变
+    public static void reOrderArray(int[] array) {
+        for (int i = 1; i < array.length; i++) {
+            int num = array[i];
+            if (array[i] % 2 == 0) {
+                continue;
+            }
+            int j = i - 1;
+            while (j >= 0 && array[j] % 2 == 0) {
+                array[j + 1] = array[j];
+                j--;
+            }
+            array[j + 1] = num;
+        }
+    }
+
+    @Test
+    public void test0() {
+        int[] array = {1,2,3,4,5,6,7,8};
+        reOrderArray(array);
+        System.out.println(Arrays.toString(array));
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
