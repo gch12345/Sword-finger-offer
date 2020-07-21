@@ -704,6 +704,39 @@ public class DailyQuestion {
         System.out.println(Arrays.toString(array));
     }
 
+    // 95. 不同的二叉搜索树 II
+    public static List<TreeNode> generateTrees(int n) {
+        List<TreeNode>[] dp = new ArrayList[n + 1];
+        dp[0] = new ArrayList<>();
+        dp[0].add(null);
+        dp[1] = new ArrayList<>();
+        dp[1].add(new TreeNode(1));
+        if (n <= 1) {
+            return dp[n];
+        }
+        for (int i = 2; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                for (int k = 0; k < dp[j].size(); k++) {
+                    for (int m = 0; m < dp[i - j - 1].size(); m++) {
+                        TreeNode root = new TreeNode(j + 1);
+                        root.left = dp[j].get(k);
+                        root.right = dp[i - j - 1].get(m);
+                        if (dp[i] == null) {
+                            dp[i] = new ArrayList<>();
+                        }
+                        dp[i].add(root);
+                    }
+                }
+            }
+        }
+        return dp[n];
+    }
+
+    @Test
+    public void test1() {
+        generateTrees(3);
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
