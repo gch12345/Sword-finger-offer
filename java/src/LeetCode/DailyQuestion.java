@@ -737,6 +737,99 @@ public class DailyQuestion {
         generateTrees(3);
     }
 
+    //64. 最小路径和
+    public int minPathSum(int[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+        int row = grid.length;
+        int col = grid[0].length;
+        int[][] dp = new int[row][col];
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < col; i++) {
+            dp[0][i] = grid[0][i] + dp[0][i - 1];
+        }
+        for (int i = 1; i < row; i++) {
+            dp[i][0] = grid[i][0] + dp[i - 1][0];
+        }
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++ ) {
+                dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+            }
+        }
+        return dp[row - 1][col - 1];
+    }
+
+    // 1025. 除数博弈
+    public boolean divisorGame0(int N) {
+        int count = 0;
+        for (int i = N - 1; i > 0; i--) {
+            if (N % i == 0) {
+                count = N / i;
+                break;
+            }
+        }
+        return count % 2 != 0;
+    }
+
+    public boolean divisorGame(int N) {
+        boolean[] dp = new boolean[N + 1];
+        dp[1] = false;
+        for (int i = 2; i <= N; i++) {
+            for (int j = i - 1; j > 0; j--) {
+                if (i % j == 0 && !dp[i - j]) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[N];
+    }
+
+    // 二叉搜索树和双向链表
+    TreeNode Head = null;
+    TreeNode Prev = null;
+    public TreeNode Convert(TreeNode pRootOfTree) {
+        if (pRootOfTree == null) {
+            return null;
+        }
+        Head.left = Prev;
+        Prev.right = Head;
+        return Head;
+    }
+
+    private void help(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        help(root.left);
+        if (Head == null) {
+            Head = root;
+        } else {
+            Prev.right = root;
+            root.left = Prev;
+        }
+        Prev = root;
+        help(root.right);
+    }
+
+    // 中序遍历
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new LinkedList<>();
+        Stack<TreeNode> stack =  new Stack<>();
+        TreeNode cur = root;
+        while (!stack.isEmpty() || cur != null) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            list.add(cur.val);
+            cur = cur.right;
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
