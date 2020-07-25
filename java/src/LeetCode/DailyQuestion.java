@@ -830,6 +830,119 @@ public class DailyQuestion {
         return list;
     }
 
+    //410. 分割数组的最大值
+    public int splitArray0(int[] nums, int m) {
+        if (nums == null || nums.length == 0 || m > nums.length) {
+            return 0;
+        }
+        int len = nums.length;
+        int[][] dp = new int[len + 1][m + 1];
+        int[] sum = new int[len + 1];
+        for (int i = 0; i <= len; i++) {
+            Arrays.fill(dp[i], Integer.MAX_VALUE);
+        }
+        for (int i = 0; i < len; i++) {
+            sum[i + 1] = sum[i] + nums[i];
+        }
+        for (int i = 1; i <= len; i++) {
+            for (int j = 1; j <= Math.min(i, m); j++) {
+                dp[i][j] = Integer.MAX_VALUE;
+                for (int k = j - 1; k < i; k++) {
+                    dp[i][j] = Math.min(dp[i][j], Math.max(dp[k][j - 1], sum[i] - sum[k]));
+                }
+            }
+        }
+        return dp[len][m];
+    }
+
+    //(最大值的最小)二分
+    public int splitArray(int[] nums, int m) {
+        int sum = nums[0];
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            sum += nums[i];
+            if (nums[i] > max) {
+                max = nums[i];
+            }
+        }
+        int left = max;
+        int right = sum;
+        while (left < right) {
+            int mid = (right - left) / 2 + left;
+            int count = 1;
+            int curSum = 0;
+            for (int i = 0; i < nums.length; i++) {
+                if (curSum + nums[i] > mid) {
+                    count++;
+                    curSum = nums[i];
+                } else {
+                    curSum += nums[i];
+                }
+            }
+            if (count > m) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+    // 875. 爱吃香蕉的珂珂
+    public int minEatingSpeed(int[] piles, int H) {
+        int left = 1;
+        int right = piles[0];
+        for (int i = 1; i < piles.length; i++) {
+            if (right < piles[i]) {
+                right = piles[i];
+            }
+        }
+        while (left < right) {
+            int mid = (right - left) / 2 + left;
+            int count = 0;
+            for (int i = 0; i < piles.length; i++) {
+                count += (piles[i] - 1)/ mid + 1;
+            }
+            if (count > H) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+    // 1011. 在 D 天内送达包裹的能力
+    public int shipWithinDays(int[] weights, int D) {
+        int left = weights[0];
+        int right = weights[0];
+        for (int i = 1; i < weights.length; i++) {
+            if (left < weights[i]) {
+                left = weights[i];
+            }
+            right += weights[i];
+        }
+        while (left < right) {
+            int count = 1;
+            int sum = 0;
+            int mid = (right - left) / 2 + left;
+            for (int i = 0; i < weights.length; i++) {
+                if (sum + weights[i] > mid) {
+                    count++;
+                    sum = weights[i];
+                } else {
+                    sum += weights[i];
+                }
+            }
+            if (count > D) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
