@@ -1,5 +1,6 @@
 package LeetCode;
 
+import com.sun.org.apache.bcel.internal.generic.ARETURN;
 import org.junit.Test;
 
 import java.util.*;
@@ -941,6 +942,109 @@ public class DailyQuestion {
             }
         }
         return left;
+    }
+
+    int[][] p = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+    public int longestIncreasingPath(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) {
+            return 0;
+        }
+        int ret = 0;
+        int[][] cache = new int[matrix.length][matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                ret = Math.max(ret, help(matrix, cache, i, j));
+            }
+        }
+        return ret;
+    }
+
+    private int help(int[][] matrix, int[][] cache, int i, int j) {
+        if (cache[i][j] != 0) {
+            return cache[i][j];
+        }
+        for (int k = 0; k < 4; k++) {
+            if (i + p[k][0] >= 0 && i + p[k][0] < matrix.length
+                    && j + p[k][1] >= 0 && j + p[k][1] < matrix[0].length
+                    && matrix[i][j] < matrix[i + p[k][0]][j + p[k][1]]) {
+                cache[i][j] = Math.max(cache[i][j], help(matrix, cache, i + p[k][0], j + p[k][1]));
+            }
+        }
+        return ++cache[i][j];
+    }
+
+    // 105. 从前序与中序遍历序列构造二叉树
+    int index = 0;
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || inorder == null || preorder.length != inorder.length) {
+            return null;
+        }
+        return helper(preorder, inorder, 0, inorder.length - 1);
+    }
+
+    private TreeNode helper(int[] preorder, int[] inorder,int start, int end) {
+        if (index > preorder.length || end < start) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[index]);
+        int curIndex = -1;
+        for (int i = start; i <= end; i++) {
+            if (inorder[i] == preorder[index]) {
+                curIndex = i;
+            }
+        }
+        index++;
+        root.left = helper(preorder, inorder, start, curIndex - 1);
+        root.right = helper(preorder, inorder, curIndex + 1, end);
+        return root;
+    }
+
+    // 删除重复元素
+    public ListNode deleteDuplication(ListNode pHead) {
+        if (pHead == null) {
+            return null;
+        }
+        ListNode head = new ListNode(Integer.MIN_VALUE);
+        head.next = pHead;
+        ListNode slow = head;
+        ListNode fast = pHead;
+        while (fast != null) {
+            if (slow.val != fast.val) {
+                slow.next = fast;
+                slow = fast;
+            }
+            fast = fast.next;
+        }
+        slow.next = null;
+        return head.next;
+    }
+
+    // 只保留没有重复的元素
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode Head = new ListNode(Integer.MIN_VALUE);
+        Head.next = head;
+        ListNode prev = Head;
+        ListNode cur = head;
+        // 1 2 2 3
+        while (cur != null) {
+            int num = cur.val;
+            boolean star = false;
+            while (cur.next != null && cur.next.val == num) {
+                cur = cur.next;
+                star = true;
+            }
+            if (star) {
+                prev.next = cur.next;
+            } else {
+                prev.next = cur;
+                prev = cur;
+                cur = cur.next;
+            }
+        }
+        return Head.next;
     }
 
     public static void main(String[] args) {
