@@ -1047,6 +1047,66 @@ public class DailyQuestion {
         return Head.next;
     }
 
+    // 392. 判断子序列
+    public boolean isSubsequence0(String s, String t) {
+        if (s == null || t == null) {
+            return false;
+        }
+        int sLen = s.length();
+        int tLen = t.length();
+        boolean[][] dp = new boolean[tLen + 1][sLen + 1];
+        for (int i = 0; i <= sLen; i++) {
+            dp[0][i] = true;
+        }
+        for (int i = 1; i <= tLen; i++) {
+            for (int j = 1; j <= sLen; j++) {
+                if (s.charAt(j - 1) == t.charAt(i - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                }
+                dp[i][j] = dp[i - 1][j];
+            }
+        }
+        return dp[tLen][sLen];
+    }
+
+    public boolean isSubsequence(String s, String t) {
+        if (s == null || t == null) {
+            return false;
+        }
+        int sLen = s.length();
+        int tLen = t.length();
+        int p1 = 0;
+        int p2 = 0;
+        while (p1 < sLen &&p2 < tLen) {
+            if (s.charAt(p1) == t.charAt(p2)) {
+                p1++;
+            }
+            p2++;
+        }
+        return p1 == sLen;
+    }
+
+    // 把数组排成最小的数
+    public String PrintMinNumber(int [] numbers) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < numbers.length; i++) {
+            list.add(numbers[i]);
+        }
+        Collections.sort(list, new Comparator<Integer>(){
+            @Override
+            public int compare(Integer x, Integer y) {
+                String a = x + "" + y;
+                String b = y + "" + x;
+                return a.compareTo(b);
+            }
+        });
+        String ret = new String();
+        for(Integer x : list) {
+            ret = ret + "" + x;
+        }
+        return ret;
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
