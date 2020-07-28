@@ -1107,6 +1107,52 @@ public class DailyQuestion {
         return ret;
     }
 
+    // 108. 将有序数组转换为二叉搜索树
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        return helper(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode helper(int[] nums, int start, int end) {
+        if (start < end) {
+            return null;
+        }
+        int mid = (end - start) / 2 + start;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = helper(nums, start, mid - 1);
+        root.right = helper(nums, mid + 1, end);
+        return root;
+    }
+
+    ListNode root;
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        root = head;
+        int size = 0;
+        while (head != null) {
+            size++;
+            head = head.next;
+        }
+        return helper(0, size - 1);
+    }
+
+    private TreeNode helper(int left, int right) {
+        if (left > right) {
+            return null;
+        }
+        int mid  = (right - left) / 2 + left;
+        TreeNode leftChild = helper(left, mid - 1);
+        TreeNode Root = new TreeNode(root.val);
+        Root.left = leftChild;
+        root = root.next;
+        Root.right = helper(mid + 1, right);
+        return Root;
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
