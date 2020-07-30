@@ -1126,6 +1126,7 @@ public class DailyQuestion {
         return root;
     }
 
+    // 有序链表转搜索二叉树
     ListNode root;
     public TreeNode sortedListToBST(ListNode head) {
         if (head == null) {
@@ -1151,6 +1152,22 @@ public class DailyQuestion {
         root = root.next;
         Root.right = helper(mid + 1, right);
         return Root;
+    }
+
+    // 343. 整数拆分
+    public int integerBreak(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 1;
+        for (int i = 3; i <= n; i++) {
+            for (int j = i - 1; j >= 1; j--) {
+                dp[i] = Math.max(dp[i], Math.max(dp[j], j) * dp[i - j]);
+            }
+        }
+        return dp[n];
     }
 
     public static void main(String[] args) {
