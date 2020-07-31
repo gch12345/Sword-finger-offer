@@ -112,9 +112,47 @@ public class DailyQuestion {
         }
     }
 
+    // 逛街
+    public void day2() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int num = sc.nextInt();
+            Stack<Integer> stack = new Stack<>();
+            int[] left = new int[num];
+            int[] right = new int[num];
+            int[] arr = new int[num];
+            for (int i = 0; i < num; i++) {
+                arr[i] = sc.nextInt();
+            }
+            for (int i = 0; i < num; i++) {
+                left[i] = stack.size();
+                while (!stack.isEmpty() && stack.peek() <= arr[i]) {
+                    stack.pop();
+                }
+                stack.add(arr[i]);
+            }
+            stack.clear();
+            for (int i = num - 1; i >= 0; i--) {
+                right[i] = stack.size() + 1 + left[i];
+                while (!stack.isEmpty() && stack.peek() <= arr[i]) {
+                    stack.pop();
+                }
+                stack.add(arr[i]);
+            }
+            for (int i = 0; i < num; i++) {
+                System.out.print(right[i] + " ");
+            }
+        }
+    }
+
+
+
     public static void main(String[] args) {
+        ArrayList list = new ArrayList(0);
+        list.add(1);
+        System.out.println(list.toString());
         DailyQuestion dailyQuestion = new DailyQuestion();
-        dailyQuestion.day1_1();
+        //dailyQuestion.day2();
     }
 }
 
