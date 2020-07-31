@@ -145,7 +145,41 @@ public class DailyQuestion {
         }
     }
 
-
+    //假期
+    public void day3(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int num = sc.nextInt();
+            int[] work = new int[num];
+            int[] exercise = new int[num];
+            for (int i = 0; i < num; i++) {
+                work[i] = sc.nextInt();
+            }
+            for (int i = 0; i < num; i++) {
+                exercise[i] = sc.nextInt();
+            }
+            //0 工作 1 锻炼 2 休息
+            int[][] dp = new int[num + 1][3];
+            dp[0][0] = Integer.MAX_VALUE;
+            dp[0][1] = Integer.MAX_VALUE;
+            dp[0][2] = 0;
+            for (int i = 1; i <= num; i++) {
+                dp[i][2] = Math.min(Math.min(dp[i - 1][1], dp[i - 1][0]),
+                        dp[i - 1][2]) + 1;
+                if (work[i - 1] == 1) {
+                    dp[i][0] = Math.min(dp[i - 1][1], dp[i - 1][2]);
+                } else {
+                    dp[i][0] = Integer.MAX_VALUE;
+                }
+                if (exercise[i - 1] == 1) {
+                    dp[i][1] = Math.min(dp[i - 1][0], dp[i - 1][2]);
+                } else {
+                    dp[i][1] = Integer.MAX_VALUE;
+                }
+            }
+            System.out.println(Math.min(Math.min(dp[num][0], dp[num][1]), dp[num][2]));
+        }
+    }
 
     public static void main(String[] args) {
         ArrayList list = new ArrayList(0);
