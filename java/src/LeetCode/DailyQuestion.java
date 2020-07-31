@@ -1164,10 +1164,30 @@ public class DailyQuestion {
         dp[2] = 1;
         for (int i = 3; i <= n; i++) {
             for (int j = i - 1; j >= 1; j--) {
-                dp[i] = Math.max(dp[i], Math.max(dp[j], j) * dp[i - j]);
+                dp[i] = Math.max(dp[i], Math.max(j, dp[j]) * Math.max(i - j, dp[i - j]));
             }
         }
         return dp[n];
+    }
+
+    //面试题 08.03. 魔术索引
+    public int findMagicIndex(int[] nums) {
+        return help(nums, 0, nums.length - 1);
+    }
+
+    private int help(int[] nums, int left, int right) {
+        if (left > right) {
+            return -1;
+        }
+        int mid = (right - left) / 2 + left;
+        int leftRet = help(nums, left, mid - 1);
+        if (leftRet != -1) {
+            return leftRet;
+        }
+        if (nums[mid] == mid) {
+            return mid;
+        }
+        return help(nums, mid + 1, right);
     }
 
     public static void main(String[] args) {
