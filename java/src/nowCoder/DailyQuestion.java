@@ -181,12 +181,71 @@ public class DailyQuestion {
         }
     }
 
+    //视野争夺
+    public static void day4() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int num = sc.nextInt();
+            int len = sc.nextInt();
+            List<point> list = new ArrayList<>();
+            for (int i = 0; i < num; i++) {
+                int left = sc.nextInt();
+                int right = sc.nextInt();
+                list.add(new point(left, right));
+            }
+            Collections.sort(list);
+            int count = 0;
+            int last = 0;
+            for (int i = 0; i < num;) {
+                int max =0;
+                while (i < num && list.get(i).left <= last) {
+                    max = Math.max(max, list.get(i).right);
+                    i++;
+                }
+                last = max;
+                count++;
+                if (i < num && list.get(i).left > last) {
+                    count = -1;
+                    break;
+                }
+                if (last >= len) {
+                    break;
+                }
+            }
+            if (last < len) {
+                System.out.println(-1);
+            } else {
+                System.out.println(count);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         ArrayList list = new ArrayList(0);
         list.add(1);
         System.out.println(list.toString());
         DailyQuestion dailyQuestion = new DailyQuestion();
         //dailyQuestion.day2();
+    }
+}
+
+class point implements Comparable<point>{
+    int left;
+    int right;
+    public point(int left, int right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public int compareTo(point o) {
+        if (left < o.left) {
+            return -1;
+        } else if (left > o.left) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
 
