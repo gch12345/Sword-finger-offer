@@ -220,11 +220,78 @@ public class DailyQuestion {
         }
     }
 
+    public void fun() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String str = sc.next();
+            char[] chars = str.toCharArray();
+            Set<Character> set = new HashSet<>();
+            int i = 0;
+            for (; i < chars.length; i++) {
+                if (set.contains(chars[i])) {
+                    continue;
+                }
+                int j = i + 1;
+                for (; j < chars.length; j++) {
+                    if (chars[j] == chars[i]) {
+                        set.add(chars[i]);
+                        break;
+                    }
+                }
+                if (j == chars.length) {
+                    break;
+                }
+            }
+            if (i >= chars.length) {
+                System.out.println(-1);
+            } else {
+                System.out.println(chars[i]);
+            }
+        }
+    }
+
+    public void fun1() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int num = sc.nextInt();
+            int[] arr = new int[num];
+            for (int i = 0; i < num; i++) {
+                arr[i] = sc.nextInt();
+            }
+            int curNum = arr[0];
+            int count = 1;
+            for (int i = 1; i < num; i++) {
+                if (count == 0) {
+                    curNum = arr[i];
+                    count = 1;
+                    continue;
+                }
+                if (arr[i] == curNum) {
+                    count++;
+                } else {
+                    count--;
+                }
+            }
+            count = 0;
+            for (int i = 0; i < num; i++) {
+                if (arr[i] == curNum) {
+                    count++;
+                }
+            }
+            if (count > num / 2) {
+                System.out.println(curNum);
+            } else {
+                System.out.println(-1);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         ArrayList list = new ArrayList(0);
         list.add(1);
-        System.out.println(list.toString());
+//        System.out.println(list.toString());
         DailyQuestion dailyQuestion = new DailyQuestion();
+        dailyQuestion.fun1();
         //dailyQuestion.day2();
     }
 }
