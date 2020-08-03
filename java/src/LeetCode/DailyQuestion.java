@@ -1190,6 +1190,63 @@ public class DailyQuestion {
         return help(nums, mid + 1, right);
     }
 
+    // 415. 字符串相加
+    public String addStrings0(String num1, String num2) {
+        if (num1 == null || num1.equals("")) {
+            return num2;
+        }
+        if (num2 == null || num2.equals("")) {
+            return num1;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        boolean star = false;
+        int i = num1.length() - 1;
+        int j = num2.length() - 1;
+        while (i >= 0 && j >= 0) {
+            char ch1 = num1.charAt(i);
+            char ch2 = num2.charAt(j);
+            int num = ch1 + ch2 - '0' - '0';
+            if (star) {
+                num++;
+            }
+            if (num >= 10) {
+                num = num % 10;
+                star = true;
+            } else {
+                star = false;
+            }
+            stringBuilder.append(num);
+            i--;
+            j--;
+        }
+        stringBuilder.reverse();
+        if (star) {
+            if (i >= 0)
+                return addStrings0("1", num1.substring(0, i + 1)) + stringBuilder.toString();
+            else
+                return addStrings0("1", num2.substring(0, j + 1)) + stringBuilder.toString();
+        } else if (i >= 0) {
+            return num1.substring(0, i + 1) + stringBuilder.toString();
+        } else
+            return num2.substring(0, j + 1) + stringBuilder.toString();
+    }
+
+    public String addStrings(String num1, String num2) {
+        int cur = 0;
+        int i = num1.length() - 1;
+        int j = num2.length() - 1;
+        StringBuilder sb = new StringBuilder();
+        while (i >= 0 || j >= 0 || cur > 0) {
+            int x = i >= 0 ? num1.charAt(i--) - '0' : 0;
+            int y = j >= 0 ? num2.charAt(j--) - '0' : 0;
+            x = x + y + cur;
+            cur = x / 10;
+            x = x % 10;
+            sb.append(x);
+        }
+        return sb.reverse().toString();
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
