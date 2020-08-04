@@ -1247,6 +1247,115 @@ public class DailyQuestion {
         return sb.reverse().toString();
     }
 
+    public boolean canFinish0(int numCourses, int[][] prerequisites) {
+        int[] flags = new int[numCourses];
+        List<List<Integer>> list = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            list.add(new ArrayList<>());
+        }
+        for (int[] cur : prerequisites) {
+            list.get(cur[1]).add(cur[0]);
+        }
+        for (int i = 0; i < numCourses; i++) {
+            if (!dfs(flags, list, i) || flags[i] != 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean dfs(int[] flags, List<List<Integer>> lists, int course) {
+        if (flags[course] == -1) {
+            return true;
+        }
+        if (flags[course] == 1) {
+            return false;
+        }
+        for (Integer x : lists.get(course)) {
+            flags[course] = 1;
+            if (!dfs(flags, lists, x)) {
+                return false;
+            }
+        }
+        flags[course] = -1;
+        return true;
+    }
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] flags = new int[numCourses];
+        List<List<Integer>> lists = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            lists.add(new ArrayList<>());
+        }
+        for (int[] cur : prerequisites) {
+            lists.get(cur[1]).add(cur[0]);
+            flags[cur[0]]++;
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (flags[i] == 0) {
+                queue.add(i);
+            }
+        }
+        while (!queue.isEmpty()) {
+            for (Integer x : lists.get(queue.poll())) {
+                flags[x]--;
+                if (flags[x] == 0) {
+                    queue.add(x);
+                }
+            }
+        }
+        for (int i = 0; i < numCourses; i++) {
+            if (flags[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void geNext(int[] next, char[] chars) {
+        int i = -1;
+        int j = 0;
+        next[0] = -1;
+        while (j < chars.length - 1) {
+            if (i == -1 || chars[i] == chars[j]) {
+                i++;
+                j++;
+                if (chars[i] != chars[j])
+                    next[j] = i;
+                else
+                    next[j] = next[i];
+            } else {
+                i = next[i];
+            }
+        }
+    }
+
+    public void KMP(char[] ch1, char[] ch2) {
+        int[] next = new int[ch2.length];
+        geNext(next, ch2);
+        int i = 0;
+        int j = 0;
+        while (i < ch1.length) {
+            if (ch1[i] == ch2[j]) {
+                if (j == ch2.length - 1) {
+                    System.out.println(i - ch2.length + 1);
+                    break;
+                }
+                i++;
+                j++;
+            } else {
+                j = next[j];
+            }
+        }
+    }
+
+    @Test
+    public void testKMP() {
+        DailyQuestion dailyQuestion = new DailyQuestion();
+        dailyQuestion.KMP("ABABABCABAABABABAB".toCharArray(), "ABABCABAA".toCharArray());
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
