@@ -1,5 +1,7 @@
 package nowCoder;
 
+import org.junit.Test;
+
 import java.util.*;
 
 public class DailyQuestion {
@@ -286,12 +288,85 @@ public class DailyQuestion {
         }
     }
 
+    public static void grade() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int num = sc.nextInt();
+            int[] arr = new int[num];
+            Map<Integer, Integer> map = new HashMap<>();
+            int sum = 0;
+            for (int i = 0; i < num; i++) {
+                arr[i] = sc.nextInt();
+                if (map.containsKey(arr[i])) {
+                    map.put(arr[i], map.get(arr[i]) + 1);
+                } else {
+                    map.put(arr[i], 1);
+                }
+            }
+            int n = sc.nextInt();
+            for (int i = 0; i < n; i++) {
+                int id = sc.nextInt();
+                double count = 0;
+                for (int j = 0; j <= arr[id - 1]; j++) {
+                    if (map.containsKey(j)) {
+                        count += map.get(j);
+                    }
+                }
+                System.out.printf("%f\n", ((count - 1) / num) * 100);
+            }
+        }
+    }
+
+    public static void fun3() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int num = sc.nextInt();
+            for (int i = 0; i < num; i++) {
+                int x = sc.nextInt();
+                int y = sc.nextInt();
+                int star = sc.nextInt();
+                int[][] arr = new int[x  + 10][y + 10];
+                for (int j = 0; j < star; j++) {
+                    int m = sc.nextInt();
+                    int n = sc.nextInt();
+                    arr[m][n] = 1;
+                }
+                int m = sc.nextInt();
+                int n = sc.nextInt();
+                for (int j = 1; j <= x; j++) {
+                    for (int k = 1; k <= y; k++) {
+                        arr[j][k] += arr[j - 1][k] + arr[j][k - 1] - arr[j - 1][k - 1];
+                    }
+                }
+                boolean flag = false;
+                for (int row = 1; row <= x - m + 1; row++) {
+                    for (int col = 1; col <= y - n + 1; col++) {
+                        int count = arr[row + m - 1][col + n - 1] - arr[row + m - 1][col - 1] - arr[row - 1][col + n - 1] + arr[row - 1][col - 1];
+                        if (count == 0) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        break;
+                    }
+                }
+                if (flag) {
+                    System.out.println("YES");
+                } else {
+                    System.out.println("NO");
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         ArrayList list = new ArrayList(0);
         list.add(1);
 //        System.out.println(list.toString());
         DailyQuestion dailyQuestion = new DailyQuestion();
-        dailyQuestion.fun1();
+        fun3();
+//        dailyQuestion.fun1();
         //dailyQuestion.day2();
     }
 }
