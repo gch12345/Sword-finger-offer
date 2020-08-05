@@ -1337,7 +1337,7 @@ public class DailyQuestion {
         int i = 0;
         int j = 0;
         while (i < ch1.length) {
-            if (ch1[i] == ch2[j]) {
+            if (j == - 1 || ch1[i] == ch2[j]) {
                 if (j == ch2.length - 1) {
                     System.out.println(i - ch2.length + 1);
                     break;
@@ -1353,7 +1353,48 @@ public class DailyQuestion {
     @Test
     public void testKMP() {
         DailyQuestion dailyQuestion = new DailyQuestion();
-        dailyQuestion.KMP("ABABABCABAABABABAB".toCharArray(), "ABABCABAA".toCharArray());
+        dailyQuestion.KMP("ABACABAB".toCharArray(), "ABAB".toCharArray());
+    }
+
+    public int rob0(TreeNode root) {
+        HashMap<TreeNode, Integer> map = new HashMap<>();
+        return dfs(root, map);
+    }
+
+    private int dfs(TreeNode root, HashMap<TreeNode, Integer> map) {
+        if (root == null) {
+            return 0;
+        }
+        if (map.containsKey(root)) {
+            return map.get(root);
+        }
+        int count = root.val;
+        if (root.left != null) {
+            count += dfs(root.left.left, map) + dfs(root.left.right, map);
+        }
+        if (root.right != null) {
+            count += dfs(root.right.right, map) + dfs(root.right.left, map);
+        }
+        int max = Math.max(dfs(root.left, map) + dfs(root.right, map), count);
+        map.put(root, max);
+        return max;
+    }
+
+    public int rob(TreeNode root) {
+        int[] ret = dfs(root);
+        return Math.max(ret[0], ret[1]);
+    }
+
+    private int[] dfs(TreeNode root) {
+        if (root == null) {
+            return new int[2];
+        }
+        int[] ret = new int[2];
+        int[] left = dfs(root.left);
+        int[] right = dfs(root.right);
+        ret[0] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+        ret[1] = root.val + left[0] + right[0];
+        return ret;
     }
 
     public static void main(String[] args) {
