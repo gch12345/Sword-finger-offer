@@ -360,12 +360,80 @@ public class DailyQuestion {
         }
     }
 
+    public static void fun4() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int num = sc.nextInt();
+            int operaNum = sc.nextInt();
+            int[] arr = new int[num];
+            for (int i = 0; i < num; i++) {
+                arr[i] = sc.nextInt();
+            }
+            Arrays.sort(arr);
+            for (int i = 0; i < operaNum; i++) {
+                int curNum = sc.nextInt();
+                int left = 0;
+                int right = num - 1;
+                int mid;
+                while (left < right) {
+                    mid = (right - left) / 2 + left;
+                    if (arr[mid] < curNum) {
+                        left = mid + 1;
+                    } else if (arr[mid] == curNum) {
+                        right--;
+                    } else {
+                        right = mid;
+                    }
+                }
+                if (arr[num - 1] < curNum) {
+                    right = num;
+                }
+                for (int j = right; j < num; j++) {
+                    arr[j]--;
+                }
+                System.out.println(num - right);
+            }
+        }
+    }
+
+    public static void fun5() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int num = sc.nextInt();
+            boolean[] b = new boolean[100010];
+            LinkedList<Integer> linkedList = new LinkedList<>();
+            for (int i = 0; i < num; i++) {
+                if (sc.nextInt() == 1) {
+                    int curNum = sc.nextInt();
+                    if (!b[curNum]) {
+                        linkedList.add(curNum);
+                        b[curNum] = true;
+                    }
+                } else {
+                    int result = sc.nextInt();
+                    int count = 0;
+                    for (int x : linkedList) {
+                        if ((x | result) == result) {
+                            count |= x;
+                        }
+                    }
+                    if (count == result) {
+                        System.out.println("YES");
+                    } else {
+                        System.out.println("NO");
+                    }
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         ArrayList list = new ArrayList(0);
         list.add(1);
 //        System.out.println(list.toString());
         DailyQuestion dailyQuestion = new DailyQuestion();
-        fun3();
+        fun4();
+//        fun3();
 //        dailyQuestion.fun1();
         //dailyQuestion.day2();
     }
