@@ -1397,6 +1397,74 @@ public class DailyQuestion {
         return ret;
     }
 
+    class node {
+        int[] ints = new int[26];
+        int flag = -1;
+    }
+    List<node> list =  new ArrayList<>();
+    public List<List<Integer>> palindromePairs(String[] words) {
+        List<List<Integer>> ret = new ArrayList<>();
+        list.add(new node());
+        for (int i = 0; i < words.length; i++) {
+            treeInsert(words[i], i);
+        }
+        for (int i = 0; i < words.length; i++) {
+            int len = words[i].length();
+            for (int j = 0; j <= len; j++) {
+                if (isPalindrome(words[i], j, len - 1)) {
+                    int left = find(words[i], 0, j - 1);
+                    if (left != -1 && left != i) {
+                        ret.add(Arrays.asList(i, left));
+                    }
+                }
+                if (j != 0 && isPalindrome(words[i], 0, j - 1)) {
+                    int right = find(words[i], j, len - 1);
+                    if (right != -1 && right != i) {
+                        ret.add(Arrays.asList(right, i));
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
+    private boolean isPalindrome(String str, int left, int right) {
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    private void treeInsert (String str, int id) {
+        char[] ch = str.toCharArray();
+        int index = 0;
+        for (int i = 0; i < ch.length; i++) {
+            int c = ch[i] - 'a';
+            if (list.get(index).ints[c] == 0) {
+                list.get(index).ints[c] = list.size();
+                list.add(new node());
+            }
+            index = list.get(index).ints[c];
+        }
+        list.get(index).flag = id;
+    }
+
+    private int find(String str, int left, int right) {
+        int index = 0;
+        for (int i = right; i >= left; i--) {
+            char ch = str.charAt(i);
+            if (list.get(index).ints[ch - 'a'] == 0) {
+                return -1;
+            }
+            index = list.get(index).ints[ch - 'a'];
+        }
+        return list.get(index).flag;
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
