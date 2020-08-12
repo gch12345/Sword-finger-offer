@@ -1,8 +1,5 @@
 package baidu;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
-
 public class topk {
     public boolean f2() {
         if (f1() && f1()) {
@@ -12,16 +9,23 @@ public class topk {
     }
 
     public boolean f3() {
-        if (f1() && f1() && !f1()) {
+        if (f1() && f2()) {
             return true;
         }
         return false;
     }
 
     public boolean f4() {
-        if (f1() || f1() || f1() || f1() || f1()) {
-            return true;
+        while (true) {
+            boolean b1 = f1();
+            boolean b2 = f2();
+            if (b1 != b2) {
+                return b1;
+            }
         }
+    }
+
+    public boolean f1() {
         return false;
     }
 
