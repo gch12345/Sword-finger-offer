@@ -1465,6 +1465,24 @@ public class DailyQuestion {
         return list.get(index).flag;
     }
 
+    public int maxProfit2(int[] prices) {
+        int min = Integer.MAX_VALUE;
+        int[] dp = new int[prices.length + 1];
+        for (int i = 1; i < dp.length; i++) {
+            min = Math.min(min, prices[i - 1]);
+            dp[i] = Math.max(dp[i - 1], prices[i - 1] - min);
+        }
+        return dp[prices.length];
+    }
+
+    public int lastRemaining(int n, int m) {
+        int ret = 0;
+        for (int i = 2; i <= n; i++) {
+            ret = (ret + m) % i;
+        }
+        return ret;
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
