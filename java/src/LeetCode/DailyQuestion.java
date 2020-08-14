@@ -1483,29 +1483,70 @@ public class DailyQuestion {
         return ret;
     }
 
+    public int findMid(int[] arr) {
+        Helper(arr, 0, arr.length - 1);
+        return Mid;
+    }
+    int Mid = 0;
+    private void Helper(int[] arr, int left, int right) {
+        if (left <= right) {
+            return;
+        }
+        int mid = arr[left];
+        int i = left;
+        int j = right;
+        while (i < j) {
+            while (i < j && arr[j] >= mid) {
+                j--;
+            }
+            while (i < j && arr[i] <= mid) {
+                i++;
+            }
+            swap(arr, i, j);
+        }
+        swap(arr, left, i);
+        if (i == arr.length / 2) {
+            Mid = arr[i];
+            return;
+        }
+        if (i < arr.length / 2) {
+            Helper(arr, i + 1, right);
+        } else {
+            Helper(arr, left, i - 1);
+        }
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
         DailyQuestion dailyQuestion = new DailyQuestion();
-        List<List<Integer>> lists = new ArrayList<>();
-        List<Integer> list0 = new ArrayList<>();
-        list0.add(2);
-        List<Integer> list1 = new ArrayList<>();
-        list1.add(3);
-        list1.add(4);
-        List<Integer> list2 = new ArrayList<>();
-        list2.add(6);
-        list2.add(5);
-        list2.add(7);
-        List<Integer> list3 = new ArrayList<>();
-        list3.add(4);
-        list3.add(1);
-        list3.add(8);
-        list3.add(3);
-        lists.add(list0);
-        lists.add(list1);
-        lists.add(list2);
-        lists.add(list3);
-        dailyQuestion.minimumTotal(lists);
+        int[] arr = {1,2,3,4,5};
+        System.out.println(dailyQuestion.findMid(arr));
+//        List<List<Integer>> lists = new ArrayList<>();
+//        List<Integer> list0 = new ArrayList<>();
+//        list0.add(2);
+//        List<Integer> list1 = new ArrayList<>();
+//        list1.add(3);
+//        list1.add(4);
+//        List<Integer> list2 = new ArrayList<>();
+//        list2.add(6);
+//        list2.add(5);
+//        list2.add(7);
+//        List<Integer> list3 = new ArrayList<>();
+//        list3.add(4);
+//        list3.add(1);
+//        list3.add(8);
+//        list3.add(3);
+//        lists.add(list0);
+//        lists.add(list1);
+//        lists.add(list2);
+//        lists.add(list3);
+//        dailyQuestion.minimumTotal(lists);
 //        int[] nums = {1,2,2,1};
 //        int[] nums1 = {2,2};
 //        dailyQuestion.intersect(nums1, nums);
