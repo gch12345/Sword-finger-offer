@@ -1,9 +1,8 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
+import grapeCity.Main;
+
+import java.util.*;
 
 public class Offer2 {
     // 58 - I. 翻转单词顺序
@@ -371,8 +370,78 @@ public class Offer2 {
         return root;
     }
 
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> lists = new ArrayList<>();
+        if (root == null) {
+            return lists;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                list.add(cur.val);
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                }
+            }
+            lists.add(0, list);
+        }
+        return lists;
+    }
+
+    public static List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> lists = new ArrayList<>();
+        if (root == null) {
+            return lists;
+        }
+        Stack<TreeNode> stack0 = new Stack<>();
+        Stack<TreeNode> stack1 = new Stack<>();
+        int star = 0;
+        stack0.add(root);
+        while (!stack0.isEmpty() || !stack1.isEmpty()) {
+            List<Integer> list = new ArrayList<>();
+            if (star == 0) {
+                while (!stack0.isEmpty()) {
+                    TreeNode cur = stack0.pop();
+                    list.add(cur.val);
+                    if (cur.left != null) {
+                        stack1.add(cur.left);
+                    }
+                    if (cur.right != null) {
+                        stack1.add(cur.right);
+                    }
+                }
+                star = 1;
+            } else {
+                while (!stack1.isEmpty()) {
+                    TreeNode cur = stack1.pop();
+                    list.add(cur.val);
+                    if (cur.right != null) {
+                        stack0.add(cur.right);
+                    }
+                    if (cur.left != null) {
+                        stack0.add(cur.left);
+                    }
+                }
+                star = 0;
+            }
+            lists.add(list);
+        }
+        return lists;
+    }
+
     public static void main(String[] args) {
-        Offer2 offer2 = new Offer2();
-        offer2.reverseWords(" ");
+        TreeNode head = new TreeNode(0);
+        head.left = new TreeNode(1);
+        head.right = new TreeNode(2);
+        head.right.left = new TreeNode(3);
+        head.right.right = new TreeNode(4);
+        zigzagLevelOrder(head);
     }
 }
