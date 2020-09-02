@@ -76,9 +76,67 @@ public class Main {
         }
     }
 
+    public static void printf(String[][] arr) {
+        if (arr == null || arr.length == 0) {
+            return;
+        }
+        int max = 0;
+        int min = 0;
+        int[] nums = new int[arr[0].length];
+        for (int i = 0; i < arr[0].length; i++) {
+            int num = Integer.parseInt(arr[1][i]);
+            if (max < num) {
+                max = num;
+            }
+            if (min > num) {
+                min = num;
+            }
+            nums[i] = num;
+        }
+        int row = max;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < arr[0].length; j++) {
+                if (nums[j] >= max) {
+                    System.out.print("#");
+                } else {
+                    System.out.print(" ");
+                }
+            }
+            max--;
+            System.out.println();
+        }
+        for (int i = 0; i < arr[0].length; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
+        row = -min;
+        if (min != 0) {
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < arr[0].length; j++) {
+                    if (nums[j] < 0) {
+                        System.out.print("#");
+                        nums[j]++;
+                    } else {
+                        System.out.print(" ");
+                    }
+                }
+                System.out.println();
+            }
+        }
+        for (int i = 0; i < arr[0].length; i++) {
+            System.out.print(arr[0][i]);
+        }
+        System.out.println();
+    }
+
     public static void main(String[] args) {
 //        int[] works = {2,1,4,5,3,1,1,3};
 //        System.out.println(work(works));
-        System.out.println(fun("aasdfadhj123451"));
+//        System.out.println(fun("aasdfadhj123451"));
+        String[][] arr = {
+                {"a", "b", "c", "d"},
+                {"5", "3", "-1", "-5"},
+        };
+        printf(arr);
     }
 }
