@@ -1,7 +1,5 @@
 package LeetCode;
 
-import grapeCity.Main;
-
 import java.util.*;
 
 public class Offer2 {
@@ -436,12 +434,42 @@ public class Offer2 {
         return lists;
     }
 
+    public static Integer find(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return null;
+        }
+        int index = arr[0];
+        while (arr[0] != arr[index]) {
+            index = arr[0];
+            int temp = arr[index];
+            arr[index] = arr[0];
+            arr[0] = temp;
+        }
+        return arr[0];
+    }
+
+    public int findRepeatNumber(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] != i) {
+                if (nums[i] == nums[nums[i]]) {
+                    return nums[i];
+                }
+                int temp = nums[i];
+                nums[i] = nums[nums[i]];
+                nums[temp] = temp;
+            }
+        }
+        return -1;
+    }
+
     public static void main(String[] args) {
-        TreeNode head = new TreeNode(0);
-        head.left = new TreeNode(1);
-        head.right = new TreeNode(2);
-        head.right.left = new TreeNode(3);
-        head.right.right = new TreeNode(4);
-        zigzagLevelOrder(head);
+//        TreeNode head = new TreeNode(0);
+//        head.left = new TreeNode(1);
+//        head.right = new TreeNode(2);
+//        head.right.left = new TreeNode(3);
+//        head.right.right = new TreeNode(4);
+//        zigzagLevelOrder(head);
+        int[] arr = {1,7,2,3,4,5,6,7};
+        System.out.println(find(arr));
     }
 }
