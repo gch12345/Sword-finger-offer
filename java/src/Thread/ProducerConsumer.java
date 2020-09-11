@@ -1,30 +1,33 @@
 package Thread;
 
-import java.util.Random;
-
 public class ProducerConsumer {
-    public static final int maxSize = 100;
+    public static final Integer maxSize = 10;
     public static volatile int size = 0;
-    public static class producer extends Thread{
+    static class producer extends Thread{
+        public producer(String name) {
+            Thread.currentThread().setName(name);
+        }
+
         @Override
         public void run() {
             while (true) {
-                if (size < maxSize) {
-                    synchronized (ProducerConsumer.class) {
-                        size++;
-                        System.out.println("生产了");
-                        notifyAll();
-                        return;
-                    }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                while (size == maxSize) {
-                    synchronized (ProducerConsumer.class) {
-                        if (size == maxSize) {
-                            try {
-                                wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                synchronized (ProducerConsumer.class) {
+                    if (size < maxSize) {
+                        size++;
+                        System.out.println(Thread.currentThread().getName() + "生产者  size = " + size);
+                        ProducerConsumer.class.notifyAll();
+
+                    }
+                    while (size == maxSize) {
+                        try {
+                            ProducerConsumer.class.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -32,26 +35,30 @@ public class ProducerConsumer {
         }
     }
 
-    public static class consumer extends Thread {
+    static class consumer extends Thread {
+        public consumer(String name) {
+            Thread.currentThread().setName(name);
+        }
+
         @Override
         public void run() {
             while (true) {
-                if (size > 0) {
-                    synchronized (ProducerConsumer.class) {
-                        size--;
-                        System.out.println("消费了");
-                        notifyAll();
-                        return;
-                    }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                while (size == 0) {
-                    synchronized (ProducerConsumer.class) {
-                        if (size == 0) {
-                            try {
-                                wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                synchronized (ProducerConsumer.class) {
+                    if (size > 0) {
+                        size--;
+                        System.out.println(Thread.currentThread().getName() + "消费者  size = " + size);
+                        ProducerConsumer.class.notifyAll();
+                    }
+                    while (size == 0) {
+                        try {
+                            ProducerConsumer.class.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -60,10 +67,13 @@ public class ProducerConsumer {
     }
 
     public static void main(String[] args) {
-        ProducerConsumer producerConsumer = new ProducerConsumer();
-        producer producer0 = new producer();
-        consumer consumer0 = new consumer();
-        producer0.start();
-        consumer0.start();
+        new consumer("c1").start();
+        new consumer("c2").start();
+        new consumer("c3").start();
+        new consumer("c3").start();
+        new producer("p1").start();
+        new producer("p2").start();
+        new producer("p3").start();
+        new producer("p4").start();
     }
 }
