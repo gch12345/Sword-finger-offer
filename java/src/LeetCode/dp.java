@@ -561,7 +561,11 @@ public class dp {
 ////        "mis*is*ip*."
 //        "ab"
 //        ".*c"
-        System.out.println(isMatch("aab",
-                "c*a*b"));
+//        System.out.println(isMatch("aab",
+//                "c*a*b"));
+        DailyQuestion dailyQuestion = new DailyQuestion();
+        int[] arr = {1,2,3,4,5,6,7,8};
+        int num = dailyQuestion.findMid(arr);
+        System.out.println(num);
     }
 }

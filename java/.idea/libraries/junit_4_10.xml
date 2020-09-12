@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="junit-4.10">
+    <CLASSES>
+      <root url="jar://D:/Java/junit-4.10.jar!/" />
+      <root url="file://$MAVEN_REPOSITORY$/mysql/mysql-connector-java/5.1.26" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/mysql/mysql-connector-java/5.1.26" recursive="false" />
+  </library>
+</component>

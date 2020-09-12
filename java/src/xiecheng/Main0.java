@@ -37,7 +37,7 @@ class WorkflowNode {
         return head;
     }
 
-    
+
     public WorkflowNode(String nodeId, int timeoutMillis, List<WorkflowNode> nextNodes) {
         this.nodeId = nodeId;
         this.timeoutMillis = timeoutMillis;

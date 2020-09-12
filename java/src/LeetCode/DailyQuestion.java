@@ -1489,7 +1489,7 @@ public class DailyQuestion {
     }
     int Mid = 0;
     private void Helper(int[] arr, int left, int right) {
-        if (left <= right) {
+        if (left >= right) {
             return;
         }
         int mid = arr[left];
@@ -1524,9 +1524,7 @@ public class DailyQuestion {
 
     public static void main(String[] args) {
         String[] strings = {"looked","just","like","her","brother"};
-        DailyQuestion dailyQuestion = new DailyQuestion();
-        int[] arr = {1,2,3,4,5};
-        System.out.println(dailyQuestion.findMid(arr));
+
 //        List<List<Integer>> lists = new ArrayList<>();
 //        List<Integer> list0 = new ArrayList<>();
 //        list0.add(2);

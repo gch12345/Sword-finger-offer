@@ -42,9 +42,6 @@ public class Main {
         return ret;
     }
 
-    public int numberofprize (int a, int b, int c) {
-
-    }
     public int getHouses (int t, int[] xa) {
         // write code here
         int ret = 2;
