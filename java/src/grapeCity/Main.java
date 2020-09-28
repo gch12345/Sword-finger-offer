@@ -48,32 +48,30 @@ public class Main {
         return Math.max(dp[works.length][0], dp[works.length][1]);
     }
 
-    public static String fun(String str) {
-        if (str == null || str.length() == 0) {
-            return str;
+    public static String fun(String s) {
+        if (s == null || s.length() == 0) {
+            return s;
         }
         Map<Character, Integer> map = new HashMap<>();
         int maxLen = 0;
-        int index = -1;
+        int index = 0;
         int count = 0;
-        char[] chars = str.toCharArray();
+        char[] chars = s.toCharArray();
+        int start = 0;
         for (int i = 0; i < chars.length; i++) {
-            if (map.containsKey(chars[i])) {
-                if (count > maxLen) {
-                    maxLen = count;
-                    index = i - count;
-                }
+            if (map.containsKey(chars[i]) && start <= map.get(chars[i])) {
+                start = map.get(chars[i]) + 1;
                 count = i - map.get(chars[i]);
             } else {
                 count++;
             }
+            if (count > maxLen) {
+                maxLen = count;
+                index = i - count + 1;
+            }
             map.put(chars[i], i);
         }
-        if (index == -1) {
-            return str;
-        } else {
-            return str.substring(index, index + maxLen);
-        }
+        return s.substring(index, index + maxLen);
     }
 
     public static void printf(String[][] arr) {
@@ -137,6 +135,6 @@ public class Main {
                 {"a", "b", "c", "d"},
                 {"5", "3", "-1", "-5"},
         };
-        printf(arr);
+        System.out.println(fun("abcabced"));
     }
 }
