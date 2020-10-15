@@ -1,5 +1,6 @@
 package LeetCode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class dp1 {
@@ -35,5 +36,69 @@ public class dp1 {
                 map.put(sum, i);
         }
         return false;
+    }
+
+    public int minimumTotal(ArrayList<ArrayList<Integer>> triangle) {
+        if (triangle == null) {
+            return Integer.MIN_VALUE;
+        }
+        int size = triangle.size();
+        int[][] dp = new int[size][size];
+        dp[0][0] = triangle.get(0).get(0);
+        for (int i = 1; i < size; i++) {
+            for (int j = 0; j <= i; j++) {
+                int cur = triangle.get(i).get(j);
+                if (j == 0) {
+                    dp[i][j] = dp[i - 1][j] + cur;
+                } else if (j == i) {
+                    dp[i][j] = dp[i - 1][j - 1] + cur;
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i - 1][j - 1]) + cur;
+                }
+            }
+        }
+        int retNum = dp[size - 1][0];
+        for (int i = 1; i < size; i++) {
+            if (dp[size - 1][i] < retNum) {
+                retNum = dp[size - 1][i];
+            }
+        }
+        return retNum;
+    }
+    private boolean[][] isPar(String s) {
+        if (s == null) {
+            return null;
+        }
+        int len = s.length();
+        boolean[][] dp = new boolean[len][len];
+        for (int i = 0; i < len; i++) {
+            for (int j = i; j >= 0; j--) {
+                if (i == j) {
+                    dp[j][i] = true;
+                } else if (i == j + 1) {
+                    dp[j][i] = (s.charAt(i) == s.charAt(j));
+                } else {
+                    dp[j][i] = dp[j + 1][i - 1] && (s.charAt(i) == s.charAt(j));
+                }
+            }
+        }
+        return dp;
+    }
+
+    private boolean isPar0(String substring) {
+        if (substring.length() == 0) {
+            return true;
+        }
+        int start = 0;
+        int end = substring.length() - 1;
+        char[] ch = substring.toCharArray();
+        while (start < end) {
+            if (ch[start] != ch[end]) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
     }
 }
