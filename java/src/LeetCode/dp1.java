@@ -2,6 +2,7 @@ package LeetCode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class dp1 {
     public static boolean checkSubarraySum(int[] nums, int k) {
@@ -100,5 +101,38 @@ public class dp1 {
             end--;
         }
         return true;
+    }
+
+    public int FindGreatestSumOfSubArray(int[] array) {
+        if (array == null || array.length == 0) {
+            return Integer.MIN_VALUE;
+        }
+        int retMax = array[0];
+        int curSum = array[0];
+        for (int i = 1; i < array.length; i++) {
+            curSum = Math.max(curSum + array[i], array[i]);
+            if (curSum > retMax) {
+                retMax = curSum;
+            }
+        }
+        return retMax;
+    }
+
+    public boolean wordBreak(String s, Set<String> dict) {
+        if (s == null || dict == null) {
+            return false;
+        }
+        int len = s.length();
+        boolean[] dp = new boolean[len + 1];
+        dp[0] = true;
+        for (int i = 1; i <= len; i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && dict.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[len];
     }
 }
