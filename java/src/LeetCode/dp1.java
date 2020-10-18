@@ -135,4 +135,52 @@ public class dp1 {
         }
         return dp[len];
     }
+
+    public int minimumTotal(ArrayList<ArrayList<Integer>> triangle) {
+        if (triangle == null) {
+            return Integer.MIN_VALUE;
+        }
+        int size = triangle.size();
+        int[][] dp = new int[size][size];
+        dp[0][0] = triangle.get(0).get(0);
+        for (int i = 1; i < size; i++) {
+            for (int j = 0; j <= i; j++) {
+                int cur = triangle.get(i).get(j);
+                if (j == 0) {
+                    dp[i][j] = dp[i - 1][j] + cur;
+                } else if (j == i) {
+                    dp[i][j] = dp[i - 1][j - 1] + cur;
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i - 1][j - 1]) + cur;
+                }
+            }
+        }
+        int retNum = dp[size - 1][0];
+        for (int i = 1; i < size; i++) {
+            if (dp[size - 1][i] < retNum) {
+                retNum = dp[size - 1][i];
+            }
+        }
+        return retNum;
+    }
+
+    public int uniquePaths(int m, int n) {
+        if (m == 0 || n == 0) {
+            return 0;
+        }
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < n; i++) {
+            dp[0][i] = 1;
+        }
+        for (int i = 0; i < m; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
 }
