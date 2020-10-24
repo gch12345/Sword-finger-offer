@@ -136,7 +136,7 @@ public class dp1 {
         return dp[len];
     }
 
-    public int minimumTotal(ArrayList<ArrayList<Integer>> triangle) {
+    public int minimumTotal0(ArrayList<ArrayList<Integer>> triangle) {
         if (triangle == null) {
             return Integer.MIN_VALUE;
         }
