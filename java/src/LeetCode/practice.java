@@ -168,6 +168,29 @@ public class practice {
         return map.get(head);
     }
 
+    // 58 - I. 翻转单词顺序
+    public String reverseWords0(String s) {
+        if (s == null || s.length() < 1) {
+            return s;
+        }
+        s = s.trim();
+        String[] strings = s.split(" ");
+        StringBuffer stringBuffer = new StringBuffer();
+        for (String string : strings) {
+            if (string.equals(" ")) {
+                continue;
+            }
+            int index = string.length() - 1;
+            while (index >= 0) {
+                stringBuffer.append(string.charAt(index));
+                index--;
+            }
+            stringBuffer.append(" ");
+        }
+        stringBuffer.deleteCharAt(stringBuffer.length() - 1);
+        return stringBuffer.reverse().toString();
+    }
+
     public static void main(String[] args) {
         practice practice = new practice();
         int[][] arr = {{0, 1}};
