@@ -225,6 +225,40 @@ public class practice {
         return str;
     }
 
+
+    /**
+     * 小Q在周末的时候和他的小伙伴来到大城市逛街，一条步行街上有很多高楼，共有n座高楼排成一行。
+     * 小Q从第一栋一直走到了最后一栋，小Q从来都没有见到这么多的楼，
+     * 所以他想知道他在每栋楼的位置处能看到多少栋楼呢？（当前面的楼的高度大于等于后面的楼时，后面的楼将被挡住）
+     */
+
+    public static List<Integer> solution(int[] arr) {
+        Stack<Integer> stack = new Stack<>();
+        List<Integer> listLeft = new ArrayList<>();
+        for (int i = 0; i < arr.length; i++) {
+            listLeft.add(1 + stack.size());
+            while (stack.isEmpty() && stack.peek() <= arr[i]) {
+                stack.pop();
+            }
+            stack.add(arr[i]);
+        }
+        List<Integer> listRight = new ArrayList<>();
+        stack.clear();
+        for (int i = arr.length - 1; i >= 0; i--) {
+            listRight.add(0, stack.size());
+            while (stack.isEmpty() && stack.peek() <= arr[i]) {
+                stack.pop();
+            }
+            stack.add(arr[i]);
+        }
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < listLeft.size(); i++) {
+            list.add(listLeft.get(i) + listRight.get(i));
+        }
+        return list;
+    }
+
+
     public static void main(String[] args) {
         practice practice = new practice();
         int[][] arr = {{0, 1}};
