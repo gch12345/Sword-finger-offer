@@ -258,6 +258,31 @@ public class practice {
         return list;
     }
 
+    /**
+     * 由于业绩优秀，公司给小Q放了 n 天的假，身为工作狂的小Q打算在在假期中工作、锻炼或者休息。
+     * 他有个奇怪的习惯：不会连续两天工作或锻炼。只有当公司营业时，小Q才能去工作，只有当健身房营业时，小Q才能去健身，
+     * 小Q一天只能干一件事。给出假期中公司，健身房的营业情况，求小Q最少需要休息几天。
+     */
+    public static int solution(int[] works, int[] gyms, int n) {
+        // 0 休息
+        // 1 锻炼
+        // 2 工作
+        int[][] dp = new int[n + 1][3];
+        for (int i = 1; i <= n; i++) {
+            if (works[i - 1] == 1) {
+                dp[i][2] = Math.min(dp[i - 1][0], dp[i - 1][1]);
+            } else {
+                dp[i][2] = Integer.MAX_VALUE;
+            }
+            if (gyms[i - 1] == 1) {
+                dp[i][1] = Math.min(dp[i - 1][0], dp[i - 1][2]);
+            } else {
+                dp[i][1] = Integer.MAX_VALUE;
+            }
+            dp[i][0] = 1 + Math.min(dp[i - 1][1], Math.min(dp[i - 1][0], dp[i - 1][2]));
+        }
+        return Math.min(dp[n][1], Math.min(dp[n][0], dp[n][2]));
+    }
 
     public static void main(String[] args) {
         practice practice = new practice();
